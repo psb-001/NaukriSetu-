@@ -77,20 +77,36 @@ fun rankEligible(seeker: Seeker, opps: List<Opportunity>): List<Ranked> {
         val expPts = if ((seeker.experienceYears ?: 0) >= needExp) 15 else 5
         val score = (skillPts + commutePts + payPts + expPts).coerceIn(0, 100)
         val topSkill = opp.requiredSkills.firstOrNull() ?: "General"
+        val reasonText = buildString {
+            append("$topSkill ${skillPct}% fit")
+            if (opp.distanceKm > 0) append(" · ${"%.1f".format(opp.distanceKm)} km away")
+            append(" · ₹${opp.payMin / 1000}k/mo")
+        }
         Ranked(
             opportunity = opp,
             score = score,
             skillPct = skillPct,
-            reason = "$topSkill matches $skillPct% · ${"%.1f".format(opp.distanceKm)} km away",
+            reason = reasonText,
         )
     }.sortedByDescending { it.score }
 }
 
-private fun skillMatchPct(have: List<String>, need: List<String>): Int {
+/**
+ * Calculates skill match percentage using SkillTaxonomy semantic matching.
+ * Satisfies G-01: "Recognise skills described in different words as the same skill."
+ */
+fun skillMatchPct(have: List<String>, need: List<String>): Int {
     if (need.isEmpty()) return 100
-    val h = have.map { it.lowercase() }.toSet()
-    val matched = need.count { it.lowercase() in h }
-    return matched * 100 / need.size
+    if (have.isEmpty()) return 0
+    var totalPoints = 0f
+    for (req in need) {
+        val bestScore = have.maxOfOrNull { candidateSkill ->
+            SkillTaxonomy.matchScore(candidateSkill, req)
+        } ?: 0f
+        // Count as matched if equivalence is above 0.70 threshold
+        totalPoints += if (bestScore >= 0.70f) 1.0f else bestScore
+    }
+    return ((totalPoints / need.size) * 100).toInt().coerceIn(0, 100)
 }
 
 private fun coursesForSkill(skill: String): List<Course> =
@@ -120,9 +136,8 @@ fun gapsFor(seeker: Seeker, opp: Opportunity): List<Gap> {
             }
         }
     }
-    val have = seeker.skills.map { it.lowercase() }.toSet()
     for (skill in opp.requiredSkills) {
-        if (skill.lowercase() !in have) {
+        if (!SkillTaxonomy.isSkillCovered(skill, seeker.skills)) {
             gaps += Gap(label = skill, kind = "Skill", courses = coursesForSkill(skill))
         }
     }
