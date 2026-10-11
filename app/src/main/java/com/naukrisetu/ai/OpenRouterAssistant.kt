@@ -31,7 +31,7 @@ object OpenRouterAssistant {
     suspend fun analyzeCandidateSpeech(
         userInput: String,
         apiKey: String,
-        model: String = "google/gemini-2.0-flash-lite:free",
+        model: String = "nvidia/nemotron-3.5-lightning:free",
     ): Result<ExtractedProfile> = withContext(Dispatchers.IO) {
         if (userInput.isBlank()) {
             return@withContext Result.failure(IllegalArgumentException("Input text cannot be blank"))

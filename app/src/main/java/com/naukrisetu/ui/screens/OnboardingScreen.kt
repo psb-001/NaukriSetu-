@@ -33,10 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.naukrisetu.BuildConfig
+import com.naukrisetu.ai.OpenRouterAssistant
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.engine.Seeker
 import com.naukrisetu.engine.SkillTaxonomy
 import com.naukrisetu.engine.canonicalSkills
+import kotlinx.coroutines.launch
 import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.onboarding.OnboardingValidator
 import com.naukrisetu.ui.theme.ThemeColors
@@ -245,16 +248,41 @@ private fun SkillsStep(
                     Spacer(Modifier.weight(1f))
                 }
                 Button(
+                    enabled = !isAnalyzing,
                     onClick = {
                         if (naturalSpeechInput.isBlank()) return@Button
-                        // Offline-capable semantic extraction using our SkillTaxonomy engine
-                        val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
-                        if (matched.isNotEmpty()) {
-                            val merged = (skills + matched).distinct().take(12)
-                            onSkills(merged)
-                            aiStatusMessage = "Extracted ${matched.size} skills into standard list"
+                        val apiKey = BuildConfig.OPENROUTER_API_KEY
+                        if (apiKey.isNotBlank()) {
+                            isAnalyzing = true
+                            aiStatusMessage = "Analyzing with AI..."
+                            scope.launch {
+                                val result = OpenRouterAssistant.analyzeCandidateSpeech(naturalSpeechInput, apiKey)
+                                isAnalyzing = false
+                                result.onSuccess { profile ->
+                                    val newSkills = (skills + profile.extractedSkills).distinct().take(12)
+                                    onSkills(newSkills)
+                                    aiStatusMessage = "AI: ${profile.summary}"
+                                }.onFailure {
+                                    // Fallback seamlessly to offline taxonomy
+                                    val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
+                                    if (matched.isNotEmpty()) {
+                                        onSkills((skills + matched).distinct().take(12))
+                                        aiStatusMessage = "Offline Extractor matched ${matched.size} skills"
+                                    } else {
+                                        aiStatusMessage = "Could not parse skills. Try simple trade words."
+                                    }
+                                }
+                            }
                         } else {
-                            aiStatusMessage = "No direct trade skills detected. Try words like wiring, plumbing, ac, fan."
+                            // Offline semantic extraction using SkillTaxonomy engine
+                            val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
+                            if (matched.isNotEmpty()) {
+                                val merged = (skills + matched).distinct().take(12)
+                                onSkills(merged)
+                                aiStatusMessage = "Extracted ${matched.size} skills into standard list"
+                            } else {
+                                aiStatusMessage = "No direct trade skills detected. Try words like wiring, plumbing, ac, fan."
+                            }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -263,7 +291,7 @@ private fun SkillsStep(
                     ),
                     shape = RoundedCornerShape(20.dp),
                 ) {
-                    Text("Auto-Extract Skills", fontSize = 12.sp)
+                    Text(if (isAnalyzing) "Thinking..." else "Auto-Extract Skills", fontSize = 12.sp)
                 }
             }
         }
