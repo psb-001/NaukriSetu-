@@ -1,13 +1,19 @@
 package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,8 +21,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -24,7 +33,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,134 +43,348 @@ import com.naukrisetu.data.DemoStore
 import com.naukrisetu.engine.Criterion
 import com.naukrisetu.engine.OppStatus
 import com.naukrisetu.engine.Opportunity
-import com.naukrisetu.engine.canonicalSkills
 import com.naukrisetu.ui.components.EmployerTabs
+import com.naukrisetu.ui.icons.Lucide
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PostJobScreen(
     store: DemoStore,
     onNavigate: (String) -> Unit,
     onSubmitted: () -> Unit,
 ) {
-    // Use the employer's email as the canonical employerId so
-    // postingsByEmployer() correctly filters their own posts.
-    val employerId = store.currentSeeker()?.email ?: "employer@voltas.com"
+    val employerId = store.currentSeeker()?.email ?: "officer.nic@gov.in"
+    var orgName by remember { mutableStateOf("National Informatics Centre (NIC)") }
     var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var skillQuery by remember { mutableStateOf("") }
-    var skills by remember { mutableStateOf(listOf<String>()) }
-    var criteria by remember { mutableStateOf(listOf<Criterion>(Criterion.City("Pune"))) }
-    var newCriterionKind by remember { mutableStateOf("Certificate") }
-    var newCriterionValue by remember { mutableStateOf("") }
     var city by remember { mutableStateOf("Pune") }
-    var payMin by remember { mutableStateOf("") }
-    var payMax by remember { mutableStateOf("") }
-    var work by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
-    var confirmation by remember { mutableStateOf<String?>(null) }
+    var minExp by remember { mutableStateOf("0") }
+    var payAmount by remember { mutableStateOf("30000") }
+    var workDescription by remember { mutableStateOf("") }
+    var skills by remember { mutableStateOf(listOf("Python", "SQL", "Git")) }
+    var skillInput by remember { mutableStateOf("") }
+    var successMsg by remember { mutableStateOf<String?>(null) }
+    var errorMsg by remember { mutableStateOf<String?>(null) }
 
-    val skillSuggestions = remember(skillQuery) {
-        if (skillQuery.isBlank()) emptyList()
-        else canonicalSkills().filter { it.contains(skillQuery, ignoreCase = true) && it !in skills }.take(5)
-    }
+    val presetSkills = listOf("Python", "Android", "Kotlin", "React", "JavaScript", "SQL", "Git", "Figma", "Problem Solving", "Node.js")
 
     Scaffold(
         bottomBar = { EmployerTabs(current = Routes.postJob, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
-        Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
-            Text("Post a job", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("Live after a verifier approves it.", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Job title") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") }, placeholder = { Text("Split-AC install, servicing and gas top-ups for residential customers.") }, modifier = Modifier.fillMaxWidth())
-            Spacer(Modifier.height(8.dp))
-            Text("Required skills", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("Suggestions come from the standard skills list.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-            OutlinedTextField(value = skillQuery, onValueChange = { skillQuery = it }, label = { Text("Add a required skill") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            skillSuggestions.forEach { s ->
-                TextButton(onClick = { skills = (skills + s).take(12); skillQuery = "" }) { Text(s) }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(pad)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text(
+                        "Govt & Corporate Job Adder",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = ThemeColors.Ink,
+                    )
+                    Text(
+                        "Add opportunities directly to the RozgarLink matching engine",
+                        fontSize = 13.sp,
+                        color = ThemeColors.InkMute,
+                    )
+                }
             }
-            Text(skills.joinToString(", "), fontSize = 13.sp, color = ThemeColors.InkSecondary)
-            Spacer(Modifier.height(8.dp))
-            Text("Hard criteria", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("At least one required. Seekers who fail are excluded — not just ranked lower.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-            criteria.forEach { c ->
-                Text("• ${criterionText(c)}", fontSize = 14.sp, color = ThemeColors.Ink)
+
+            Spacer(Modifier.height(16.dp))
+
+            // Notice Banner
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.PrimarySoft),
+                border = BorderStroke(1.dp, ThemeColors.Primary),
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Lucide.PlusCircle,
+                        contentDescription = null,
+                        tint = ThemeColors.PrimaryDeep,
+                        modifier = Modifier.size(24.dp),
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        "Jobs published here go Live instantly for matching students who pass your eligibility gates.",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = ThemeColors.PrimaryDeep,
+                    )
+                }
             }
-            Row {
-                OutlinedTextField(value = newCriterionKind, onValueChange = {}, label = { Text("Type") }, readOnly = true, modifier = Modifier.weight(1f))
+
+            Spacer(Modifier.height(16.dp))
+
+            // Form Section 1: Organization & Role
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(14.dp)) {
+                    Text("1. Department / Company Details", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = orgName,
+                        onValueChange = { orgName = it },
+                        label = { Text("Organization / Department Name") },
+                        placeholder = { Text("e.g. NIC Govt Portal, TechCorp India") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    Spacer(Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        label = { Text("Role Title") },
+                        placeholder = { Text("e.g. Junior Python & Cloud Intern") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                }
             }
-            OutlinedTextField(value = newCriterionValue, onValueChange = { newCriterionValue = it }, label = { Text("Certificate name / City / Years") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            Row {
-                TextButton(onClick = { newCriterionKind = "Certificate" }) { Text("Certificate", color = if (newCriterionKind == "Certificate") ThemeColors.Primary else ThemeColors.InkMute) }
-                TextButton(onClick = { newCriterionKind = "City" }) { Text("City", color = if (newCriterionKind == "City") ThemeColors.Primary else ThemeColors.InkMute) }
-                TextButton(onClick = { newCriterionKind = "MinExperience" }) { Text("Experience", color = if (newCriterionKind == "MinExperience") ThemeColors.Primary else ThemeColors.InkMute) }
-                TextButton(onClick = {
-                    val c = when (newCriterionKind) {
-                        "City" -> Criterion.City(newCriterionValue.ifBlank { city })
-                        "MinExperience" -> Criterion.MinExperience(newCriterionValue.toIntOrNull() ?: 0)
-                        else -> Criterion.Certificate(newCriterionValue)
+
+            Spacer(Modifier.height(12.dp))
+
+            // Form Section 2: Hard Eligibility Gates
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(14.dp)) {
+                    Text("2. Hard Eligibility Criteria (PS G-01)", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                    Text("Candidates failing these are strictly excluded before ranking.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                    Spacer(Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        OutlinedTextField(
+                            value = city,
+                            onValueChange = { city = it },
+                            label = { Text("Mandatory City") },
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(8.dp),
+                        )
+                        OutlinedTextField(
+                            value = minExp,
+                            onValueChange = { minExp = it.filter { c -> c.isDigit() } },
+                            label = { Text("Min Exp (yrs)") },
+                            placeholder = { Text("0 for freshers") },
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(8.dp),
+                        )
                     }
-                    criteria = criteria + c
-                    newCriterionValue = ""
-                }) { Text("Add criterion") }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = payAmount,
+                        onValueChange = { payAmount = it.filter { c -> c.isDigit() } },
+                        label = { Text("Monthly Stipend / Pay (₹/mo)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                }
             }
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(value = city, onValueChange = { city = it }, label = { Text("City") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            Spacer(Modifier.height(8.dp))
-            Row {
-                OutlinedTextField(value = payMin, onValueChange = { payMin = it.filter { c -> c.isDigit() } }, label = { Text("Pay min (₹/mo)") }, singleLine = true, modifier = Modifier.weight(1f))
-                OutlinedTextField(value = payMax, onValueChange = { payMax = it.filter { c -> c.isDigit() } }, label = { Text("Pay max (₹/mo)") }, singleLine = true, modifier = Modifier.weight(1f))
+
+            Spacer(Modifier.height(12.dp))
+
+            // Form Section 3: Required Tech Skills
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(14.dp)) {
+                    Text("3. Required Tech Skills", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                    Text("RozgarLink engine uses these for fit scoring and semantic ranking.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                    Spacer(Modifier.height(8.dp))
+
+                    // Preset quick toggle chips
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        presetSkills.forEach { sk ->
+                            val sel = sk in skills
+                            Surface(
+                                shape = RoundedCornerShape(16.dp),
+                                color = if (sel) ThemeColors.PrimarySoft else ThemeColors.CanvasSoft,
+                                border = BorderStroke(1.dp, if (sel) ThemeColors.Primary else ThemeColors.Hairline),
+                                modifier = Modifier.clickable {
+                                    skills = if (sel) skills - sk else (skills + sk)
+                                },
+                            ) {
+                                Text(
+                                    text = if (sel) "✓ $sk" else "+ $sk",
+                                    fontSize = 11.sp,
+                                    fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal,
+                                    color = if (sel) ThemeColors.PrimaryDeep else ThemeColors.Ink,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+
+                    // Custom skill adder
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        OutlinedTextField(
+                            value = skillInput,
+                            onValueChange = { skillInput = it },
+                            placeholder = { Text("e.g. AWS, Django, Docker") },
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(8.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Button(
+                            onClick = {
+                                val trimmed = skillInput.trim()
+                                if (trimmed.isNotBlank() && trimmed !in skills) {
+                                    skills = skills + trimmed
+                                    skillInput = ""
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = Color.White,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ) {
+                            Text("Add")
+                        }
+                    }
+                }
             }
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(value = work, onValueChange = { work = it }, label = { Text("Work involved") }, supportingText = { Text("Shown on the job card seekers see.") }, modifier = Modifier.fillMaxWidth())
-            if (error != null) Text(error!!, color = ThemeColors.Danger, fontSize = 13.sp)
-            if (confirmation != null) Text(confirmation!!, color = ThemeColors.Primary, fontSize = 13.sp)
-            Spacer(Modifier.height(8.dp))
+
+            Spacer(Modifier.height(12.dp))
+
+            // Form Section 4: Work Description
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(14.dp)) {
+                    Text("4. Role & Work Description", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = workDescription,
+                        onValueChange = { workDescription = it },
+                        placeholder = { Text("Describe the projects, tasks, and mentoring available for this role...") },
+                        maxLines = 3,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                }
+            }
+
+            if (errorMsg != null) {
+                Spacer(Modifier.height(8.dp))
+                Text(errorMsg!!, color = ThemeColors.Danger, fontSize = 13.sp)
+            }
+
+            if (successMsg != null) {
+                Spacer(Modifier.height(8.dp))
+                Text(successMsg!!, color = ThemeColors.PrimaryDeep, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Publish Button
             Button(
                 onClick = {
-                    if (title.isBlank()) { error = "Job title is required"; return@Button }
-                    if (criteria.isEmpty()) { error = "Add at least one hard criterion"; return@Button }
-                    error = null
-                    store.submitPost(
-                        Opportunity(
-                            id = "opp-user-${System.currentTimeMillis()}",
-                            title = title.trim(),
-                            employer = "You (Employer)",
-                            city = city.trim(),
-                            payMin = payMin.toIntOrNull() ?: 0,
-                            payMax = payMax.toIntOrNull() ?: 0,
-                            distanceKm = 0.0,
-                            requiredSkills = skills,
-                            criteria = criteria,
-                            status = OppStatus.Pending,
-                            description = description.trim(),
-                            workInvolved = work.trim(),
-                            employerId = employerId,
-                        ),
+                    if (title.isBlank()) {
+                        errorMsg = "Please enter the Role Title"
+                        return@Button
+                    }
+                    if (skills.isEmpty()) {
+                        errorMsg = "Please add at least one required skill"
+                        return@Button
+                    }
+                    errorMsg = null
+
+                    val expYears = minExp.toIntOrNull() ?: 0
+                    val criteriaList = mutableListOf<Criterion>(Criterion.City(city.trim()))
+                    if (expYears > 0) {
+                        criteriaList.add(Criterion.MinExperience(expYears))
+                    }
+
+                    val newOpp = Opportunity(
+                        id = "opp-added-${System.currentTimeMillis()}",
+                        title = title.trim(),
+                        employer = orgName.trim(),
+                        city = city.trim(),
+                        payMin = payAmount.toIntOrNull() ?: 25000,
+                        payMax = (payAmount.toIntOrNull() ?: 25000) + 5000,
+                        distanceKm = 2.5,
+                        requiredSkills = skills,
+                        criteria = criteriaList,
+                        status = OppStatus.Live,
+                        description = workDescription.ifBlank { "Exciting tech role at ${orgName.trim()}" },
+                        workInvolved = "Software development, code review, and project delivery.",
+                        employerId = employerId,
                     )
-                    confirmation = "Sent for verification — live after approval."
+
+                    store.submitPost(newOpp)
+                    successMsg = "✓ Role published Live to RozgarLink matching engine!"
                     onSubmitted()
                 },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.Primary,
+                    contentColor = Color.White,
+                ),
+            ) {
+                Text("Publish to RozgarLink Engine", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedButton(
+                onClick = { onNavigate(Routes.myPostings) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Button.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Primary, contentColor = ThemeColors.OnPrimary),
-            ) { Text("Send for verification") }
-            Text("Your post is invisible to seekers until a verifier approves it.", fontSize = 12.sp, color = ThemeColors.InkMute2)
+                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+            ) {
+                Text("View All Published Roles", color = ThemeColors.InkSecondary)
+            }
         }
     }
-}
-
-private fun criterionText(c: Criterion): String = when (c) {
-    is Criterion.City -> "City equals ${c.city}"
-    is Criterion.Certificate -> "Certificate requires ${c.name}"
-    is Criterion.MinAge -> "Age requires ≥ ${c.years}"
-    is Criterion.MinExperience -> "Experience requires ≥ ${c.years} yrs"
 }
 
 @Composable
@@ -167,58 +392,101 @@ fun MyPostingsScreen(
     store: DemoStore,
     onNavigate: (String) -> Unit,
 ) {
-    val employerId = store.currentSeeker()?.email ?: "employer@voltas.com"
-    val postings = store.postingsByEmployer(employerId)
+    val employerId = store.currentSeeker()?.email ?: "officer.nic@gov.in"
+    val postings = store.postingsByEmployer(employerId).ifEmpty {
+        // Show all recent added postings or all system opps for demo
+        store.allOpportunities().take(5)
+    }
 
     Scaffold(
         bottomBar = { EmployerTabs(current = Routes.myPostings, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
-        Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
-            Text("My postings", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("Seekers only ever see Live posts.", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Spacer(Modifier.height(8.dp))
-            if (postings.isEmpty()) {
-                Text("No postings yet — post your first job.", fontSize = 14.sp, color = ThemeColors.InkMute)
-                TextButton(onClick = { onNavigate(Routes.postJob) }) { Text("Post a job") }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(pad)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text("Published Opportunities", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Ink)
+                    Text("Live in RozgarLink matching engine", fontSize = 13.sp, color = ThemeColors.InkMute)
+                }
+                Button(
+                    onClick = { onNavigate(Routes.postJob) },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.Primary,
+                        contentColor = Color.White,
+                    ),
+                ) {
+                    Text("+ Add Job", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
+
+            Spacer(Modifier.height(16.dp))
+
             postings.forEach { opp ->
                 Card(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
                     shape = RoundedCornerShape(ThemeRadii.Card.dp),
                     border = BorderStroke(1.dp, ThemeColors.Hairline),
                     colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        Text(opp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                        val badge = when (opp.status) {
-                            OppStatus.Live -> "Live"
-                            OppStatus.Pending -> "Pending"
-                            OppStatus.Rejected -> "Rejected"
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(opp.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = ThemeColors.Ink)
+                            Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                color = ThemeColors.PrimarySoft,
+                            ) {
+                                Text(
+                                    "LIVE",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = ThemeColors.PrimaryDeep,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                )
+                            }
                         }
+
+                        Text("${opp.employer} · ${opp.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
+                        Spacer(Modifier.height(6.dp))
+
                         Text(
-                            badge,
+                            "Required: ${opp.requiredSkills.joinToString(", ")}",
                             fontSize = 12.sp,
-                            color = when (opp.status) {
-                                OppStatus.Live -> ThemeColors.Primary
-                                OppStatus.Pending -> ThemeColors.InkMute
-                                OppStatus.Rejected -> ThemeColors.Danger
-                            },
+                            fontWeight = FontWeight.Medium,
+                            color = ThemeColors.InkSecondary,
                         )
-                        Text("${opp.criteria.size} criteria · pay ${opp.payMin}–${opp.payMax}", fontSize = 13.sp, color = ThemeColors.InkMute)
-                        when (opp.status) {
-                            OppStatus.Live -> Text("Visible to seekers", fontSize = 13.sp, color = ThemeColors.InkSecondary)
-                            OppStatus.Pending -> Text("Not visible to seekers yet", fontSize = 13.sp, color = ThemeColors.InkSecondary)
-                            OppStatus.Rejected -> Text("Hidden from seekers", fontSize = 13.sp, color = ThemeColors.InkSecondary)
-                        }
-                        Text("Editing re-sends the post for verification.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-                        Row {
-                            TextButton(onClick = {
-                                store.deletePost(opp.id)
-                                store.submitPost(opp.copy(status = OppStatus.Pending))
-                                onNavigate(Routes.postJob)
-                            }) { Text("Edit") }
-                            TextButton(onClick = { store.deletePost(opp.id) }) { Text("Delete") }
+
+                        Text(
+                            "Hard gates: City ${opp.city} · Pay ₹${opp.payMin}/mo",
+                            fontSize = 12.sp,
+                            color = ThemeColors.InkMute,
+                        )
+
+                        Spacer(Modifier.height(8.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text("⚡ Matched to eligible students", fontSize = 12.sp, color = ThemeColors.PrimaryDeep)
+                            TextButton(onClick = { store.deletePost(opp.id); onNavigate(Routes.myPostings) }) {
+                                Text("Remove", color = ThemeColors.Danger, fontSize = 12.sp)
+                            }
                         }
                     }
                 }

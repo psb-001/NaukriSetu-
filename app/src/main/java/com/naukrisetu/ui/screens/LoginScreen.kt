@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,7 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -33,7 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +49,8 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
+    // 0 = Student Portal, 1 = Govt / Employer Adder Portal
+    var portalMode by remember { mutableStateOf(0) }
     var email by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(false) }
@@ -66,11 +66,8 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
         scope.launch {
             try {
                 withContext(Dispatchers.IO) { SupabaseApi.sendOtp(email.trim()) }
-            } catch (e: Exception) {
-                // Supabase free tier built-in email provider has a strict rate limit
-                // (3 emails/hour). If rate-limited, still advance to OTP screen so
-                // users/judges can verify with demo fallback code (e.g. 123456)
-                // or previously received code.
+            } catch (_: Exception) {
+                // Rate-limited fallback on Supabase free tier (demo bypass available)
             }
             loading = false
             onLoggedIn(email.trim(), role)
@@ -78,171 +75,241 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp).verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp)
+            .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(Modifier.height(24.dp))
-        Wordmark(fontSize = 22)
-        Spacer(Modifier.height(24.dp))
-        Text(Strings.loginTitle, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
-        Text(Strings.loginSubtitle, fontSize = 14.sp, color = ThemeColors.InkMute)
+        Spacer(Modifier.height(20.dp))
+        Wordmark(fontSize = 24)
+        Spacer(Modifier.height(18.dp))
+
+        // PORTAL SWITCHER: Student vs Govt / Adder Portal
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Button(
+                onClick = { portalMode = 0; error = null },
+                modifier = Modifier.weight(1f).height(46.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (portalMode == 0) ThemeColors.Primary else ThemeColors.CanvasSoft,
+                    contentColor = if (portalMode == 0) Color.White else ThemeColors.InkSecondary,
+                ),
+                border = BorderStroke(1.dp, if (portalMode == 0) ThemeColors.Primary else ThemeColors.Hairline),
+            ) {
+                Text(
+                    "🎓 Student Portal",
+                    fontSize = 13.sp,
+                    fontWeight = if (portalMode == 0) FontWeight.Bold else FontWeight.Medium,
+                )
+            }
+
+            Button(
+                onClick = { portalMode = 1; error = null },
+                modifier = Modifier.weight(1f).height(46.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (portalMode == 1) ThemeColors.Primary else ThemeColors.CanvasSoft,
+                    contentColor = if (portalMode == 1) Color.White else ThemeColors.InkSecondary,
+                ),
+                border = BorderStroke(1.dp, if (portalMode == 1) ThemeColors.Primary else ThemeColors.Hairline),
+            ) {
+                Text(
+                    "🏛️ Job Adder Portal",
+                    fontSize = 13.sp,
+                    fontWeight = if (portalMode == 1) FontWeight.Bold else FontWeight.Medium,
+                )
+            }
+        }
+
         Spacer(Modifier.height(20.dp))
 
-        Text(Strings.emailLabel, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+        // Portal specific title & blurb
+        if (portalMode == 0) {
+            Text(
+                "Student & Fresher Access",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = ThemeColors.Ink,
+            )
+            Text(
+                "Log in to find verified internships & tech jobs mapped directly to your skill graph.",
+                fontSize = 13.sp,
+                color = ThemeColors.InkMute,
+            )
+        } else {
+            Text(
+                "Govt & Corporate Job Adder",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = ThemeColors.Ink,
+            )
+            Text(
+                "Publish official government internships, public sector roles, and tech vacancies directly into the RozgarLink engine.",
+                fontSize = 13.sp,
+                color = ThemeColors.InkMute,
+            )
+        }
+
+        Spacer(Modifier.height(18.dp))
+
+        Text(
+            if (portalMode == 0) "Student College / Personal Email" else "Official Govt / Corporate Email",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = ThemeColors.Ink,
+        )
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it; error = null },
-            placeholder = { Text(Strings.emailHint) },
+            placeholder = {
+                Text(if (portalMode == 0) "e.g. student@naukrisetu.com" else "e.g. officer@nic.in or hr@techcorp.com")
+            },
             isError = error != null,
             supportingText = { if (error != null) Text(error!!, color = ThemeColors.Danger) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
         )
         Spacer(Modifier.height(12.dp))
+
         Button(
-            onClick = { submit(Role.Seeker) },
+            onClick = { submit(if (portalMode == 0) Role.Seeker else Role.Employer) },
             enabled = !loading,
-            modifier = Modifier.fillMaxWidth().height(52.dp),
+            modifier = Modifier.fillMaxWidth().height(48.dp),
             shape = RoundedCornerShape(ThemeRadii.Button.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = ThemeColors.Primary,
-                contentColor = ThemeColors.OnPrimary,
+                contentColor = Color.White,
             ),
         ) {
             if (loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
-                    color = ThemeColors.OnPrimary,
+                    color = Color.White,
                     strokeWidth = 2.dp,
                 )
             } else {
-                Text(Strings.continueLabel, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-            }
-        }
-        Spacer(Modifier.height(16.dp))
-
-        // 1-Tap Quick Mock Logins for Reviewers & Judges
-        Text("Quick Demo Profiles (1-Tap Login)", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.InkMute)
-        Spacer(Modifier.height(8.dp))
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = {
-                    email = "student@naukrisetu.com"
-                    submit(Role.Seeker)
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ThemeColors.CanvasSoft,
-                    contentColor = ThemeColors.Ink
-                ),
-                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
-            ) {
-                Text("🎓 Aman (CS Student)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
-            }
-            Button(
-                onClick = {
-                    email = "student.web@naukrisetu.com"
-                    submit(Role.Seeker)
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ThemeColors.CanvasSoft,
-                    contentColor = ThemeColors.Ink
-                ),
-                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
-            ) {
-                Text("👩‍💻 Pooja (Web Intern)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
-            }
-            Button(
-                onClick = {
-                    email = "employer@techcorp.com"
-                    submit(Role.Employer)
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ThemeColors.CanvasSoft,
-                    contentColor = ThemeColors.Ink
-                ),
-                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
-            ) {
-                Text("🏢 Tech Recruiter", fontSize = 12.sp, fontWeight = FontWeight.Medium)
-            }
-            Button(
-                onClick = {
-                    email = "verifier@campus.edu"
-                    submit(Role.Verifier)
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ThemeColors.CanvasSoft,
-                    contentColor = ThemeColors.Ink
-                ),
-                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
-            ) {
-                Text("🏛️ Campus Verifier", fontSize = 12.sp, fontWeight = FontWeight.Medium)
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            HorizontalDivider(modifier = Modifier.weight(1f), color = ThemeColors.Hairline)
-            Text(Strings.orContinueAs, fontSize = 12.sp, color = ThemeColors.InkMute2, modifier = Modifier.padding(horizontal = 12.dp))
-            HorizontalDivider(modifier = Modifier.weight(1f), color = ThemeColors.Hairline)
-        }
-        Spacer(Modifier.height(16.dp))
-        RoleCard(icon = Lucide.BriefcaseBusiness, title = Strings.continueAsEmployer, blurb = Strings.employerBlurb) {
-            if (email.isBlank()) email = "employer@voltas.com"
-            submit(Role.Employer)
-        }
-        Spacer(Modifier.height(12.dp))
-        RoleCard(icon = Lucide.ShieldCheck, title = Strings.continueAsVerifier, blurb = Strings.verifierBlurb) {
-            if (email.isBlank()) email = "verifier@yolo.com"
-            submit(Role.Verifier)
-        }
-        Spacer(Modifier.weight(1f))
-        Text(
-            Strings.demoOnDevice,
-            fontSize = 12.sp,
-            color = ThemeColors.InkMute2,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 16.dp),
-        )
-    }
-}
-
-@Composable
-private fun RoleCard(icon: ImageVector, title: String, blurb: String, onClick: () -> Unit) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-        border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-    ) {
-        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = ThemeColors.Ink,
-                    modifier = Modifier.padding(10.dp).size(20.dp),
+                Text(
+                    if (portalMode == 0) "Enter Student Portal (OTP)" else "Enter Job Adder Portal (OTP)",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
-            Spacer(Modifier.width(12.dp))
-            Column(verticalArrangement = Arrangement.Center) {
-                Text(title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
-                Text(blurb, fontSize = 13.sp, color = ThemeColors.InkMute)
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // 1-Tap Quick Demo Profiles
+        Text(
+            if (portalMode == 0) "1-Tap Student Demo Logins:" else "1-Tap Govt / Adder Demo Logins:",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = ThemeColors.InkMute,
+        )
+        Spacer(Modifier.height(8.dp))
+
+        if (portalMode == 0) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Button(
+                    onClick = {
+                        email = "student@naukrisetu.com"
+                        submit(Role.Seeker)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.CanvasSoft,
+                        contentColor = ThemeColors.Ink,
+                    ),
+                    border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                ) {
+                    Text("🎓 Aman (B.Tech CS Student)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
+                Button(
+                    onClick = {
+                        email = "student.web@naukrisetu.com"
+                        submit(Role.Seeker)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.CanvasSoft,
+                        contentColor = ThemeColors.Ink,
+                    ),
+                    border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                ) {
+                    Text("👩‍💻 Pooja (BCA Web Intern)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
+            }
+        } else {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Button(
+                    onClick = {
+                        email = "officer.nic@gov.in"
+                        submit(Role.Employer)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.CanvasSoft,
+                        contentColor = ThemeColors.Ink,
+                    ),
+                    border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                ) {
+                    Text("🏛️ NIC Govt Nodal Officer", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
+                Button(
+                    onClick = {
+                        email = "employer@techcorp.com"
+                        submit(Role.Employer)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.CanvasSoft,
+                        contentColor = ThemeColors.Ink,
+                    ),
+                    border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                ) {
+                    Text("🏢 TechCorp Recruiter", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                }
             }
         }
+
+        Spacer(Modifier.height(24.dp))
+
+        // Info card explaining the G-01 RozgarLink engine separation
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(ThemeRadii.Card.dp),
+            colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+            border = BorderStroke(1.dp, ThemeColors.Hairline),
+        ) {
+            Column(Modifier.padding(14.dp)) {
+                Text(
+                    "⚡ RozgarLink G-01 Two-Sided Platform",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    color = ThemeColors.Ink,
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "1. Government/employers add requirements with mandatory hard gates (city, min experience, qualification).\n2. Students specify tech skills and projects.\n3. The engine computes strict eligibility first, then ranks eligible matches with plain-language explanations.",
+                    fontSize = 12.sp,
+                    color = ThemeColors.InkMute,
+                    lineHeight = 17.sp,
+                )
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
     }
 }
