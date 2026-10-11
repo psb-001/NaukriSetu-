@@ -265,32 +265,44 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(12.dp))
 
-            // KYC card with real live progress bar + amber warning
+            // Student Verified Profile status card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Card.dp),
                 border = BorderStroke(1.dp, ThemeColors.Hairline),
-                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Profile $kycPct% complete", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                    Text("$kycDone of 5 checks done. Completing KYC unlocks verified employer listings.", fontSize = 13.sp, color = ThemeColors.InkMute)
-                    LinearProgressIndicator(
-                        progress = { kycPct / 100f },
-                        modifier = Modifier.fillMaxWidth(),
-                        color = ThemeColors.Primary,
-                        trackColor = ThemeColors.Hairline,
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            shape = RoundedCornerShape(50.dp),
+                            color = ThemeColors.Primary,
+                            modifier = Modifier.size(10.dp)
+                        ) {}
+                        Spacer(Modifier.width(8.dp))
+                        Text("Campus Verified Student Profile", fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = ThemeColors.Ink)
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        "${seeker.name} · ${seeker.certificates.firstOrNull() ?: "B.Tech Computer Science"}",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = ThemeColors.Ink
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "All ${eligible.size} student fresher and internship opportunities are unlocked.",
+                        fontSize = 12.sp,
+                        color = ThemeColors.InkMute
+                    )
+                    Spacer(Modifier.height(10.dp))
                     Button(
                         onClick = { onNavigate(Routes.profile) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ThemeColors.Primary,
-                            contentColor = ThemeColors.OnPrimary,
+                            containerColor = ThemeColors.Ink,
+                            contentColor = ThemeColors.Canvas,
                         ),
-                        modifier = Modifier.padding(top = 4.dp),
-                    ) { Text("Continue KYC", fontSize = 14.sp) }
-                    AmberBox(text = "Aadhaar pending verification — you can browse, some jobs stay locked.")
+                        shape = RoundedCornerShape(8.dp),
+                    ) { Text("View & Edit Student Profile", fontSize = 13.sp) }
                 }
             }
             Spacer(Modifier.height(12.dp))

@@ -90,7 +90,6 @@ fun MatchesScreen(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 if (tab == 0) {
                     if (eligible.isEmpty()) {
-                        val kycDone = KycLogic.checksDone(seeker)
                         // M17 - Eligible empty with illustration
                         Image(
                             painter = painterResource(com.naukrisetu.R.drawable.ill_empty_search),
@@ -99,12 +98,8 @@ fun MatchesScreen(
                             modifier = Modifier.fillMaxWidth().aspectRatio(2048f / 1434f).padding(vertical = 32.dp),
                         )
                         Spacer(Modifier.height(16.dp))
-                        Text("Complete KYC to unlock matches", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                        Text("You have $kycDone of 5 KYC checks done. Verified documents unlock the jobs you already qualify for.", fontSize = 13.sp, color = ThemeColors.InkMute)
-                        Button(
-                            onClick = { onNavigate(Routes.profile) },
-                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Primary, contentColor = ThemeColors.OnPrimary),
-                        ) { Text("Complete KYC") }
+                        Text("No direct matches for your current city/criteria", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                        Text("Explore the requirements tab to see what skills or locations need updating.", fontSize = 13.sp, color = ThemeColors.InkMute)
                         TextButton(onClick = { tab = 1 }) { Text("Review requirements to unlock (${ineligible.size})") }
                     } else {
                         Text("Ranked by fit score. Tap a card for the full breakdown.", fontSize = 13.sp, color = ThemeColors.InkMute)
