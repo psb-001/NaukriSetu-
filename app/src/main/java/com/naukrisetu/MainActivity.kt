@@ -20,7 +20,9 @@ import com.naukrisetu.data.DemoStore
 import com.naukrisetu.ui.auth.Role
 import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.nav.Routes
+import com.naukrisetu.ui.screens.HomeScreen
 import com.naukrisetu.ui.screens.LoginScreen
+import com.naukrisetu.ui.screens.MatchesScreen
 import com.naukrisetu.ui.screens.OnboardingScreen
 import com.naukrisetu.ui.screens.OtpScreen
 import com.naukrisetu.ui.screens.SplashScreen
@@ -78,9 +80,21 @@ class MainActivity : ComponentActivity() {
                                 },
                             )
                         }
-                        composable(Routes.home) { Placeholder(Routes.home) }
-                        composable(Routes.matches) { Placeholder(Routes.matches) }
-                        composable(Routes.gaps) { Placeholder(Routes.gaps) }
+                        composable(Routes.home) {
+                            HomeScreen(
+                                store = store,
+                                onNavigate = { nav.navigate(it) },
+                                onHowToQualify = { oppId -> nav.navigate("${Routes.gaps}/$oppId") },
+                            )
+                        }
+                        composable(Routes.matches) {
+                            MatchesScreen(
+                                store = store,
+                                onNavigate = { nav.navigate(it) },
+                                onHowToQualify = { oppId -> nav.navigate("${Routes.gaps}/$oppId") },
+                            )
+                        }
+                        composable("${Routes.gaps}/{oppId}") { Placeholder(Strings.gapsTitle) }
                         composable(Routes.courses) { Placeholder(Routes.courses) }
                         composable(Routes.profile) { Placeholder(Routes.profile) }
                         composable(Routes.postJob) { Placeholder(Routes.postJob) }

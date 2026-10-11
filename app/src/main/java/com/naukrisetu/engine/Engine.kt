@@ -29,6 +29,22 @@ fun checkEligibility(seeker: Seeker, opp: Opportunity): List<String> {
     return failures
 }
 
+/** Split visible opps into (eligible ranked, ineligible with reasons). */
+fun splitMatches(seeker: Seeker, opps: List<Opportunity>): Pair<List<Ranked>, List<Pair<Opportunity, List<String>>>> {
+    val visible = seekerVisibleOpps(opps)
+    val eligible = mutableListOf<Opportunity>()
+    val ineligible = mutableListOf<Pair<Opportunity, List<String>>>()
+    for (opp in visible) {
+        val failures = checkEligibility(seeker, opp)
+        if (failures.isEmpty()) eligible += opp else ineligible += opp to failures
+    }
+    return rankEligible(seeker, eligible) to ineligible
+}
+
+/** Hero number: live count of qualifying jobs — never hard-coded. */
+fun homeHeroCount(seeker: Seeker, opps: List<Opportunity>): Int =
+    splitMatches(seeker, opps).first.size
+
 /** Seekers only ever see Live postings — enforced here, not in the UI. */
 fun seekerVisibleOpps(opps: List<Opportunity>): List<Opportunity> =
     opps.filter { it.status == OppStatus.Live }

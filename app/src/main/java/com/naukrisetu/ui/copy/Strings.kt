@@ -29,4 +29,5 @@ object Strings {
 
     const val onboardingTitle = "Create your profile"
     const val onboardingSaved = "Saved automatically — come back anytime."
+    const val gapsTitle = "How to qualify"
 }
