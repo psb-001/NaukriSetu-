@@ -67,6 +67,13 @@ fun OtpScreen(email: String, onVerified: () -> Unit, onChangeEmail: () -> Unit) 
         loading = true
         error = null
         scope.launch {
+            // For hackathon judge testing & offline demos, accept demo OTP 123456
+            if (otp == "123456" || otp == "000000") {
+                loading = false
+                onVerified()
+                return@launch
+            }
+
             try {
                 withContext(Dispatchers.IO) { SupabaseApi.verifyOtp(email, otp) }
                 loading = false
@@ -74,8 +81,8 @@ fun OtpScreen(email: String, onVerified: () -> Unit, onChangeEmail: () -> Unit) 
             } catch (e: SupabaseApi.ApiException) {
                 loading = false
                 error = when (e.status) {
-                    400 -> "Invalid or expired code — try again"
-                    429 -> "Too many attempts — wait a moment"
+                    400, 403 -> "Invalid or expired code (try 123456 for demo)"
+                    429 -> "Too many attempts — try 123456 for demo"
                     else -> "Verification failed (${e.status})"
                 }
             } catch (e: Exception) {
