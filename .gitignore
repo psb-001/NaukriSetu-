@@ -14,3 +14,4 @@ out/
 *.log
 emulator-boot.log
 verify.png
+*.png
