@@ -156,6 +156,24 @@ object Lucide {
         verticalLineTo(6f); lineTo(12f, 2f); lineTo(20f, 6f); verticalLineTo(13f); close()
         moveTo(9f, 12f); lineTo(11f, 14f); lineTo(15f, 10f)
     })
+
+    /** lucide globe. */
+    val Globe: ImageVector = icon({
+        arcTo(10f, 10f, 0f, true, true, 22f, 12f); arcTo(10f, 10f, 0f, true, true, 2f, 12f)
+        moveTo(12f, 2f); verticalLineTo(22f)
+        moveTo(2f, 12f); horizontalLineTo(22f)
+    })
+
+    /** lucide rotate-ccw. */
+    val RotateCcw: ImageVector = icon({
+        moveTo(3f, 12f); arcTo(9f, 9f, 0f, false, true, 12f, 3f); lineTo(9f, 3f); lineTo(12f, 1f); lineTo(15f, 3f); lineTo(12f, 3f)
+        arcTo(9f, 9f, 0f, false, true, 3f, 21f); lineTo(15f, 21f); lineTo(12f, 23f); lineTo(9f, 21f); lineTo(12f, 21f)
+    })
+
+    /** lucide log-out. */
+    val LogOut: ImageVector = icon({
+        moveTo(9f, 21f); horizontalLineTo(3f); arcTo(2f, 2f, 0f, false, true, 1f, 19f); verticalLineTo(5f); arcTo(2f, 2f, 0f, false, true, 3f, 3f); horizontalLineTo(21f); arcTo(2f, 2f, 0f, false, true, 23f, 5f); verticalLineTo(19f); arcTo(2f, 2f, 0f, false, true, 21f, 19f); horizontalLineTo(10f); lineTo(7f, 16f); lineTo(10f, 13f)
+    })
 }
 
 private typealias PathBuilder = androidx.compose.ui.graphics.vector.PathBuilder

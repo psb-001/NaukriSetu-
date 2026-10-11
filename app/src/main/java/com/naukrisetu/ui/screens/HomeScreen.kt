@@ -1,10 +1,8 @@
 package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,6 +48,7 @@ import com.naukrisetu.engine.homeHeroCount
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
 import com.naukrisetu.ui.components.AmberBox
+import com.naukrisetu.ui.components.CompactJobCard
 import com.naukrisetu.ui.components.ScoreRing
 import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.components.UnderlineLink
@@ -63,7 +62,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
     store: DemoStore,
@@ -165,7 +163,7 @@ fun HomeScreen(
             
             // Top 3 eligible as compact ranked rows
             filtered.take(3).forEachIndexed { i, r ->
-                CompactEligibleJobCard(
+                CompactJobCard(
                     ranked = r,
                     position = i + 1,
                     total = eligible.size,
@@ -242,41 +240,6 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun CompactEligibleJobCard(
-    ranked: com.naukrisetu.engine.Ranked,
-    position: Int,
-    total: Int,
-    onHowToQualify: () -> Unit,
-) {
-    val opp = ranked.opportunity
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-        border = BorderStroke(1.dp, ThemeColors.Hairline),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-    ) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            // Score ring (small)
-            ScoreRing(score = ranked.score, size = 36.dp, stroke = 4.dp, fontSize = 11)
-            Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(opp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                Text("${opp.employer} · ${opp.city}", fontSize = 12.sp, color = ThemeColors.InkMute)
-                Text("#$position of $total", fontSize = 11.sp, color = ThemeColors.InkMute2)
-                Text("${opportunityPay(opp)} · ${"%.1f".format(opp.distanceKm)} km", fontSize = 12.sp, color = ThemeColors.Ink)
-                Text(ranked.reason, fontSize = 12.sp, color = ThemeColors.InkSecondary)
-            }
-            androidx.compose.material3.Icon(
-                imageVector = com.naukrisetu.ui.icons.Lucide.ChevronRight,
-                contentDescription = null,
-                tint = ThemeColors.InkMute,
-                modifier = Modifier.size(20.dp),
-            )
-        }
-    }
-}
 
 @Composable
 fun CourseCard(course: com.naukrisetu.engine.Course) {
