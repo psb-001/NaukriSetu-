@@ -135,3 +135,23 @@ netsim I 10-11 08:28:37.591 netsimd.rs:386 - Args {
         wifi_mode: None,
     },
 }
+INFO         | Monitoring duration of emulator setup.
+WARNING      | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
+INFO         | Using security allow list from: C:\Users\Asus\AppData\Local\Android\Sdk\emulator\lib\emulator_access.json
+INFO         | The active JSON Web Key Sets can be found here: C:\Users\Asus\AppData\Local\Temp\avd\running\26792\jwks\18320c48-2841-4914-a6e6-d237cb4a67f3\active.jwk
+INFO         | Scanning C:\Users\Asus\AppData\Local\Temp\avd\running\26792\jwks\18320c48-2841-4914-a6e6-d237cb4a67f3 for jwk keys.
+INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO         | Advertising in: C:\Users\Asus\AppData\Local\Temp\avd\running\pid_26792.ini
+INFO         | Activated packet streamer for bluetooth emulation
+INFO         | Activated packet streamer for uwb emulation
+INFO         | Successfully initialized netsim WiFi
+INFO         | Setting display: 0 configuration to: 1080x2400, dpi: 420x420 
+INFO         | setDisplayActiveConfig: id:0, 1080x2400
+WARNING      | getEnvironmentConfig: No environment config is provided
+INFO         | getEnvironmentConfig: Using default virtual scene mode for the environment.
+INFO         | getEnvironmentConfig: Using default configuration for mode mesh3d for the environment.
+INFO         | Initializing a scene with mode: mesh3d, argument: Toren1BD.obj
+USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
+WARNING      | Failed to process .ini file C:\Users\Asus\.android\emu-update-last-check.ini for reading.
+WARNING      | Failed to process .ini file C:\Users\Asus\.android\emu-update-last-check.ini for reading.
+INFO         | Boot completed in 177282 ms

@@ -6,7 +6,7 @@
 
 **Architecture:** Single-activity Compose app. `ui/theme` = Supabase DS tokens (emerald #3ECF8E, near-black #171717, hairline #DFDFDF, Inter+PJS). `ui/screens` = one file per Kombai design. `data/` = in-memory DemoStore + seed data. `engine/` = pure Kotlin matching logic (gate → rank → explain → gaps). Navigation = Jetpack Navigation Compose with role-based bottom tabs.
 
-**Tech Stack:** Kotlin 2.4.21, AGP 9.4.1, Gradle 9.3.0, compileSdk 37, minSdk 26, Compose BOM 2026.09.00, activity-compose, navigation-compose, lifecycle-viewmodel-compose. No Firebase, no network, no Hilt (manual wiring, "kotlin simple").
+**Tech Stack:** Kotlin 2.3.21 (verified stable on Maven Central 2026-10-11; NOT 2.4.21 — unverifiable, Central latest tag is 2.5.0-Beta1), AGP 9.4.1, Gradle 9.8.1 (9.3.0 dist missing ProjectTypeBinding class — broken build), compileSdk 37, minSdk 26, Compose BOM 2026.09.00, activity-compose, navigation-compose, lifecycle-viewmodel-compose. No Firebase, no network, no Hilt (manual wiring, "kotlin simple").
 
 **Spec:** `Y:/UI-prompts.md` (P0–P9 locked) + `docs/design-text/M*.txt` (extracted Kombai copy, 18 screens) + Kombai canvas `naukrisetu-ui` (visual reference via `mcp__kombai__canvas_read`).
 
