@@ -16,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.naukrisetu.data.DemoStore
 import com.naukrisetu.ui.auth.Role
 import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.screens.LoginScreen
+import com.naukrisetu.ui.screens.OnboardingScreen
 import com.naukrisetu.ui.screens.OtpScreen
 import com.naukrisetu.ui.screens.SplashScreen
 import com.naukrisetu.ui.theme.ThemeColors
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(modifier = Modifier.fillMaxSize(), color = ThemeColors.Canvas) {
                     val nav = rememberNavController()
+                    val store = remember { DemoStore() }
                     var pendingEmail by remember { mutableStateOf("") }
                     var pendingRole by remember { mutableStateOf(Role.Seeker) }
                     NavHost(navController = nav, startDestination = Routes.splash) {
@@ -64,7 +67,17 @@ class MainActivity : ComponentActivity() {
                                 onChangeEmail = { nav.popBackStack() },
                             )
                         }
-                        composable(Routes.onboarding) { Placeholder(Strings.onboardingTitle) }
+                        composable(Routes.onboarding) {
+                            OnboardingScreen(
+                                email = pendingEmail,
+                                store = store,
+                                onFinished = {
+                                    nav.navigate(Routes.home) {
+                                        popUpTo(Routes.splash) { inclusive = true }
+                                    }
+                                },
+                            )
+                        }
                         composable(Routes.home) { Placeholder(Routes.home) }
                         composable(Routes.matches) { Placeholder(Routes.matches) }
                         composable(Routes.gaps) { Placeholder(Routes.gaps) }
