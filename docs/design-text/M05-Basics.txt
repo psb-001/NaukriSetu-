@@ -1,0 +1,16 @@
+Create your profile
+2 of 3
+The basics
+Full name
+Phone
++91
+10 digits, starts with 6–9.
+City
+Needed to find jobs near you — matches are filtered by city.
+Age
+(optional)
+Experience
+(years, optional)
+Some jobs need this — add it anytime in Profile.
+Back
+Next

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "kombai": {
+      "command": "C:\\Users\\Asus\\AppData\\Local\\Programs\\@kombaielectron-app\\Kombai.exe",
+      "args": [
+        "C:\\Users\\Asus\\AppData\\Local\\Programs\\@kombaielectron-app\\resources\\app.asar.unpacked\\dist\\chat-mcp-gateway.cjs",
+        "--registration",
+        "C:\\Users\\Asus\\.kombai\\electron-chat-mcp.Kombai.json"
+      ],
+      "env": {
+        "ELECTRON_RUN_AS_NODE": "1"
+      }
+    }
+  }
+}

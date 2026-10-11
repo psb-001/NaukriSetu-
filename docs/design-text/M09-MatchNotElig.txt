@@ -1,0 +1,23 @@
+Your matches
+Hard requirements checked first — fix one to move a job into Eligible.
+Eligible (5)
+Not eligible (3)
+These jobs list the exact conditions that failed.
+House Electrician
+Sharma Enterprises · Mumbai
+Not eligible
+₹28,000/mo
+Needs Mumbai address — you live in Pune
+How to qualify
+AC Technician
+CoolTech Services · Pune
+₹27,000/mo
+Needs certificate: AC Repair & Servicing
+Site Electrician
+Sharma Builders · Pune
+₹24,000/mo
+Needs experience ≥ 3 years — you have 2
+Home
+Matches
+Courses
+Profile

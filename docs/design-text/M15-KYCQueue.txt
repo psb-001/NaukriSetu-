@@ -1,0 +1,25 @@
+Verification queue
+One trust pattern for people and jobs.
+KYC docs (4)
+Jobs (2)
+Approvals update that seeker's matches immediately.
+Ravi Kadam
+Aadhaar card
+2 min ago
+Approve
+Reject
+Aadhaar photo
+Reason
+(required to reject)
+Reject with note
+Address proof
+just now
+Meena Iyer
+18 min ago
+Suresh Pawar
+Certificate: ITI Electrician
+1 hr ago
+Demo data — nothing leaves this device.
+KYC Queue
+Jobs Queue
+Profile
