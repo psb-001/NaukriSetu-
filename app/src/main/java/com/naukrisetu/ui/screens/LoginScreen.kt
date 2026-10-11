@@ -1,6 +1,5 @@
 package com.naukrisetu.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,37 +27,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.naukrisetu.auth.GoogleAuthHelper
+import com.naukrisetu.data.SupabaseApi
 import com.naukrisetu.ui.auth.EmailCheck
 import com.naukrisetu.ui.auth.Role
-import com.naukrisetu.ui.components.InfoBox
 import com.naukrisetu.ui.copy.Strings
-import com.naukrisetu.ui.icons.GoogleG
 import com.naukrisetu.ui.icons.Lucide
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
     var email by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
-    val context = LocalContext.current
+    var loading by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     fun submit(role: Role) {
         if (!EmailCheck.valid(email)) {
-            error = Strings.gmailError
+            error = Strings.emailError
             return
         }
         error = null
-        onLoggedIn(email.trim(), role)
+        loading = true
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) { SupabaseApi.sendOtp(email.trim()) }
+                loading = false
+                onLoggedIn(email.trim(), role)
+            } catch (e: Exception) {
+                loading = false
+                error = e.message ?: "Failed to send OTP — check your connection"
+            }
+        }
     }
 
     Column(
@@ -69,44 +81,39 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
         Text(Strings.loginTitle, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
         Text(Strings.loginSubtitle, fontSize = 14.sp, color = ThemeColors.InkMute)
         Spacer(Modifier.height(20.dp))
-        // Real Google OAuth via Supabase Custom Tab (falls back to demo if not configured)
-        Button(
-            onClick = { GoogleAuthHelper.launchGoogleSignIn(context) },
-            modifier = Modifier.fillMaxWidth().height(52.dp),
-            shape = RoundedCornerShape(ThemeRadii.Button.dp),
-            border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = ThemeColors.Canvas,
-                contentColor = ThemeColors.Ink,
-            ),
-        ) {
-            Icon(imageVector = GoogleG.Logo, contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
-            Spacer(Modifier.width(10.dp))
-            Text(Strings.continueWithGoogle, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        }
-        InfoBox(icon = Lucide.Info, text = "${Strings.demoHintPrefix} ${Strings.demoOtp}")
-        Spacer(Modifier.height(12.dp))
-        Text(Strings.gmailLabel, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+
+        Text(Strings.emailLabel, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it; error = null },
-            placeholder = { Text("ravi.kadam@gmail.com") },
+            placeholder = { Text(Strings.emailHint) },
             isError = error != null,
-            supportingText = { Text(error ?: Strings.gmailHint) },
+            supportingText = { if (error != null) Text(error!!, color = ThemeColors.Danger) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
         Button(
             onClick = { submit(Role.Seeker) },
+            enabled = !loading,
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(ThemeRadii.Button.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = ThemeColors.Primary,
                 contentColor = ThemeColors.OnPrimary,
             ),
-        ) { Text(Strings.continueLabel, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    color = ThemeColors.OnPrimary,
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                Text(Strings.continueLabel, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            }
+        }
         Spacer(Modifier.height(20.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalDivider(modifier = Modifier.weight(1f), color = ThemeColors.Hairline)
@@ -114,9 +121,13 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
             HorizontalDivider(modifier = Modifier.weight(1f), color = ThemeColors.Hairline)
         }
         Spacer(Modifier.height(16.dp))
-        RoleCard(icon = Lucide.BriefcaseBusiness, title = Strings.continueAsEmployer, blurb = Strings.employerBlurb) { submit(Role.Employer) }
+        RoleCard(icon = Lucide.BriefcaseBusiness, title = Strings.continueAsEmployer, blurb = Strings.employerBlurb) {
+            submit(Role.Employer)
+        }
         Spacer(Modifier.height(12.dp))
-        RoleCard(icon = Lucide.ShieldCheck, title = Strings.continueAsVerifier, blurb = Strings.verifierBlurb) { submit(Role.Verifier) }
+        RoleCard(icon = Lucide.ShieldCheck, title = Strings.continueAsVerifier, blurb = Strings.verifierBlurb) {
+            submit(Role.Verifier)
+        }
         Spacer(Modifier.weight(1f))
         Text(
             Strings.demoOnDevice,

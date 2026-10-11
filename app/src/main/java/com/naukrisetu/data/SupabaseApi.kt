@@ -29,6 +29,59 @@ object SupabaseApi {
     fun patch(path: String, body: JSONObject): String = request("PATCH", path, body)
     fun delete(path: String): String = request("DELETE", path, null)
 
+    // -------- Auth helpers --------
+
+    /**
+     * Sends a 6-digit OTP to the given email via Supabase Auth.
+     * Uses the email-OTP (magic link) flow — no password needed.
+     * Throws [ApiException] on failure.
+     */
+    fun sendOtp(email: String) {
+        val body = JSONObject().apply {
+            put("email", email)
+        }
+        val conn = java.net.URL("${SupabaseConfig.AUTH}/otp").openConnection()
+            as java.net.HttpURLConnection
+        conn.requestMethod = "POST"
+        conn.connectTimeout = SupabaseConfig.TIMEOUT_MS.toInt()
+        conn.readTimeout   = SupabaseConfig.TIMEOUT_MS.toInt()
+        conn.setRequestProperty("apikey", SupabaseConfig.ANON_KEY)
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.doOutput = true
+        conn.outputStream.use { it.write(body.toString().toByteArray()) }
+        val status = conn.responseCode
+        if (status !in 200..299) {
+            val err = conn.errorStream?.bufferedReader()?.readText() ?: ""
+            throw ApiException(status, err)
+        }
+    }
+
+    /**
+     * Verifies a 6-digit OTP.
+     * Returns the access_token on success, throws [ApiException] on failure.
+     */
+    fun verifyOtp(email: String, token: String): String {
+        val body = JSONObject().apply {
+            put("email", email)
+            put("token", token)
+            put("type", "email")
+        }
+        val conn = java.net.URL("${SupabaseConfig.AUTH}/verify").openConnection()
+            as java.net.HttpURLConnection
+        conn.requestMethod = "POST"
+        conn.connectTimeout = SupabaseConfig.TIMEOUT_MS.toInt()
+        conn.readTimeout   = SupabaseConfig.TIMEOUT_MS.toInt()
+        conn.setRequestProperty("apikey", SupabaseConfig.ANON_KEY)
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.doOutput = true
+        conn.outputStream.use { it.write(body.toString().toByteArray()) }
+        val status = conn.responseCode
+        val stream = if (status in 200..299) conn.inputStream else conn.errorStream
+        val text = stream?.bufferedReader()?.readText() ?: ""
+        if (status !in 200..299) throw ApiException(status, text)
+        return JSONObject(text).optString("access_token")
+    }
+
     private fun request(method: String, path: String, body: JSONObject?): String {
         val conn = URL("${SupabaseConfig.REST}/$path").openConnection() as HttpURLConnection
         conn.requestMethod = method

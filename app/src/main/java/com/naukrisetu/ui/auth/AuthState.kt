@@ -1,14 +1,10 @@
 package com.naukrisetu.ui.auth
 
-/** Demo auth: any @gmail.com address, OTP is always 1234. No backend. */
+/** Accepts any valid-looking email (e.g. user@domain.com). */
 object EmailCheck {
-    fun valid(email: String): Boolean =
-        email.trim().lowercase().endsWith("@gmail.com") &&
-            email.trim().length > "@gmail.com".length
-}
+    private val EMAIL_REGEX = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
 
-class OtpState {
-    fun verify(code: String): Boolean = code == "1234"
+    fun valid(email: String): Boolean = EMAIL_REGEX.matches(email.trim())
 }
 
 enum class Role { Seeker, Employer, Verifier }
