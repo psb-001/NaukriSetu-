@@ -21,17 +21,17 @@ data class ExtractedProfile(
  * OpenRouter AI Assistant for parsing natural conversational text or voice transcripts into
  * canonical job skills and profile details.
  *
- * Uses free-tier LLM models on OpenRouter (e.g. meta-llama/llama-3.3-70b-instruct:free
- * or google/gemini-2.0-flash-lite:free).
+ * Uses the free-tier model: nvidia/nemotron-3.5-lightning:free as default.
  */
 object OpenRouterAssistant {
 
     private const val OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+    const val DEFAULT_MODEL = "nvidia/nemotron-3.5-lightning:free"
 
     suspend fun analyzeCandidateSpeech(
         userInput: String,
         apiKey: String,
-        model: String = "nvidia/nemotron-3.5-lightning:free",
+        model: String = DEFAULT_MODEL,
     ): Result<ExtractedProfile> = withContext(Dispatchers.IO) {
         if (userInput.isBlank()) {
             return@withContext Result.failure(IllegalArgumentException("Input text cannot be blank"))
