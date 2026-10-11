@@ -1,6 +1,7 @@
 package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,28 +12,32 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.BuildConfig
@@ -40,12 +45,11 @@ import com.naukrisetu.ai.OpenRouterAssistant
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.engine.Seeker
 import com.naukrisetu.engine.SkillTaxonomy
-import com.naukrisetu.engine.canonicalSkills
-import kotlinx.coroutines.launch
-import com.naukrisetu.ui.copy.Strings
+import com.naukrisetu.ui.icons.Lucide
 import com.naukrisetu.ui.onboarding.OnboardingValidator
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingScreen(
@@ -54,71 +58,139 @@ fun OnboardingScreen(
     onFinished: () -> Unit,
 ) {
     var step by remember { mutableStateOf(1) }
-    var profileRole by remember { mutableStateOf<String?>(null) }
+    var degreeTrack by remember { mutableStateOf("B.Tech / B.E. (Computer Science / IT)") }
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
-    var experience by remember { mutableStateOf("") }
-    var skills by remember { mutableStateOf(listOf<String>()) }
-    var goal by remember { mutableStateOf("") }
+    var city by remember { mutableStateOf("Pune") }
+    var studyYear by remember { mutableStateOf("Final Year") }
+    var experience by remember { mutableStateOf("0") }
+    var skills by remember { mutableStateOf(listOf("Python", "Problem Solving", "Git")) }
+    var careerGoal by remember { mutableStateOf("Junior Software / Mobile Engineer") }
     var basicsError by remember { mutableStateOf<String?>(null) }
 
     fun persist() {
         val existing = store.seeker(email)
         store.upsertSeeker(
-            (existing ?: Seeker(id = "seeker-ravi", name = "", email = email, phone = "", city = "")).copy(
-                name = name.ifBlank { existing?.name ?: "" },
+            (existing ?: Seeker(id = "seeker-$email", name = "", email = email, phone = "", city = city)).copy(
+                name = name.ifBlank { existing?.name ?: "Student" },
                 email = email,
                 phone = phone.ifBlank { existing?.phone ?: "" },
-                city = city.ifBlank { existing?.city ?: "" },
-                age = age.toIntOrNull() ?: existing?.age,
-                experienceYears = experience.toIntOrNull() ?: existing?.experienceYears,
-                skills = skills.ifEmpty { existing?.skills ?: emptyList() },
-                role = profileRole ?: existing?.role,
-                goal = goal.ifBlank { existing?.goal },
+                city = city.ifBlank { existing?.city ?: "Pune" },
+                age = 21,
+                experienceYears = experience.toIntOrNull() ?: 0,
+                skills = skills.ifEmpty { existing?.skills ?: listOf("Python", "Git") },
+                certificates = listOf(degreeTrack),
+                role = "Student",
+                goal = careerGoal,
             ),
         )
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
-        Text(Strings.onboardingTitle, fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-        Text("$step of 3", fontSize = 13.sp, color = ThemeColors.InkMute)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+    ) {
+        // Step progress header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column {
+                Text(
+                    "Student Profile Setup",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = ThemeColors.Ink,
+                )
+                Text(
+                    "Step $step of 3 · Skills-first matching",
+                    fontSize = 13.sp,
+                    color = ThemeColors.InkMute,
+                )
+            }
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = ThemeColors.PrimarySoft,
+            ) {
+                Text(
+                    "$step / 3",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = ThemeColors.PrimaryDeep,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                )
+            }
+        }
+
         Spacer(Modifier.height(16.dp))
-        Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+
+        // Step content
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+        ) {
             when (step) {
-                1 -> RoleStep(selected = profileRole, onSelect = { profileRole = it; persist() })
+                1 -> DegreeTrackStep(
+                    selected = degreeTrack,
+                    onSelect = { degreeTrack = it },
+                )
                 2 -> BasicsStep(
                     name = name, onName = { name = it },
                     phone = phone, onPhone = { phone = it },
                     city = city, onCity = { city = it },
-                    age = age, onAge = { age = it },
+                    studyYear = studyYear, onStudyYear = { studyYear = it },
                     experience = experience, onExperience = { experience = it },
                     error = basicsError,
                 )
                 3 -> SkillsStep(
-                    profileRole = profileRole,
                     skills = skills,
                     onSkills = { skills = it },
-                    goal = goal,
-                    onGoal = { goal = it },
+                    careerGoal = careerGoal,
+                    onCareerGoal = { careerGoal = it },
                 )
             }
         }
-        Spacer(Modifier.height(12.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+
+        Spacer(Modifier.height(16.dp))
+
+        // Bottom navigation buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             if (step > 1) {
-                OutlinedButton(onClick = { persist(); step-- }) { Text("Back") }
+                OutlinedButton(
+                    onClick = { persist(); step-- },
+                    shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = ThemeColors.InkSecondary),
+                    border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                ) {
+                    Text("Back", fontSize = 14.sp)
+                }
             } else {
-                Spacer(Modifier.weight(1f))
+                Spacer(Modifier.width(1.dp))
             }
+
             if (step < 3) {
                 Button(
                     onClick = {
                         if (step == 2) {
-                            if (!OnboardingValidator.validName(name)) { basicsError = "Enter your full name"; return@Button }
-                            if (!OnboardingValidator.validPhone(phone)) { basicsError = "Enter a 10-digit mobile number starting 6–9"; return@Button }
-                            if (city.isBlank()) { basicsError = "City is needed to find jobs near you"; return@Button }
+                            if (!OnboardingValidator.validName(name)) {
+                                basicsError = "Enter your full name"
+                                return@Button
+                            }
+                            if (!OnboardingValidator.validPhone(phone)) {
+                                basicsError = "Enter a valid 10-digit mobile number starting 6–9"
+                                return@Button
+                            }
+                            if (city.isBlank()) {
+                                basicsError = "City is required to match nearby roles"
+                                return@Button
+                            }
                             basicsError = null
                         }
                         persist()
@@ -127,46 +199,87 @@ fun OnboardingScreen(
                     shape = RoundedCornerShape(ThemeRadii.Button.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ThemeColors.Primary,
-                        contentColor = ThemeColors.OnPrimary,
+                        contentColor = Color.White,
                     ),
-                ) { Text("Next") }
+                ) {
+                    Text("Continue", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                }
             } else {
                 Button(
-                    onClick = { persist(); onFinished() },
+                    onClick = {
+                        persist()
+                        onFinished()
+                    },
                     shape = RoundedCornerShape(ThemeRadii.Button.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ThemeColors.Primary,
-                        contentColor = ThemeColors.OnPrimary,
+                        contentColor = Color.White,
                     ),
-                ) { Text("Finish setup") }
+                ) {
+                    Text("Complete & Match Jobs", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                }
             }
         }
-        Text(Strings.onboardingSaved, fontSize = 12.sp, color = ThemeColors.InkMute2)
     }
 }
 
 @Composable
-private fun RoleStep(selected: String?, onSelect: (String) -> Unit) {
-    Text("What describes you best?", fontSize = 16.sp, color = ThemeColors.Ink)
-    Spacer(Modifier.height(12.dp))
-    roleCard("Experienced worker", "I have hands-on skills and want jobs now.", selected, onSelect)
-    roleCard("Student", "I'm studying and picking a goal.", selected, onSelect)
-    roleCard("Trainee", "I'm learning a trade.", selected, onSelect)
-}
+private fun DegreeTrackStep(
+    selected: String,
+    onSelect: (String) -> Unit,
+) {
+    Text(
+        "What is your degree or education track?",
+        fontSize = 16.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = ThemeColors.Ink,
+    )
+    Text(
+        "Recruiters look for student status for internships and entry-level positions.",
+        fontSize = 13.sp,
+        color = ThemeColors.InkMute,
+    )
+    Spacer(Modifier.height(14.dp))
 
-@Composable
-private fun roleCard(title: String, blurb: String, selected: String?, onSelect: (String) -> Unit) {
-    val isSel = selected == title
-    Card(
-        onClick = { onSelect(title) },
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-        border = BorderStroke(1.dp, if (isSel) ThemeColors.Primary else ThemeColors.Hairline),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text(blurb, fontSize = 13.sp, color = ThemeColors.InkMute)
+    val tracks = listOf(
+        "B.Tech / B.E. (Computer Science / IT)" to "Focus on software engineering, algorithms, and development.",
+        "BCA / MCA / B.Sc Computer Science" to "Web and software applications, database and cloud administration.",
+        "Diploma / Polytechnic (Tech / Electronics)" to "Hands-on technical implementation, systems, and hardware.",
+        "Self-Taught / Other Engineering Branch" to "Building tech projects and transitioning into software.",
+    )
+
+    tracks.forEach { (title, blurb) ->
+        val isSel = selected == title
+        Card(
+            onClick = { onSelect(title) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp),
+            shape = RoundedCornerShape(ThemeRadii.Card.dp),
+            border = BorderStroke(
+                if (isSel) 2.dp else 1.dp,
+                if (isSel) ThemeColors.Primary else ThemeColors.Hairline,
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isSel) ThemeColors.PrimarySoft else ThemeColors.Canvas,
+            ),
+        ) {
+            Row(
+                modifier = Modifier.padding(14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(50.dp),
+                    color = if (isSel) ThemeColors.Primary else ThemeColors.Hairline,
+                    modifier = Modifier.size(10.dp),
+                ) {}
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(title, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(2.dp))
+                    Text(blurb, fontSize = 12.sp, color = ThemeColors.InkMute)
+                }
+            }
         }
     }
 }
@@ -176,65 +289,75 @@ private fun BasicsStep(
     name: String, onName: (String) -> Unit,
     phone: String, onPhone: (String) -> Unit,
     city: String, onCity: (String) -> Unit,
-    age: String, onAge: (String) -> Unit,
+    studyYear: String, onStudyYear: (String) -> Unit,
     experience: String, onExperience: (String) -> Unit,
     error: String?,
 ) {
-    Text("The basics", fontSize = 16.sp, color = ThemeColors.Ink)
-    Spacer(Modifier.height(8.dp))
+    Text("Personal & Campus Info", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
+    Text("Used to calculate location match and fresher eligibility.", fontSize = 13.sp, color = ThemeColors.InkMute)
+    Spacer(Modifier.height(12.dp))
+
     OutlinedTextField(
         value = name,
         onValueChange = onName,
-        label = { Text("Full name") },
+        label = { Text("Full Name") },
+        placeholder = { Text("e.g. Aman Verma") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
     )
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(10.dp))
+
     OutlinedTextField(
         value = phone,
         onValueChange = onPhone,
-        label = { Text("Phone") },
+        label = { Text("Mobile Number") },
         prefix = { Text("+91 ") },
-        supportingText = { Text("10 digits, starts with 6–9.") },
+        placeholder = { Text("9823012345") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
     )
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(10.dp))
+
     OutlinedTextField(
         value = city,
         onValueChange = onCity,
-        label = { Text("City") },
-        supportingText = { Text("Matches are strictly filtered by your city.") },
+        label = { Text("Preferred Job / Internship City") },
+        placeholder = { Text("e.g. Pune, Mumbai, Bangalore") },
+        supportingText = { Text("Hard eligibility gate — you'll see jobs in this city.") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
     )
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(10.dp))
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         OutlinedTextField(
-            value = age,
-            onValueChange = { onAge(it.filter { c -> c.isDigit() }.take(2)) },
-            label = { Text("Age (years)") },
-            placeholder = { Text("e.g. 21") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = studyYear,
+            onValueChange = onStudyYear,
+            label = { Text("Year of Study") },
+            placeholder = { Text("e.g. Final Year") },
             singleLine = true,
             modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(8.dp),
         )
         OutlinedTextField(
             value = experience,
             onValueChange = { onExperience(it.filter { c -> c.isDigit() }.take(2)) },
             label = { Text("Experience (years)") },
-            placeholder = { Text("0 for fresher") },
+            placeholder = { Text("0 for Fresher") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
             modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(8.dp),
         )
     }
-    Spacer(Modifier.height(4.dp))
-    Text("Enter 0 experience if fresher. Age/exp can be updated anytime in Profile.", fontSize = 12.sp, color = ThemeColors.InkMute2)
+
     if (error != null) {
         Spacer(Modifier.height(8.dp))
         Text(error, color = ThemeColors.Danger, fontSize = 13.sp)
@@ -244,30 +367,46 @@ private fun BasicsStep(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SkillsStep(
-    profileRole: String?,
     skills: List<String>,
     onSkills: (List<String>) -> Unit,
-    goal: String,
-    onGoal: (String) -> Unit,
+    careerGoal: String,
+    onCareerGoal: (String) -> Unit,
 ) {
     var naturalSpeechInput by remember { mutableStateOf("") }
     var isAnalyzing by remember { mutableStateOf(false) }
     var aiStatusMessage by remember { mutableStateOf<String?>(null) }
-    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
-    // AI Natural Language Skill Assistant Card
+    Text("Skills & Projects", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
+    Text("The matching engine scores your fit based on these skills.", fontSize = 13.sp, color = ThemeColors.InkMute)
+
+    Spacer(Modifier.height(12.dp))
+
+    // AI Natural Language Skill Extractor
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(ThemeRadii.Card.dp),
         border = BorderStroke(1.dp, ThemeColors.Hairline),
         colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
     ) {
         Column(Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("✨ AI Skill Assistant", fontWeight = FontWeight.Medium, fontSize = 14.sp, color = ThemeColors.Ink)
+                Icon(
+                    imageVector = Lucide.Sparkles,
+                    contentDescription = null,
+                    tint = ThemeColors.PrimaryDeep,
+                    modifier = Modifier.size(18.dp),
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    "AI Skill & Project Extractor",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    color = ThemeColors.Ink,
+                )
             }
             Text(
-                "Tell us in your own words what you know or study (e.g., 'Maine ITI wiring aur fan repair seekha hai'). AI will map it to standard skills.",
+                "Describe your college projects, coursework, or languages in your own words. AI will map them into verified skills.",
                 fontSize = 12.sp,
                 color = ThemeColors.InkMute,
                 modifier = Modifier.padding(vertical = 4.dp),
@@ -275,10 +414,16 @@ private fun SkillsStep(
             OutlinedTextField(
                 value = naturalSpeechInput,
                 onValueChange = { naturalSpeechInput = it },
-                placeholder = { Text("Type here in English, Hindi, or Hinglish…", fontSize = 13.sp) },
+                placeholder = {
+                    Text(
+                        "e.g. 'I built an Android app with Kotlin and Firebase, and know Python, SQL, and Git.'",
+                        fontSize = 12.sp,
+                    )
+                },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = false,
                 maxLines = 3,
+                shape = RoundedCornerShape(8.dp),
             )
             Spacer(Modifier.height(8.dp))
             Row(
@@ -287,109 +432,115 @@ private fun SkillsStep(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (aiStatusMessage != null) {
-                    Text(aiStatusMessage!!, fontSize = 11.sp, color = ThemeColors.Primary, modifier = Modifier.weight(1f))
+                    Text(aiStatusMessage!!, fontSize = 11.sp, color = ThemeColors.PrimaryDeep, modifier = Modifier.weight(1f))
                 } else {
                     Spacer(Modifier.weight(1f))
                 }
                 Button(
-                    enabled = !isAnalyzing,
+                    enabled = !isAnalyzing && naturalSpeechInput.isNotBlank(),
                     onClick = {
-                        if (naturalSpeechInput.isBlank()) return@Button
                         val apiKey = BuildConfig.OPENROUTER_API_KEY
                         if (apiKey.isNotBlank()) {
                             isAnalyzing = true
-                            aiStatusMessage = "Analyzing with AI..."
+                            aiStatusMessage = "Analyzing projects with AI..."
                             scope.launch {
                                 val result = OpenRouterAssistant.analyzeCandidateSpeech(naturalSpeechInput, apiKey)
                                 isAnalyzing = false
                                 result.onSuccess { profile ->
                                     val newSkills = (skills + profile.extractedSkills).distinct().take(12)
                                     onSkills(newSkills)
-                                    aiStatusMessage = "AI: ${profile.summary}"
+                                    aiStatusMessage = "✓ Extracted: ${profile.extractedSkills.joinToString(", ")}"
                                 }.onFailure {
-                                    // Fallback seamlessly to offline taxonomy
                                     val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
                                     if (matched.isNotEmpty()) {
                                         onSkills((skills + matched).distinct().take(12))
-                                        aiStatusMessage = "Offline Extractor matched ${matched.size} skills"
+                                        aiStatusMessage = "✓ Matched ${matched.size} tech skills"
                                     } else {
-                                        aiStatusMessage = "Could not parse skills. Try simple trade words."
+                                        aiStatusMessage = "Mention programming languages or frameworks."
                                     }
                                 }
                             }
                         } else {
-                            // Offline semantic extraction using SkillTaxonomy engine
                             val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
                             if (matched.isNotEmpty()) {
-                                val merged = (skills + matched).distinct().take(12)
-                                onSkills(merged)
-                                aiStatusMessage = "Extracted ${matched.size} skills into standard list"
-                            } else {
-                                aiStatusMessage = "No direct trade skills detected. Try words like wiring, plumbing, ac, fan."
+                                onSkills((skills + matched).distinct().take(12))
+                                aiStatusMessage = "✓ Matched ${matched.size} skills"
                             }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ThemeColors.Primary,
-                        contentColor = ThemeColors.OnPrimary,
+                        contentColor = Color.White,
                     ),
-                    shape = RoundedCornerShape(20.dp),
+                    shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text(if (isAnalyzing) "Thinking..." else "Auto-Extract Skills", fontSize = 12.sp)
+                    Text(if (isAnalyzing) "Analyzing..." else "Auto-Extract", fontSize = 12.sp)
                 }
             }
         }
     }
 
-    if (profileRole == "Student") {
-        Text("What are you studying?", fontSize = 16.sp, color = ThemeColors.Ink)
-        Spacer(Modifier.height(8.dp))
-        OutlinedTextField(value = goal, onValueChange = onGoal, label = { Text("What do you want to become?") }, supportingText = { Text("Pick from the standard skills list.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-        Spacer(Modifier.height(12.dp))
-        Text("Your acquired skills or coursework", fontSize = 15.sp, color = ThemeColors.Ink)
-    } else if (profileRole == "Trainee") {
-        Text("Your interests", fontSize = 16.sp, color = ThemeColors.Ink)
-        Text("Pick the trades you want to learn.", fontSize = 13.sp, color = ThemeColors.InkMute)
-        Spacer(Modifier.height(8.dp))
-        InterestGrid(all = canonicalSkills(), selected = skills, onToggle = { s ->
-            onSkills(if (s in skills) skills - s else (skills + s).take(12))
-        })
-        return
-    }
-    var query by remember { mutableStateOf("") }
-    val suggestions = remember(query) {
-        if (query.isBlank()) emptyList()
-        else canonicalSkills().filter { it.contains(query, ignoreCase = true) && it !in skills }.take(5)
-    }
-    Text("Your skills", fontSize = 16.sp, color = ThemeColors.Ink)
-    Text("Type to add — suggestions come from the standard skills list.", fontSize = 13.sp, color = ThemeColors.InkMute)
-    Spacer(Modifier.height(8.dp))
-    OutlinedTextField(value = query, onValueChange = { query = it }, label = { Text("Add a skill") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-    suggestions.forEach { s ->
-        TextButton(onClick = { onSkills((skills + s).take(12)); query = "" }) {
-            Text("$s — matched from canonical skills", color = ThemeColors.Ink)
-        }
-    }
-    Spacer(Modifier.height(8.dp))
-    Text("${skills.size} of 12 skills", fontSize = 13.sp, color = ThemeColors.InkMute)
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        skills.forEach { s ->
-            AssistChip(onClick = { onSkills(skills - s) }, label = { Text(s) })
-        }
-    }
-    Text("Matches update instantly when skills change.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-}
+    Spacer(Modifier.height(14.dp))
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun InterestGrid(all: List<String>, selected: List<String>, onToggle: (String) -> Unit) {
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        all.forEach { s ->
-            val sel = s in selected
-            if (sel) {
-                AssistChip(onClick = { onToggle(s) }, label = { Text("✓ $s") })
-            } else {
-                TextButton(onClick = { onToggle(s) }) { Text(s, color = ThemeColors.InkMute) }
+    // Quick Add Popular Tech Skills
+    Text("Quick Add Student Tech Skills:", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+    Spacer(Modifier.height(6.dp))
+
+    val popular = listOf("Python", "Android", "Kotlin", "React", "JavaScript", "SQL", "Git", "Figma", "Problem Solving", "Machine Learning")
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        popular.forEach { sk ->
+            val isAdded = sk in skills
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = if (isAdded) ThemeColors.PrimarySoft else ThemeColors.Canvas,
+                border = BorderStroke(1.dp, if (isAdded) ThemeColors.Primary else ThemeColors.Hairline),
+                modifier = Modifier.clickable {
+                    if (isAdded) onSkills(skills - sk) else onSkills((skills + sk).take(12))
+                },
+            ) {
+                Text(
+                    text = if (isAdded) "✓ $sk" else "+ $sk",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = if (isAdded) ThemeColors.PrimaryDeep else ThemeColors.Ink,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                )
+            }
+        }
+    }
+
+    Spacer(Modifier.height(14.dp))
+
+    // Currently Selected Skills
+    Text("Your Active Skills (${skills.size}):", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+    Spacer(Modifier.height(6.dp))
+
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        skills.forEach { sk ->
+            Surface(
+                shape = RoundedCornerShape(8.dp),
+                color = ThemeColors.CanvasSoft,
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                ) {
+                    Text("⚡ $sk", fontSize = 12.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        "✕",
+                        fontSize = 11.sp,
+                        color = ThemeColors.InkMute,
+                        modifier = Modifier.clickable { onSkills(skills - sk) },
+                    )
+                }
             }
         }
     }

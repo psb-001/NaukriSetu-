@@ -88,8 +88,8 @@ fun CompactJobCard(
                         Text(
                             text = if (isMatched) "✓ $req" else req,
                             fontSize = 11.sp,
-                            fontWeight = if (isMatched) FontWeight.Medium else FontWeight.Normal,
-                            color = if (isMatched) ThemeColors.Primary else ThemeColors.InkMute,
+                            fontWeight = if (isMatched) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (isMatched) ThemeColors.PrimaryDeep else ThemeColors.InkMute,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                         )
                     }
@@ -101,7 +101,7 @@ fun CompactJobCard(
                 text = "⚡ Engine: " + ranked.reason,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Medium,
-                color = ThemeColors.Primary
+                color = ThemeColors.PrimaryDeep
             )
         }
     }

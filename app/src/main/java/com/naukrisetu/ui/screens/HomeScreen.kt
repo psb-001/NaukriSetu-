@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -152,19 +153,29 @@ fun HomeScreen(
             )
             Spacer(Modifier.height(8.dp))
 
-            // Selectable chips (selected = black fill)
+            // Selectable chips (selected = brand primary fill, unselected = soft clean pill)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("All", "Android", "Python", "Web Dev", "Full Stack", "Data & AI", "UI/UX Design").forEach { c ->
                     val selected = chip == c
                     Card(
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
                         shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = if (selected) ThemeColors.Ink else ThemeColors.CanvasSoft),
-                        border = BorderStroke(1.dp, if (selected) ThemeColors.Ink else ThemeColors.Hairline),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (selected) ThemeColors.Primary else ThemeColors.CanvasSoft,
+                        ),
+                        border = BorderStroke(
+                            1.dp,
+                            if (selected) ThemeColors.Primary else ThemeColors.Hairline,
+                        ),
                         onClick = { chip = c },
                     ) {
-                        Text(c, color = if (selected) ThemeColors.Canvas else ThemeColors.Ink, fontSize = 13.sp,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
+                        Text(
+                            text = c,
+                            color = if (selected) Color.White else ThemeColors.InkSecondary,
+                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                            fontSize = 13.sp,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        )
                     }
                 }
             }
@@ -298,11 +309,11 @@ fun HomeScreen(
                     Button(
                         onClick = { onNavigate(Routes.profile) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ThemeColors.Ink,
-                            contentColor = ThemeColors.Canvas,
+                            containerColor = ThemeColors.Primary,
+                            contentColor = Color.White,
                         ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) { Text("View & Edit Student Profile", fontSize = 13.sp) }
+                        shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                    ) { Text("View & Edit Student Profile", fontSize = 13.sp, fontWeight = FontWeight.SemiBold) }
                 }
             }
             Spacer(Modifier.height(12.dp))

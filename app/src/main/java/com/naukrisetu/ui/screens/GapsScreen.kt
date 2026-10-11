@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,7 @@ import com.naukrisetu.engine.gapsFor
 import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
+import com.naukrisetu.ui.theme.ThemeRadii
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -141,10 +143,13 @@ fun GapsScreen(
             Button(
                 onClick = { onNavigate(Routes.matches) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Ink),
+                shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.Primary,
+                    contentColor = Color.White,
+                ),
             ) {
-                Text("Back to All Matches")
+                Text("Back to All Matches", fontWeight = FontWeight.SemiBold)
             }
         }
     }

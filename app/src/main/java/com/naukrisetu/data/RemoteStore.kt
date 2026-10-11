@@ -207,7 +207,19 @@ class RemoteStore(
     override fun currentSeeker(): Seeker? {
         seekers[email]?.let { return it }
         seekers.values.firstOrNull { it.email.equals(email, ignoreCase = true) }?.let { return it }
-        return if (email.contains("student")) Seed.studentSeeker else Seed.demoSeeker
+        if (email.equals(Seed.studentSeeker.email, ignoreCase = true)) return Seed.studentSeeker
+        if (email.equals("student.web@naukrisetu.com", ignoreCase = true)) {
+            return Seed.studentSeeker.copy(
+                id = "seeker-pooja",
+                name = "Pooja Deshmukh",
+                email = "student.web@naukrisetu.com",
+                skills = listOf("React", "JavaScript", "HTML/CSS", "Git", "Figma"),
+                certificates = listOf("BCA (Bachelor of Computer Applications)"),
+                goal = "Frontend Web Developer",
+            )
+        }
+        if (email.equals(DEMO_SEEKER_EMAIL, ignoreCase = true)) return Seed.demoSeeker
+        return null
     }
 
     override fun seeker(id: String): Seeker? {

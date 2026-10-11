@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
@@ -63,4 +64,5 @@ object Lucide {
     val RotateCcw: ImageVector = Icons.Filled.Refresh
     val LogOut: ImageVector = Icons.AutoMirrored.Filled.Logout
     val Bell: ImageVector = Icons.Filled.Notifications
+    val Sparkles: ImageVector = Icons.Filled.Star
 }

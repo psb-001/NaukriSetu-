@@ -22,6 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -137,7 +138,10 @@ fun ProfileScreen(
                                     citySavedMsg = "Updated to $trimmed! Matches refreshed."
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Ink),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = Color.White,
+                            ),
                             shape = RoundedCornerShape(8.dp),
                         ) {
                             Text("Save")
@@ -216,7 +220,10 @@ fun ProfileScreen(
                                     skillInput = ""
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Ink),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = Color.White,
+                            ),
                             shape = RoundedCornerShape(8.dp),
                         ) {
                             Text("Add")
@@ -286,7 +293,10 @@ fun ProfileScreen(
                                     certInput = ""
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Ink),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = Color.White,
+                            ),
                             shape = RoundedCornerShape(8.dp),
                         ) {
                             Text("Add")
@@ -297,23 +307,36 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Settings & Logout
+            // Settings & Actions
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Card.dp),
                 border = BorderStroke(1.dp, ThemeColors.Hairline),
                 colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
             ) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("App Settings", fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("App Settings & Actions", fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth().clickable { onLogout() }.padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    OutlinedButton(
+                        onClick = { onNavigate(Routes.onboarding) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                        border = BorderStroke(1.dp, ThemeColors.Primary),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ThemeColors.PrimaryDeep),
                     ) {
-                        Icon(imageVector = Lucide.LogOut, contentDescription = null, tint = ThemeColors.Danger, modifier = Modifier.size(20.dp))
+                        Text("Redo Student Setup & AI Extractor", fontWeight = FontWeight.SemiBold)
+                    }
+
+                    OutlinedButton(
+                        onClick = onLogout,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                        border = BorderStroke(1.dp, ThemeColors.Danger),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ThemeColors.Danger),
+                    ) {
+                        Icon(imageVector = Lucide.LogOut, contentDescription = null, tint = ThemeColors.Danger, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Log Out", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Danger)
+                        Text("Log Out", fontWeight = FontWeight.SemiBold)
                     }
                 }
             }

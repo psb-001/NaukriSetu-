@@ -18,9 +18,9 @@ class ScaffoldTest {
     }
 
     @Test fun `theme tokens match supabase ds`() {
-        assertEquals(Color(0xFF3ECF8E), ThemeColors.Primary)
-        assertEquals(Color(0xFF171717), ThemeColors.Ink)
-        assertEquals(Color(0xFFDFDFDF), ThemeColors.Hairline)
+        assertEquals(Color(0xFF10B981), ThemeColors.Primary)
+        assertEquals(Color(0xFF0F172A), ThemeColors.Ink)
+        assertEquals(Color(0xFFE2E8F0), ThemeColors.Hairline)
         assertEquals(Color(0xFFFFFFFF), ThemeColors.Canvas)
     }
 }

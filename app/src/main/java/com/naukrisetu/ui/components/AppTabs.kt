@@ -81,9 +81,9 @@ private fun IconTabs(tabs: List<Tab>, current: String, onNavigate: (String) -> U
                 },
                 label = { Text(t.label, fontSize = 11.sp) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedTextColor = ThemeColors.Ink,
+                    selectedTextColor = ThemeColors.PrimaryDeep,
                     unselectedTextColor = ThemeColors.InkMute,
-                    indicatorColor = ThemeColors.CanvasSoft,
+                    indicatorColor = ThemeColors.PrimarySoft,
                 ),
             )
         }
