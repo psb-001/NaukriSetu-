@@ -20,10 +20,13 @@ import com.naukrisetu.data.DemoStore
 import com.naukrisetu.ui.auth.Role
 import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.nav.Routes
+import com.naukrisetu.ui.screens.CoursesScreen
+import com.naukrisetu.ui.screens.GapsScreen
 import com.naukrisetu.ui.screens.HomeScreen
 import com.naukrisetu.ui.screens.LoginScreen
 import com.naukrisetu.ui.screens.MatchesScreen
 import com.naukrisetu.ui.screens.OnboardingScreen
+import com.naukrisetu.ui.screens.ProfileScreen
 import com.naukrisetu.ui.screens.OtpScreen
 import com.naukrisetu.ui.screens.SplashScreen
 import com.naukrisetu.ui.theme.ThemeColors
@@ -94,7 +97,28 @@ class MainActivity : ComponentActivity() {
                                 onHowToQualify = { oppId -> nav.navigate("${Routes.gaps}/$oppId") },
                             )
                         }
-                        composable("${Routes.gaps}/{oppId}") { Placeholder(Strings.gapsTitle) }
+                        composable("${Routes.gaps}/{oppId}") { backStack ->
+                            GapsScreen(
+                                oppId = backStack.arguments?.getString("oppId") ?: "",
+                                store = store,
+                                onNavigate = { nav.navigate(it) },
+                                onOpenCourses = { nav.navigate(Routes.courses) },
+                            )
+                        }
+                        composable(Routes.courses) {
+                            CoursesScreen(onNavigate = { nav.navigate(it) })
+                        }
+                        composable(Routes.profile) {
+                            ProfileScreen(
+                                store = store,
+                                onNavigate = { nav.navigate(it) },
+                                onLogout = {
+                                    nav.navigate(Routes.login) {
+                                        popUpTo(Routes.splash) { inclusive = true }
+                                    }
+                                },
+                            )
+                        }
                         composable(Routes.courses) { Placeholder(Routes.courses) }
                         composable(Routes.profile) { Placeholder(Routes.profile) }
                         composable(Routes.postJob) { Placeholder(Routes.postJob) }

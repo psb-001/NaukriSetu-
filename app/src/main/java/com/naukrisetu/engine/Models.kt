@@ -17,6 +17,8 @@ data class Seeker(
     val role: String? = null,
     val goal: String? = null,
     val payMinimum: Int? = null,
+    val aadhaar: String? = null,
+    val addressProof: Boolean = false,
 )
 
 /** Hard requirement on a posting. Seekers who fail are excluded, not ranked lower. */
