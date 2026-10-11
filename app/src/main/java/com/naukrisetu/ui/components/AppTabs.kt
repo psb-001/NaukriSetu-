@@ -48,7 +48,6 @@ private data class Tab(val label: String, val route: String, val icon: ImageVect
 private val seekerTabs = listOf(
     Tab("Home", Routes.home, Lucide.Home),
     Tab("Matches", Routes.matches, Lucide.BriefcaseBusiness),
-    Tab("Courses", Routes.courses, Lucide.BookOpen),
     Tab("Profile", Routes.profile, Lucide.UserRound),
 )
 

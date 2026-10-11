@@ -3,6 +3,8 @@ package com.naukrisetu.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
     var email by remember { mutableStateOf("") }
@@ -116,7 +119,79 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
                 Text(Strings.continueLabel, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             }
         }
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(16.dp))
+
+        // 1-Tap Quick Mock Logins for Reviewers & Judges
+        Text("Quick Demo Profiles (1-Tap Login)", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.InkMute)
+        Spacer(Modifier.height(8.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                onClick = {
+                    email = "student@naukrisetu.com"
+                    submit(Role.Seeker)
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.CanvasSoft,
+                    contentColor = ThemeColors.Ink
+                ),
+                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+            ) {
+                Text("🎓 Student: Aman", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    email = "ravi.kadam@gmail.com"
+                    submit(Role.Seeker)
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.CanvasSoft,
+                    contentColor = ThemeColors.Ink
+                ),
+                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+            ) {
+                Text("⚡ Worker: Ravi", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    email = "employer@voltas.com"
+                    submit(Role.Employer)
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.CanvasSoft,
+                    contentColor = ThemeColors.Ink
+                ),
+                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+            ) {
+                Text("🏢 Employer: Voltas", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    email = "verifier@yolo.com"
+                    submit(Role.Verifier)
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ThemeColors.CanvasSoft,
+                    contentColor = ThemeColors.Ink
+                ),
+                border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
+            ) {
+                Text("🛡️ Verifier: Meera", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             HorizontalDivider(modifier = Modifier.weight(1f), color = ThemeColors.Hairline)
             Text(Strings.orContinueAs, fontSize = 12.sp, color = ThemeColors.InkMute2, modifier = Modifier.padding(horizontal = 12.dp))
@@ -124,10 +199,12 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
         }
         Spacer(Modifier.height(16.dp))
         RoleCard(icon = Lucide.BriefcaseBusiness, title = Strings.continueAsEmployer, blurb = Strings.employerBlurb) {
+            if (email.isBlank()) email = "employer@voltas.com"
             submit(Role.Employer)
         }
         Spacer(Modifier.height(12.dp))
         RoleCard(icon = Lucide.ShieldCheck, title = Strings.continueAsVerifier, blurb = Strings.verifierBlurb) {
+            if (email.isBlank()) email = "verifier@yolo.com"
             submit(Role.Verifier)
         }
         Spacer(Modifier.weight(1f))

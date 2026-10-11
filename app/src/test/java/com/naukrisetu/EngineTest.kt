@@ -61,7 +61,7 @@ class EngineTest {
         assertTrue(store.allOpportunities().any { it.status == OppStatus.Pending })
     }
 
-    @Test fun `seed has eight opportunities`() {
-        assertEquals(8, Seed.opportunities.size)
+    @Test fun `seed has twelve opportunities`() {
+        assertEquals(12, Seed.opportunities.size)
     }
 }

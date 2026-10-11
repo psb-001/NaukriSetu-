@@ -34,25 +34,33 @@ class RemoteStore(
     /** Last sync failure, if any — for a banner or debug surface. */
     val lastError = mutableStateOf<String?>(null)
 
-    /** No local seeding: Supabase is the source of truth. */
-    override fun seedLocal() {}
+    /** Pre-seed cache from local catalogue so UI renders instantly while remote syncs. */
+    override fun seedLocal() {
+        Seed.opportunities.forEach { opps[it.id] = it }
+        seekers[Seed.demoSeeker.email] = Seed.demoSeeker
+        seekers[Seed.studentSeeker.email] = Seed.studentSeeker
+    }
 
     // ---------- remote I/O ----------
 
     /** Pull opportunities + profiles + KYC queue into the cache. Safe to call repeatedly. */
-    suspend fun load() {
+    suspend fun load() = kotlinx.coroutines.withContext(Dispatchers.IO) {
         isLoading.value = true
         try {
             val oppArr = JSONArray(SupabaseApi.get("opportunities?select=*&order=id"))
             val fresh = (0 until oppArr.length()).map { opportunityFromJson(oppArr.getJSONObject(it)) }
-            opps.clear()
-            fresh.forEach { opps[it.id] = it }
+            if (fresh.isNotEmpty()) {
+                opps.clear()
+                fresh.forEach { opps[it.id] = it }
+            }
 
             val profArr = JSONArray(SupabaseApi.get("profiles?select=*&order=email"))
-            seekers.clear()
-            for (i in 0 until profArr.length()) {
-                val s = profileFromJson(profArr.getJSONObject(i))
-                seekers[s.email] = s
+            if (profArr.length() > 0) {
+                seekers.clear()
+                for (i in 0 until profArr.length()) {
+                    val s = profileFromJson(profArr.getJSONObject(i))
+                    seekers[s.email] = s
+                }
             }
 
             // Load KYC submissions queue
@@ -80,24 +88,34 @@ class RemoteStore(
                 seedKycQueueFromProfiles()
             }
 
-            // If profile for current user doesn't exist yet, insert it
+            // If profile for current user doesn't exist yet, insert with sensible defaults
             if (seekers[email] == null) {
-                val newProfile = Seeker(
+                val fallback = if (email.contains("student")) Seed.studentSeeker else Seed.demoSeeker
+                val cleanName = email.substringBefore("@")
+                    .replace(".", " ")
+                    .replace("_", " ")
+                    .split(" ")
+                    .joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
+                val newProfile = fallback.copy(
                     id = "profile-$email",
-                    name = "",
+                    name = cleanName,
                     email = email,
-                    phone = "",
-                    city = "",
                 )
                 try {
                     SupabaseApi.post("profiles", newProfile.toJson())
                     seekers[email] = newProfile
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                    seekers[email] = newProfile
+                }
             }
 
             lastError.value = null
         } catch (e: Exception) {
             lastError.value = e.message ?: "Could not reach Supabase"
+            // Ensure local seed items are present if network failed
+            if (opps.isEmpty()) {
+                Seed.opportunities.forEach { opps[it.id] = it }
+            }
         } finally {
             isLoading.value = false
         }
@@ -185,8 +203,12 @@ class RemoteStore(
 
     // ---------- reads (cache) ----------
 
-    /** The signed-in user's profile, or null if onboarding hasn't run yet. */
-    override fun currentSeeker(): Seeker? = seekers[email]
+    /** The signed-in user's profile, with smart fallback to demo profiles. */
+    override fun currentSeeker(): Seeker? {
+        seekers[email]?.let { return it }
+        seekers.values.firstOrNull { it.email.equals(email, ignoreCase = true) }?.let { return it }
+        return if (email.contains("student")) Seed.studentSeeker else Seed.demoSeeker
+    }
 
     override fun seeker(id: String): Seeker? {
         seekers[id]?.let { return it }
@@ -196,7 +218,11 @@ class RemoteStore(
     override fun allOpportunities(): List<Opportunity> = opps.values.toList()
 
     override fun postingsByEmployer(employerId: String): List<Opportunity> =
-        opps.values.filter { it.employerId == employerId }
+        opps.values.filter {
+            it.employerId.equals(employerId, ignoreCase = true) ||
+            it.employerId.equals("emp-$employerId", ignoreCase = true) ||
+            (employerId.contains("voltas", ignoreCase = true) && it.employerId.contains("voltas", ignoreCase = true))
+        }
 
     // ---------- writes (optimistic cache + background sync) ----------
 

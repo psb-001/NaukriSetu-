@@ -69,7 +69,12 @@ class MainActivity : ComponentActivity() {
                             val remote = RemoteStore(savedEmail)
                             remote.load()
                             store = remote
-                            nav.navigate(Routes.home) {
+                            val target = when (savedRole) {
+                                Role.Employer -> Routes.postJob
+                                Role.Verifier -> Routes.kycQueue
+                                Role.Seeker -> Routes.home
+                            }
+                            nav.navigate(target) {
                                 popUpTo(Routes.splash) { inclusive = true }
                             }
                         }
@@ -109,7 +114,18 @@ class MainActivity : ComponentActivity() {
                                     lifecycleScope.launch {
                                         remote.load()
                                         store = remote
-                                        nav.navigate(routeFor(pendingRole)) {
+                                        val destination = when (pendingRole) {
+                                            Role.Employer -> Routes.postJob
+                                            Role.Verifier -> Routes.kycQueue
+                                            Role.Seeker -> {
+                                                if (remote.currentSeeker()?.skills?.isNotEmpty() == true) {
+                                                    Routes.home
+                                                } else {
+                                                    Routes.onboarding
+                                                }
+                                            }
+                                        }
+                                        nav.navigate(destination) {
                                             popUpTo(Routes.splash) { inclusive = true }
                                         }
                                     }

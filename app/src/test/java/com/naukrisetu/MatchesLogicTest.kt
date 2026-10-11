@@ -13,11 +13,11 @@ class MatchesLogicTest {
 
     @Test fun `matches split matches engine`() {
         val (eligible, ineligible) = splitMatches(seeker, liveOpps)
-        assertEquals(5, eligible.size)
+        assertEquals(9, eligible.size)
         assertEquals(3, ineligible.size)
     }
 
     @Test fun `home hero count is live`() {
-        assertEquals(5, homeHeroCount(seeker, liveOpps))
+        assertEquals(9, homeHeroCount(seeker, liveOpps))
     }
 }

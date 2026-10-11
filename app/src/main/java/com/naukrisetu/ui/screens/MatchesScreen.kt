@@ -105,7 +105,7 @@ fun MatchesScreen(
                             onClick = { onNavigate(Routes.profile) },
                             colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Primary, contentColor = ThemeColors.OnPrimary),
                         ) { Text("Complete KYC") }
-                        TextButton(onClick = { onNavigate(Routes.courses) }) { Text("Browse courses meanwhile") }
+                        TextButton(onClick = { tab = 1 }) { Text("Review requirements to unlock (${ineligible.size})") }
                     } else {
                         Text("Ranked by fit score. Tap a card for the full breakdown.", fontSize = 13.sp, color = ThemeColors.InkMute)
                         eligible.forEachIndexed { i, r ->
@@ -113,6 +113,7 @@ fun MatchesScreen(
                                 ranked = r,
                                 position = i + 1,
                                 total = eligible.size,
+                                seeker = seeker,
                                 onHowToQualify = { onHowToQualify(r.opportunity.id) },
                             )
                         }

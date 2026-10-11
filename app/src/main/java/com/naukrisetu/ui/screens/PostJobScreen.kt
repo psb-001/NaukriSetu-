@@ -46,7 +46,7 @@ fun PostJobScreen(
 ) {
     // Use the employer's email as the canonical employerId so
     // postingsByEmployer() correctly filters their own posts.
-    val employerId = store.currentSeeker()?.email?.let { "emp-$it" } ?: "emp-you"
+    val employerId = store.currentSeeker()?.email ?: "employer@voltas.com"
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var skillQuery by remember { mutableStateOf("") }
@@ -167,7 +167,7 @@ fun MyPostingsScreen(
     store: DemoStore,
     onNavigate: (String) -> Unit,
 ) {
-    val employerId = store.currentSeeker()?.email?.let { "emp-$it" } ?: "emp-you"
+    val employerId = store.currentSeeker()?.email ?: "employer@voltas.com"
     val postings = store.postingsByEmployer(employerId)
 
     Scaffold(

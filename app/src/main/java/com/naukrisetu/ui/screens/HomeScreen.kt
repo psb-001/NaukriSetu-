@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
@@ -91,7 +89,58 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text("Namaste, ${seeker.name.split(" ").firstOrNull() ?: "there"}", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("$hero new matches since yesterday", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Text("$hero new matches qualified by RozgarLink engine", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Spacer(Modifier.height(10.dp))
+
+            // RozgarLink G-01 Engine Banner
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+            ) {
+                Column(Modifier.padding(12.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            shape = RoundedCornerShape(50.dp),
+                            color = ThemeColors.Primary,
+                            modifier = Modifier.size(8.dp)
+                        ) {}
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            "ROZGARLINK G-01 MATCHING ENGINE",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = ThemeColors.Primary,
+                            letterSpacing = 0.5.sp
+                        )
+                    }
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "${seeker.name} · ${if (seeker.experienceYears == 0) "Student / Fresher friendly" else "${seeker.experienceYears}y experience"} · ${seeker.city.ifBlank { "Pune" }}",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = ThemeColors.Ink
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        seeker.skills.take(6).forEach { sk ->
+                            Surface(
+                                shape = RoundedCornerShape(6.dp),
+                                color = ThemeColors.Canvas,
+                                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                            ) {
+                                Text(
+                                    text = "⚡ $sk",
+                                    fontSize = 11.sp,
+                                    color = ThemeColors.Ink,
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
             Spacer(Modifier.height(12.dp))
 
             // Pill search bar with search icon
@@ -162,17 +211,46 @@ fun HomeScreen(
             Spacer(Modifier.height(8.dp))
 
             // Top 3 eligible as compact ranked rows
-            filtered.take(3).forEachIndexed { i, r ->
-                CompactJobCard(
-                    ranked = r,
-                    position = i + 1,
-                    total = eligible.size,
-                    onHowToQualify = { onHowToQualify(r.opportunity.id) },
-                )
+            if (filtered.isNotEmpty()) {
+                filtered.take(3).forEachIndexed { i, r ->
+                    CompactJobCard(
+                        ranked = r,
+                        position = i + 1,
+                        total = eligible.size,
+                        seeker = seeker,
+                        onHowToQualify = { onHowToQualify(r.opportunity.id) },
+                    )
+                }
+            } else if (eligible.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                    border = BorderStroke(1.dp, ThemeColors.Hairline),
+                    colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+                ) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text("No matches for filter '$chip'", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                        Text("Switch to 'All' to see your ${eligible.size} qualified opportunities.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                        TextButton(onClick = { chip = "All" }) { Text("Show All Matches") }
+                    }
+                }
+            } else {
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                    border = BorderStroke(1.dp, ThemeColors.Hairline),
+                    colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+                ) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text("0 direct matches for current criteria", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                        Text("Opportunities are filtered by city (${seeker.city.ifBlank { "Pune" }}) and mandatory criteria. Update your profile or explore unlockable roles.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                        UnderlineLink(text = "View all jobs and why they failed gates →", onClick = { onNavigate(Routes.matches) })
+                    }
+                }
             }
             Spacer(Modifier.height(12.dp))
 
-            // Gap card with underlined How to qualify
+            // Unlocked skills card
             val topGap = eligible.firstOrNull()?.let { gapsFor(seeker, it.opportunity).firstOrNull() }
             if (topGap != null) {
                 Card(
@@ -182,9 +260,9 @@ fun HomeScreen(
                     colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        Text("You're 1 skill away from ${eligible.first().opportunity.title}", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                        Text("Missing: ${topGap.label}", fontSize = 13.sp, color = ThemeColors.InkMute)
-                        UnderlineLink(text = "How to qualify", onClick = { onHowToQualify(eligible.first().opportunity.id) })
+                        Text("⚡ Bridge 1 Skill: ${eligible.first().opportunity.title}", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                        Text("Missing: ${topGap.label} · Bridging this moves you to top candidate rank.", fontSize = 13.sp, color = ThemeColors.InkMute)
+                        UnderlineLink(text = "How to bridge & qualify →", onClick = { onHowToQualify(eligible.first().opportunity.id) })
                     }
                 }
             }
@@ -199,7 +277,7 @@ fun HomeScreen(
             ) {
                 Column(Modifier.padding(16.dp)) {
                     Text("Profile $kycPct% complete", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                    Text("$kycDone of 5 checks done. Completing KYC unlocks more jobs.", fontSize = 13.sp, color = ThemeColors.InkMute)
+                    Text("$kycDone of 5 checks done. Completing KYC unlocks verified employer listings.", fontSize = 13.sp, color = ThemeColors.InkMute)
                     LinearProgressIndicator(
                         progress = { kycPct / 100f },
                         modifier = Modifier.fillMaxWidth(),
@@ -219,46 +297,6 @@ fun HomeScreen(
                 }
             }
             Spacer(Modifier.height(12.dp))
-
-            // Courses horizontal strip — gap-relevant or fallback
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text("Courses for your gaps", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                UnderlineLink(text = "View catalog", onClick = { onNavigate(Routes.courses) })
-            }
-            Text("${gapCourses.size} courses recommended based on missing skills", fontSize = 13.sp, color = ThemeColors.InkMute)
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-            ) {
-                items(gapCourses.take(4)) { c ->
-                    CourseCard(course = c)
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-        }
-    }
-}
-
-@Composable
-fun CourseCard(course: com.naukrisetu.engine.Course) {
-    Card(
-        modifier = Modifier.size(160.dp, 140.dp),
-        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-        border = BorderStroke(1.dp, ThemeColors.Hairline),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Text(course.code, fontSize = 11.sp, color = ThemeColors.InkMute2)
-            Text(course.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text("${course.provider} · ${course.weeks} weeks", fontSize = 11.sp, color = ThemeColors.InkMute)
         }
     }
 }
