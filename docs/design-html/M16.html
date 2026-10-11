@@ -1,0 +1,169 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="page layout container" style="font-family:'Inter',sans-serif">
+    <main class="flex-1 px-5 pb-6 pt-6" data-kid="1-1" data-name="main verification queue content">
+        <!-- Header -->
+        <header data-kid="1-1-1" data-name="page header section">
+            <h1 class="text-[20px] font-bold leading-tight" data-kid="1-1-1-1" data-name="page title heading" style="font-family:'Plus Jakarta Sans',sans-serif">
+                Verification queue
+            </h1>
+            <p class="mt-1 text-[13px] leading-snug text-[#707070]" data-kid="1-1-1-2" data-name="page subtitle description">
+                Approve once — the post is live for every seeker instantly.
+            </p>
+        </header>
+        <!-- Queue tabs -->
+        <div class="mt-5 flex items-center gap-2" data-kid="1-1-2" data-name="queue filter tab list" role="tablist">
+            <button class="flex h-9 shrink-0 items-center rounded-full border border-[#c7c7c7] bg-white px-4 text-[13px] font-semibold text-[#171717]" data-kid="1-1-2-1" data-name="KYC docs tab button">
+                KYC docs (4)
+            </button>
+            <button aria-current="true" class="flex h-9 shrink-0 items-center rounded-full bg-[#171717] px-4 text-[13px] font-semibold text-white" data-kid="1-1-2-2" data-name="jobs tab button (active)">
+                Jobs (2)
+            </button>
+        </div>
+        <!-- Queue rows -->
+        <div class="mt-4 flex flex-col gap-3" data-kid="1-1-3" data-name="queue card list container">
+            <!-- Row 1 · Pending job -->
+            <article class="rounded-xl border border-[#dfdfdf] bg-white p-4" data-kid="1-1-3-1" data-name="pending job verification card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-1-3-1-1" data-name="card header row">
+                    <div class="min-w-0" data-kid="1-1-3-1-1-1" data-name="company and role info block">
+                        <p class="text-[12px] text-[#707070]" data-kid="1-1-3-1-1-1-1" data-name="company name label">
+                            Sharma Enterprises
+                        </p>
+                        <h3 class="mt-0.5 text-[16px] font-semibold leading-snug" data-kid="1-1-3-1-1-1-2" data-name="job role title" style="font-family:'Plus Jakarta Sans',sans-serif">
+                            Fan Repair Technician
+                        </h3>
+                    </div>
+                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#fff8d6] px-2.5 py-1 text-[11px] font-semibold text-[#171717]" data-kid="1-1-3-1-1-2" data-name="pending status badge">
+                        <span class="h-1.5 w-1.5 rounded-full bg-[#ffdb13]" data-kid="1-1-3-1-1-2-1" data-name="pending status indicator dot">
+                        </span>
+                        Pending
+                    </span>
+                </div>
+                <p class="mt-1 text-[12px] text-[#707070]" data-kid="1-1-3-1-2" data-name="job summary line (criteria, pay, city)">
+                    2 criteria · ₹18–21k · Pune
+                </p>
+                <div class="mt-3 flex flex-wrap gap-1.5" data-kid="1-1-3-1-3" data-name="job criteria tags container">
+                    <span class="rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 text-[11px] leading-none text-[#171717]" data-kid="1-1-3-1-3-1" data-name="certificate criteria tag">
+                        Certificate: Fan Motor Repair
+                    </span>
+                    <span class="rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 text-[11px] leading-none text-[#171717]" data-kid="1-1-3-1-3-2" data-name="city criteria tag">
+                        City = Pune
+                    </span>
+                </div>
+                <div class="mt-4 flex items-center gap-2" data-kid="1-1-3-1-4" data-name="card action button row">
+                    <button class="h-9 shrink-0 rounded-md bg-[#3ecf8e] px-4 text-[13px] font-semibold text-[#171717]" data-kid="1-1-3-1-4-1" data-name="approve job button" style="font-family:'Plus Jakarta Sans',sans-serif">
+                        Approve
+                    </button>
+                    <button class="h-9 shrink-0 rounded-md border border-[#c7c7c7] bg-white px-4 text-[13px] font-medium text-[#171717]" data-kid="1-1-3-1-4-2" data-name="reject job button">
+                        Reject
+                    </button>
+                    <span class="ml-auto cursor-pointer text-[12px] text-[#171717] underline underline-offset-2" data-kid="1-1-3-1-4-3" data-name="view full post link">
+                        View full post
+                    </span>
+                </div>
+            </article>
+            <!-- Row 2 · Rejected job -->
+            <article class="rounded-xl border border-[#dfdfdf] bg-white p-4" data-kid="1-1-3-2" data-name="rejected job verification card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-1-3-2-1" data-name="card header row">
+                    <div class="min-w-0" data-kid="1-1-3-2-1-1" data-name="company and role info block">
+                        <p class="text-[12px] text-[#707070]" data-kid="1-1-3-2-1-1-1" data-name="company name label">
+                            Rao Constructions
+                        </p>
+                        <h3 class="mt-0.5 text-[16px] font-semibold leading-snug" data-kid="1-1-3-2-1-1-2" data-name="job role title" style="font-family:'Plus Jakarta Sans',sans-serif">
+                            Plumbing Helper
+                        </h3>
+                    </div>
+                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#ffeceb] px-2.5 py-1 text-[11px] font-semibold text-[#171717]" data-kid="1-1-3-2-1-2" data-name="rejected status badge">
+                        <span class="h-1.5 w-1.5 rounded-full bg-[#ff2201]" data-kid="1-1-3-2-1-2-1" data-name="rejected status indicator dot">
+                        </span>
+                        Rejected
+                    </span>
+                </div>
+                <p class="mt-1 text-[12px] text-[#707070]" data-kid="1-1-3-2-2" data-name="job summary line (criteria, pay, city)">
+                    2 criteria · ₹13–16k · Pune
+                </p>
+                <div class="mt-3 rounded-lg bg-[#ffeceb] p-3" data-kid="1-1-3-2-3" data-name="rejection reason notice block">
+                    <p class="text-[12px] leading-snug text-[#171717]" data-kid="1-1-3-2-3-1" data-name="rejection note text">
+                        <span class="font-semibold" data-kid="1-1-3-2-3-1-1" data-name="rejected status word in note">
+                            Rejected
+                        </span>
+                        — verifier note: add a fixed maximum pay so seekers see a realistic range.
+                    </p>
+                </div>
+                <div class="mt-3" data-kid="1-1-3-2-4" data-name="resubmit action container">
+                    <button class="h-9 rounded-md border border-[#c7c7c7] bg-white px-3 text-[12px] font-medium text-[#171717]" data-kid="1-1-3-2-4-1" data-name="re-submit after edit button">
+                        Re-submit after edit
+                    </button>
+                </div>
+            </article>
+        </div>
+        <p class="mt-4 text-[11px] leading-snug text-[#9a9a9a]" data-kid="1-1-4" data-name="queue footer disclaimer text">
+            Pending and rejected posts never appear in seeker matches — enforced in the engine.
+        </p>
+        <!-- Approved today -->
+        <section class="mt-6" data-kid="1-1-5" data-name="approved today section">
+            <div class="flex items-center justify-between" data-kid="1-1-5-1" data-name="approved section header row">
+                <h2 class="text-[13px] font-semibold text-[#171717]" data-kid="1-1-5-1-1" data-name="approved section heading" style="font-family:'Plus Jakarta Sans',sans-serif">
+                    Approved today
+                </h2>
+                <span class="text-[11px] text-[#9a9a9a]" data-kid="1-1-5-1-2" data-name="approved post count label">
+                    1 post
+                </span>
+            </div>
+            <div class="mt-2 rounded-xl border border-[#dfdfdf] bg-white p-4" data-kid="1-1-5-2" data-name="approved post card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-1-5-2-1" data-name="approved card header row">
+                    <div class="min-w-0" data-kid="1-1-5-2-1-1" data-name="company and role info block">
+                        <p class="text-[12px] text-[#707070]" data-kid="1-1-5-2-1-1-1" data-name="company name label">
+                            Kesari Electricals
+                        </p>
+                        <h3 class="mt-0.5 text-[15px] font-semibold leading-snug" data-kid="1-1-5-2-1-1-2" data-name="approved job role title" style="font-family:'Plus Jakarta Sans',sans-serif">
+                            Wiring Assistant
+                        </h3>
+                    </div>
+                    <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#e7f8ef] px-2.5 py-1 text-[11px] font-semibold text-[#171717]" data-kid="1-1-5-2-1-2" data-name="live status badge">
+                        <span class="h-1.5 w-1.5 rounded-full bg-[#3ecf8e]" data-kid="1-1-5-2-1-2-1" data-name="live status indicator dot">
+                        </span>
+                        Live
+                    </span>
+                </div>
+                <p class="mt-1.5 text-[12px] leading-snug text-[#707070]" data-kid="1-1-5-2-2" data-name="approval detail line (time, seekers)">
+                    Approved 10:24 · appears in seeker matches instantly · 3 seekers qualify
+                </p>
+            </div>
+        </section>
+    </main>
+    <!-- Verifier bottom tab bar -->
+    <nav class="mt-auto border-t border-[#dfdfdf] bg-white px-2 pb-6 pt-2.5" data-kid="1-2" data-name="verifier bottom tab navigation">
+        <div class="grid grid-cols-3" data-kid="1-2-1" data-name="bottom tab grid container">
+            <a class="flex flex-col items-center gap-1 py-1 text-[#707070]" data-kid="1-2-1-1" data-name="KYC queue tab item">
+                <span class="text-[22px] leading-none" data-kid="1-2-1-1-1" data-name="KYC queue icon container">
+                    <i class="icon-shield-check" data-kid="1-2-1-1-1-1" data-name="shield check icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-2-1-1-2" data-name="KYC queue tab label">
+                    KYC Queue
+                </span>
+            </a>
+            <a class="flex flex-col items-center gap-1 py-1" data-kid="1-2-1-2" data-name="jobs queue tab item (active)">
+                <span class="text-[22px] leading-none text-[#3ecf8e]" data-kid="1-2-1-2-1" data-name="jobs queue icon container">
+                    <i class="icon-file-check-2" data-kid="1-2-1-2-1-1" data-name="file check icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-2-1-2-2" data-name="jobs queue tab label">
+                    Jobs Queue
+                </span>
+            </a>
+            <a class="flex flex-col items-center gap-1 py-1 text-[#707070]" data-kid="1-2-1-3" data-name="profile tab item">
+                <span class="text-[22px] leading-none" data-kid="1-2-1-3-1" data-name="profile icon container">
+                    <i class="icon-user-round" data-kid="1-2-1-3-1-1" data-name="user profile icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-2-1-3-2" data-name="profile tab label">
+                    Profile
+                </span>
+            </a>
+        </div>
+    </nav>
+</div>

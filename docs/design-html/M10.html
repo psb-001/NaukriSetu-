@@ -1,0 +1,273 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+.font-display{font-family:'Plus Jakarta Sans',sans-serif;}
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="page layout container" style="font-family:'Inter',sans-serif;">
+    <main class="flex-1 px-5 pb-8 pt-6" data-kid="1-1" data-name="main content area">
+        <!-- Header -->
+        <header data-kid="1-1-1" data-name="profile header with name and email">
+            <h1 class="font-display text-[20px] font-bold leading-tight" data-kid="1-1-1-1" data-name="page title heading">
+                Profile
+            </h1>
+            <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-1-1-2" data-name="user name and email subtitle">
+                Ravi Kadam · ravi.kadam@gmail.com
+            </p>
+        </header>
+        <!-- Amber verification banner -->
+        <div class="mt-4 flex items-center gap-2.5 rounded-lg bg-[#fff8d6] px-3.5 py-3" data-kid="1-1-2" data-name="verification pending banner">
+            <span class="h-2 w-2 shrink-0 rounded-full bg-[#ffdb13]" data-kid="1-1-2-1" data-name="yellow pending indicator dot">
+            </span>
+            <p class="text-[13px] leading-snug" data-kid="1-1-2-2" data-name="verification status message">
+                Verification pending — you can browse, some jobs stay locked.
+            </p>
+        </div>
+        <!-- Progress header -->
+        <section class="mt-5" data-kid="1-1-3" data-name="profile completeness section">
+            <div class="flex items-baseline justify-between" data-kid="1-1-3-1" data-name="progress header row">
+                <p class="font-display text-[15px] font-semibold" data-kid="1-1-3-1-1" data-name="profile completion percentage label">
+                    Profile 40% complete
+                </p>
+                <p class="text-[12px] text-[#707070]" data-kid="1-1-3-1-2" data-name="completed checks count label">
+                    2 of 5 checks done
+                </p>
+            </div>
+            <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-1-3-2" data-name="progress bar track">
+                <div class="h-full w-[40%] rounded-full bg-[#3ecf8e]" data-kid="1-1-3-2-1" data-name="progress bar fill at 40 percent">
+                </div>
+            </div>
+            <p class="mt-2.5 text-[13px]" data-kid="1-1-3-3" data-name="completing KYC unlocks note">
+                Completing KYC unlocks
+                <span class="font-semibold" data-kid="1-1-3-3-1" data-name="lockable jobs count emphasis">
+                    2 more jobs
+                </span>
+            </p>
+        </section>
+        <!-- KYC steps — vertical stepper -->
+        <section class="mt-7" data-kid="1-1-4" data-name="KYC vertical stepper section">
+            <!-- Step 1 · Aadhaar (done) -->
+            <div class="flex gap-4" data-kid="1-1-4-1" data-name="Aadhaar verification step row">
+                <div class="flex w-8 shrink-0 flex-col items-center" data-kid="1-1-4-1-1" data-name="step 1 indicator column">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#3ecf8e]" data-kid="1-1-4-1-1-1" data-name="completed step circle badge">
+                        <span class="text-[15px] text-white" data-kid="1-1-4-1-1-1-1" data-name="checkmark icon holder">
+                            <i class="icon-check" data-kid="1-1-4-1-1-1-1-1" data-name="checkmark icon">
+                            </i>
+                        </span>
+                    </div>
+                    <div class="my-1.5 w-px flex-1 bg-[#dfdfdf]" data-kid="1-1-4-1-1-2" data-name="vertical connector line">
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1 pb-7" data-kid="1-1-4-1-2" data-name="step 1 content area">
+                    <div class="flex items-center justify-between gap-3" data-kid="1-1-4-1-2-1" data-name="step title and status row">
+                        <h2 class="font-display text-[15px] font-semibold" data-kid="1-1-4-1-2-1-1" data-name="Aadhaar step title">
+                            Aadhaar
+                        </h2>
+                        <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#fff8d6] px-2.5 py-1 text-[11px] font-medium" data-kid="1-1-4-1-2-1-2" data-name="pending status badge">
+                            <span class="h-1.5 w-1.5 rounded-full bg-[#ffdb13]" data-kid="1-1-4-1-2-1-2-1" data-name="pending dot icon">
+                            </span>
+                            Pending
+                        </span>
+                    </div>
+                    <div class="mt-2.5 flex items-center gap-3" data-kid="1-1-4-1-2-2" data-name="upload status row">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#ebebeb] bg-[#fafafa] text-[18px] text-[#707070]" data-kid="1-1-4-1-2-2-1" data-name="file icon thumbnail">
+                            <i class="icon-file" data-kid="1-1-4-1-2-2-1-1" data-name="file icon">
+                            </i>
+                        </div>
+                        <p class="text-[12px] text-[#707070]" data-kid="1-1-4-1-2-2-2" data-name="uploaded status text">
+                            Uploaded · awaiting check
+                        </p>
+                    </div>
+                    <p class="mt-2.5 text-[11px] leading-snug text-[#9a9a9a]" data-kid="1-1-4-1-2-3" data-name="demo disclaimer note">
+                        12-digit format check only — demo does not contact UIDAI.
+                    </p>
+                </div>
+            </div>
+            <!-- Step 2 · Address (current) -->
+            <div class="flex gap-4" data-kid="1-1-4-2" data-name="Address verification step row">
+                <div class="flex w-8 shrink-0 flex-col items-center" data-kid="1-1-4-2-1" data-name="step 2 indicator column">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#3ecf8e] bg-white" data-kid="1-1-4-2-1-1" data-name="current step circle badge">
+                        <span class="font-display text-[13px] font-bold text-[#3ecf8e]" data-kid="1-1-4-2-1-1-1" data-name="step number two text">
+                            2
+                        </span>
+                    </div>
+                    <div class="my-1.5 w-px flex-1 bg-[#dfdfdf]" data-kid="1-1-4-2-1-2" data-name="vertical connector line">
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1 pb-7" data-kid="1-1-4-2-2" data-name="step 2 content area">
+                    <h2 class="font-display text-[15px] font-semibold" data-kid="1-1-4-2-2-1" data-name="Address step title">
+                        Address
+                    </h2>
+                    <label class="mb-1.5 mt-3 block text-[13px] font-semibold" data-kid="1-1-4-2-2-2" data-name="full address field label">
+                        Full address
+                    </label>
+                    <div class="rounded-lg border border-[#c7c7c7] px-3 py-2.5 text-[14px] leading-snug" data-kid="1-1-4-2-2-3" data-name="full address input display">
+                        Flat 4, Sai Residency, Kothrud
+                    </div>
+                    <label class="mb-1.5 mt-3.5 block text-[13px] font-semibold" data-kid="1-1-4-2-2-4" data-name="city field label">
+                        City
+                    </label>
+                    <div class="flex items-center justify-between rounded-lg border border-[#c7c7c7] px-3 py-2.5" data-kid="1-1-4-2-2-5" data-name="city selector field">
+                        <span class="flex items-center gap-2 text-[14px]" data-kid="1-1-4-2-2-5-1" data-name="city value with pin icon">
+                            <span class="text-[16px] text-[#707070]" data-kid="1-1-4-2-2-5-1-1" data-name="map pin icon holder">
+                                <i class="icon-map-pin" data-kid="1-1-4-2-2-5-1-1-1" data-name="map pin icon">
+                                </i>
+                            </span>
+                            Pune
+                        </span>
+                        <span class="text-[16px] text-[#b2b2b2]" data-kid="1-1-4-2-2-5-2" data-name="chevron down indicator holder">
+                            <i class="icon-chevron-down" data-kid="1-1-4-2-2-5-2-1" data-name="chevron down icon">
+                            </i>
+                        </span>
+                    </div>
+                    <p class="mt-1.5 text-[11px] leading-snug text-[#9a9a9a]" data-kid="1-1-4-2-2-6" data-name="city change note">
+                        Changing city re-runs your matches instantly.
+                    </p>
+                    <div class="mt-3.5 flex items-center justify-center gap-2 rounded-lg border border-dashed border-[#c7c7c7] py-3.5" data-kid="1-1-4-2-2-7" data-name="address proof upload dropzone">
+                        <span class="text-[18px] text-[#707070]" data-kid="1-1-4-2-2-7-1" data-name="camera icon holder">
+                            <i class="icon-camera" data-kid="1-1-4-2-2-7-1-1" data-name="camera icon">
+                            </i>
+                        </span>
+                        <p class="text-[13px] font-medium" data-kid="1-1-4-2-2-7-2" data-name="upload address proof label">
+                            Take photo or upload address proof
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 3 · Certificates (upcoming) -->
+            <div class="flex gap-4" data-kid="1-1-4-3" data-name="Certificates step row">
+                <div class="flex w-8 shrink-0 flex-col items-center" data-kid="1-1-4-3-1" data-name="step 3 indicator column">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full border border-[#dfdfdf] bg-white" data-kid="1-1-4-3-1-1" data-name="upcoming step circle badge">
+                        <span class="font-display text-[13px] font-bold text-[#9a9a9a]" data-kid="1-1-4-3-1-1-1" data-name="step number three text">
+                            3
+                        </span>
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1" data-kid="1-1-4-3-2" data-name="step 3 content area">
+                    <h2 class="font-display text-[15px] font-semibold" data-kid="1-1-4-3-2-1" data-name="Certificates step title">
+                        Certificates
+                    </h2>
+                    <div class="mt-2.5 flex items-center justify-between gap-3" data-kid="1-1-4-3-2-2" data-name="certificate entry row">
+                        <div class="min-w-0" data-kid="1-1-4-3-2-2-1" data-name="certificate detail container">
+                            <p class="font-display truncate text-[14px] font-medium" data-kid="1-1-4-3-2-2-1-1" data-name="certificate name text">
+                                ITI Electrician Certificate
+                            </p>
+                            <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-1-4-3-2-2-1-2" data-name="certificate issuer and expiry text">
+                                NCVT · expires 2028
+                            </p>
+                        </div>
+                        <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#fff8d6] px-2.5 py-1 text-[11px] font-medium" data-kid="1-1-4-3-2-2-2" data-name="pending status badge">
+                            <span class="h-1.5 w-1.5 rounded-full bg-[#ffdb13]" data-kid="1-1-4-3-2-2-2-1" data-name="pending dot icon">
+                            </span>
+                            Pending
+                        </span>
+                    </div>
+                    <p class="mt-2.5 text-[11px] leading-snug text-[#9a9a9a]" data-kid="1-1-4-3-2-3" data-name="matching disclaimer note">
+                        Write the name exactly as on the certificate — it is matched letter for letter.
+                    </p>
+                    <button class="mt-3 flex items-center gap-1.5 text-[13px] font-medium" data-kid="1-1-4-3-2-4" data-name="add certificate button">
+                        <span class="text-[17px] text-[#707070]" data-kid="1-1-4-3-2-4-1" data-name="plus icon holder">
+                            <i class="icon-plus-circle" data-kid="1-1-4-3-2-4-1-1" data-name="plus circle icon">
+                            </i>
+                        </span>
+                        Add certificate
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- Privacy line -->
+        <p class="mt-7 text-center text-[11px] text-[#9a9a9a]" data-kid="1-1-5" data-name="privacy note about devices">
+            Documents stay on this device in the demo.
+        </p>
+        <!-- Settings -->
+        <section class="mt-8 border-t border-[#dfdfdf] pt-5" data-kid="1-1-6" data-name="settings section">
+            <h2 class="font-display text-[16px] font-semibold" data-kid="1-1-6-1" data-name="Settings section heading">
+                Settings
+            </h2>
+            <div class="mt-1" data-kid="1-1-6-2" data-name="settings list container">
+                <div class="flex items-center justify-between gap-3 border-b border-[#dfdfdf] py-3.5" data-kid="1-1-6-2-1" data-name="app language settings row">
+                    <div data-kid="1-1-6-2-1-1" data-name="language label and subtext">
+                        <p class="text-[14px]" data-kid="1-1-6-2-1-1-1" data-name="app language label">
+                            App language
+                        </p>
+                        <p class="mt-0.5 text-[11px] text-[#9a9a9a]" data-kid="1-1-6-2-1-1-2" data-name="language availability subtext">
+                            Hindi / Marathi coming
+                        </p>
+                    </div>
+                    <div class="flex shrink-0 items-center gap-1 text-[13px] text-[#707070]" data-kid="1-1-6-2-1-2" data-name="current language value with arrow">
+                        English
+                        <span class="text-[16px]" data-kid="1-1-6-2-1-2-1" data-name="chevron right icon holder">
+                            <i class="icon-chevron-right" data-kid="1-1-6-2-1-2-1-1" data-name="chevron right icon">
+                            </i>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between gap-3 border-b border-[#dfdfdf] py-3.5" data-kid="1-1-6-2-2" data-name="about settings row">
+                    <p class="text-[14px]" data-kid="1-1-6-2-2-1" data-name="About label">
+                        About
+                    </p>
+                    <p class="text-[12px] text-[#707070]" data-kid="1-1-6-2-2-2" data-name="app version text">
+                        NaukriSetu v0.1.0 (demo)
+                    </p>
+                </div>
+                <div class="flex items-center justify-between gap-3 py-3.5" data-kid="1-1-6-2-3" data-name="demo reset settings row">
+                    <div data-kid="1-1-6-2-3-1" data-name="demo reset label and subtext">
+                        <p class="text-[14px] text-[#ff2201]" data-kid="1-1-6-2-3-1-1" data-name="demo reset label in red">
+                            Demo reset
+                        </p>
+                        <p class="mt-0.5 text-[11px] text-[#9a9a9a]" data-kid="1-1-6-2-3-1-2" data-name="clears local data subtext">
+                            Clears all local data
+                        </p>
+                    </div>
+                    <span class="text-[16px] text-[#b2b2b2]" data-kid="1-1-6-2-3-2" data-name="chevron right arrow holder">
+                        <i class="icon-chevron-right" data-kid="1-1-6-2-3-2-1" data-name="chevron right icon">
+                        </i>
+                    </span>
+                </div>
+            </div>
+            <button class="mt-2 h-11 w-full rounded-md border border-[#c7c7c7] bg-white text-[15px] font-medium" data-kid="1-1-6-3" data-name="log out button">
+                Log out
+            </button>
+        </section>
+    </main>
+    <!-- Bottom tab bar -->
+    <nav class="border-t border-[#dfdfdf] bg-white" data-kid="1-2" data-name="bottom tab navigation bar">
+        <div class="grid grid-cols-4 px-2 pb-4 pt-2.5" data-kid="1-2-1" data-name="tab grid container">
+            <div class="flex flex-col items-center gap-1 text-[#707070]" data-kid="1-2-1-1" data-name="home tab item">
+                <span class="text-[22px]" data-kid="1-2-1-1-1" data-name="home icon holder">
+                    <i class="icon-house" data-kid="1-2-1-1-1-1" data-name="house icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-2-1-1-2" data-name="home tab label">
+                    Home
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 text-[#707070]" data-kid="1-2-1-2" data-name="matches tab item">
+                <span class="text-[22px]" data-kid="1-2-1-2-1" data-name="matches icon holder">
+                    <i class="icon-briefcase-business" data-kid="1-2-1-2-1-1" data-name="briefcase icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-2-1-2-2" data-name="matches tab label">
+                    Matches
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 text-[#707070]" data-kid="1-2-1-3" data-name="courses tab item">
+                <span class="text-[22px]" data-kid="1-2-1-3-1" data-name="courses icon holder">
+                    <i class="icon-book-open" data-kid="1-2-1-3-1-1" data-name="open book icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-2-1-3-2" data-name="courses tab label">
+                    Courses
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1" data-kid="1-2-1-4" data-name="profile tab item active">
+                <span class="text-[22px] text-[#3ecf8e]" data-kid="1-2-1-4-1" data-name="profile icon holder">
+                    <i class="icon-user-round" data-kid="1-2-1-4-1-1" data-name="user icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-2-1-4-2" data-name="profile tab label active">
+                    Profile
+                </span>
+            </div>
+        </div>
+    </nav>
+</div>

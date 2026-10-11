@@ -1,0 +1,85 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="mobile job matches page layout container" style="font-family:'Inter',sans-serif;">
+    <!-- Header -->
+    <header class="px-5 pt-7" data-kid="1-1" data-name="page header">
+        <h1 class="text-[20px] font-bold leading-tight" data-kid="1-1-1" data-name="page title" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            Your matches
+        </h1>
+        <p class="mt-1 text-[13px] leading-snug text-[#707070]" data-kid="1-1-2" data-name="page subtitle">
+            Hard requirements checked first.
+        </p>
+    </header>
+    <!-- Tabs -->
+    <div class="mt-4 border-b border-[#dfdfdf] px-5" data-kid="1-2" data-name="tab navigation bar">
+        <div class="flex gap-7" data-kid="1-2-1" data-name="tab row">
+            <button class="relative pb-2.5 text-[15px] font-semibold text-[#171717]" data-kid="1-2-1-1" data-name="active 'Eligible' tab button" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                Eligible (0)
+                <span class="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-[#171717]" data-kid="1-2-1-1-1" data-name="active tab underline indicator">
+                </span>
+            </button>
+            <button class="pb-2.5 text-[15px] font-medium text-[#707070]" data-kid="1-2-1-2" data-name="'Not eligible' tab button">
+                Not eligible (8)
+            </button>
+        </div>
+    </div>
+    <!-- Empty state -->
+    <main class="flex flex-1 flex-col items-center justify-center px-8 py-12 text-center" data-kid="1-3" data-name="main empty state section">
+        <img alt="Open box with a magnifying glass and a sprouting seedling" class="h-auto w-[180px] shrink-0" data-kid="1-3-1" data-name="empty state illustration image" decoding="async" loading="lazy" src="/api/local/images/.kombai/canvas/assets/empty-search.svg"/>
+        <h2 class="mt-7 text-[18px] font-bold leading-snug" data-kid="1-3-2" data-name="empty state headline" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            Complete KYC to unlock matches
+        </h2>
+        <p class="mt-2 max-w-[280px] text-[13px] leading-relaxed text-[#707070]" data-kid="1-3-3" data-name="empty state description text">
+            You have 0 of 5 KYC checks done. Verified documents unlock the jobs you already qualify for.
+        </p>
+        <button class="mt-7 h-11 w-full max-w-[280px] rounded-[6px] bg-[#3ecf8e] text-[15px] font-semibold text-[#171717]" data-kid="1-3-4" data-name="primary 'Complete KYC' call-to-action button" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            Complete KYC
+        </button>
+        <button class="mt-4 text-[13px] font-medium text-[#171717] underline underline-offset-2" data-kid="1-3-5" data-name="secondary 'Browse courses meanwhile' link">
+            Browse courses meanwhile
+        </button>
+    </main>
+    <!-- Bottom tab bar -->
+    <nav class="mt-auto border-t border-[#dfdfdf] bg-white" data-kid="1-4" data-name="bottom tab navigation bar">
+        <div class="flex items-start justify-around px-2 pb-5 pt-2.5" data-kid="1-4-1" data-name="bottom nav row">
+            <div class="flex w-16 flex-col items-center gap-1 text-[#707070]" data-kid="1-4-1-1" data-name="home nav item">
+                <span class="text-[22px] leading-none" data-kid="1-4-1-1-1" data-name="home icon wrapper">
+                    <i class="icon-house" data-kid="1-4-1-1-1-1" data-name="home icon (lucide house)">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-4-1-1-2" data-name="home nav label">
+                    Home
+                </span>
+            </div>
+            <div class="flex w-16 flex-col items-center gap-1" data-kid="1-4-1-2" data-name="matches nav item (active)">
+                <span class="text-[22px] leading-none text-[#3ecf8e]" data-kid="1-4-1-2-1" data-name="matches icon wrapper">
+                    <i class="icon-briefcase-business" data-kid="1-4-1-2-1-1" data-name="matches icon (lucide briefcase-business)">
+                    </i>
+                </span>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-4-1-2-2" data-name="matches nav label">
+                    Matches
+                </span>
+            </div>
+            <div class="flex w-16 flex-col items-center gap-1 text-[#707070]" data-kid="1-4-1-3" data-name="courses nav item">
+                <span class="text-[22px] leading-none" data-kid="1-4-1-3-1" data-name="courses icon wrapper">
+                    <i class="icon-book-open" data-kid="1-4-1-3-1-1" data-name="courses icon (lucide book-open)">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-4-1-3-2" data-name="courses nav label">
+                    Courses
+                </span>
+            </div>
+            <div class="flex w-16 flex-col items-center gap-1 text-[#707070]" data-kid="1-4-1-4" data-name="profile nav item">
+                <span class="text-[22px] leading-none" data-kid="1-4-1-4-1" data-name="profile icon wrapper">
+                    <i class="icon-user-round" data-kid="1-4-1-4-1-1" data-name="profile icon (lucide user-round)">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium" data-kid="1-4-1-4-2" data-name="profile nav label">
+                    Profile
+                </span>
+            </div>
+        </div>
+    </nav>
+</div>

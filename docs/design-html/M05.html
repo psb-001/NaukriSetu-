@@ -1,0 +1,133 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+body { font-family: 'Inter', system-ui, sans-serif; }
+.font-pjs { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+</style>
+<div class="flex min-h-screen flex-col bg-white text-[#171717]" data-kid="1" data-name="page layout container">
+    <!-- Header -->
+    <header class="grid grid-cols-[2.5rem_1fr_2.5rem] items-center px-5 pt-4" data-kid="1-1" data-name="page header bar with back button and step title">
+        <button class="flex h-10 w-10 items-center justify-center rounded-full border border-[#dfdfdf] bg-white" data-kid="1-1-1" data-name="back navigation button">
+            <span class="text-[18px] leading-none text-[#171717]" data-kid="1-1-1-1" data-name="back button icon wrapper">
+                <i class="icon-arrow-left" data-kid="1-1-1-1-1" data-name="left arrow icon">
+                </i>
+            </span>
+        </button>
+        <div class="text-center text-[15px] font-semibold" data-kid="1-1-2" data-name="header title text">
+            Create your profile
+        </div>
+        <div class="text-right text-[13px] font-medium text-[#707070]" data-kid="1-1-3" data-name="step progress indicator text">
+            2 of 3
+        </div>
+    </header>
+    <!-- Step dots -->
+    <div class="flex items-center justify-center gap-1.5 px-5 pt-3" data-kid="1-2" data-name="step progress dots row">
+        <span class="h-2 w-2 rounded-full bg-[#24b47e]" data-kid="1-2-1" data-name="completed step dot">
+        </span>
+        <span class="h-2 w-5 rounded-full bg-[#3ecf8e]" data-kid="1-2-2" data-name="current step progress indicator">
+        </span>
+        <span class="h-2 w-2 rounded-full bg-[#dfdfdf]" data-kid="1-2-3" data-name="remaining step dot">
+        </span>
+    </div>
+    <!-- Heading -->
+    <h1 class="font-pjs px-5 pt-5 text-[22px] font-bold leading-tight" data-kid="1-3" data-name="section heading text">
+        The basics
+    </h1>
+    <!-- Form -->
+    <div class="flex flex-col gap-5 px-5 pt-6" data-kid="1-4" data-name="profile form container">
+        <!-- Full name -->
+        <div data-kid="1-4-1" data-name="full name field group">
+            <label class="mb-1.5 block text-[13px] font-semibold" data-kid="1-4-1-1" data-name="full name field label">
+                Full name
+                <span class="font-normal text-[#707070]" data-kid="1-4-1-1-1" data-name="required field asterisk">
+                    *
+                </span>
+            </label>
+            <input class="h-12 w-full rounded-lg border border-[#c7c7c7] bg-white px-4 text-[15px] text-[#171717] outline-hidden" data-kid="1-4-1-2" data-name="full name text input" value="Ravi Kadam"/>
+        </div>
+        <!-- Phone -->
+        <div data-kid="1-4-2" data-name="phone number field group">
+            <label class="mb-1.5 block text-[13px] font-semibold" data-kid="1-4-2-1" data-name="phone field label">
+                Phone
+                <span class="font-normal text-[#707070]" data-kid="1-4-2-1-1" data-name="required field asterisk">
+                    *
+                </span>
+            </label>
+            <div class="flex h-12 w-full items-center gap-3 rounded-lg border border-[#c7c7c7] bg-white px-4" data-kid="1-4-2-2" data-name="phone input container with country code">
+                <span class="text-[15px] font-semibold" data-kid="1-4-2-2-1" data-name="India country code prefix">
+                    +91
+                </span>
+                <span class="h-5 w-px bg-[#dfdfdf]" data-kid="1-4-2-2-2" data-name="divider between country code and phone">
+                </span>
+                <input class="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[15px] text-[#171717] outline-hidden" data-kid="1-4-2-2-3" data-name="phone number input field" inputmode="numeric" value="98220 12210"/>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-[#707070]" data-kid="1-4-2-3" data-name="phone input helper text">
+                10 digits, starts with 6–9.
+            </p>
+        </div>
+        <!-- City -->
+        <div data-kid="1-4-3" data-name="city field group">
+            <label class="mb-1.5 block text-[13px] font-semibold" data-kid="1-4-3-1" data-name="city field label">
+                City
+                <span class="font-normal text-[#707070]" data-kid="1-4-3-1-1" data-name="required field asterisk">
+                    *
+                </span>
+            </label>
+            <div class="flex h-12 w-full items-center gap-2.5 rounded-lg border border-[#c7c7c7] bg-white px-4" data-kid="1-4-3-2" data-name="city input container with icon">
+                <span class="text-[16px] leading-none text-[#707070]" data-kid="1-4-3-2-1" data-name="location icon wrapper">
+                    <i class="icon-map-pin" data-kid="1-4-3-2-1-1" data-name="map pin location icon">
+                    </i>
+                </span>
+                <input class="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-[15px] text-[#171717] outline-hidden" data-kid="1-4-3-2-2" data-name="city name input field" value="Pune"/>
+            </div>
+            <div class="mt-2 flex items-start gap-2 rounded-lg bg-[#fafafa] px-3 py-2.5" data-kid="1-4-3-3" data-name="city info hint box">
+                <span class="mt-0.5 text-[14px] leading-none text-[#707070]" data-kid="1-4-3-3-1" data-name="hint box icon wrapper">
+                    <i class="icon-map-pin" data-kid="1-4-3-3-1-1" data-name="map pin icon in hint">
+                    </i>
+                </span>
+                <p class="text-[12px] leading-snug text-[#707070]" data-kid="1-4-3-3-2" data-name="city info hint text">
+                    Needed to find jobs near you — matches are filtered by city.
+                </p>
+            </div>
+        </div>
+        <!-- Age + experience -->
+        <div data-kid="1-4-4" data-name="age and experience field group">
+            <div class="grid grid-cols-2 gap-3" data-kid="1-4-4-1" data-name="age and experience two column grid">
+                <div data-kid="1-4-4-1-1" data-name="age field column">
+                    <label class="mb-1.5 block min-h-[36px] text-[13px] font-semibold leading-snug" data-kid="1-4-4-1-1-1" data-name="age field label with fixed height">
+                        Age
+                        <span class="font-normal text-[#707070]" data-kid="1-4-4-1-1-1-1" data-name="age optional marker text">
+                            (optional)
+                        </span>
+                    </label>
+                    <input class="h-12 w-full rounded-lg border border-[#c7c7c7] bg-white px-4 text-[15px] text-[#171717] outline-hidden" data-kid="1-4-4-1-1-2" data-name="age input field" value="24"/>
+                </div>
+                <div data-kid="1-4-4-1-2" data-name="experience field column">
+                    <label class="mb-1.5 block min-h-[36px] text-[13px] font-semibold leading-snug" data-kid="1-4-4-1-2-1" data-name="experience field label with fixed height">
+                        Experience
+                        <span class="font-normal text-[#707070]" data-kid="1-4-4-1-2-1-1" data-name="experience optional marker text">
+                            (years, optional)
+                        </span>
+                    </label>
+                    <input class="h-12 w-full rounded-lg border border-[#c7c7c7] bg-white px-4 text-[15px] text-[#171717] outline-hidden" data-kid="1-4-4-1-2-2" data-name="experience input field" value="2"/>
+                </div>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-[#707070]" data-kid="1-4-4-2" data-name="age experience helper text">
+                Some jobs need this — add it anytime in Profile.
+            </p>
+        </div>
+    </div>
+    <!-- Footer actions -->
+    <footer class="mt-auto flex gap-3 px-5 pb-6 pt-8" data-kid="1-5" data-name="page footer action buttons">
+        <button class="h-12 flex-1 rounded-md border border-[#c7c7c7] bg-white text-[15px] font-semibold text-[#171717]" data-kid="1-5-1" data-name="back navigation action button">
+            Back
+        </button>
+        <button class="flex h-12 flex-1 items-center justify-center gap-1.5 rounded-md bg-[#3ecf8e] text-[15px] font-semibold text-[#171717]" data-kid="1-5-2" data-name="next action button">
+            Next
+            <span class="text-[16px] leading-none" data-kid="1-5-2-1" data-name="next button icon wrapper">
+                <i class="icon-arrow-right" data-kid="1-5-2-1-1" data-name="right arrow icon">
+                </i>
+            </span>
+        </button>
+    </footer>
+</div>

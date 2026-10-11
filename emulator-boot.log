@@ -155,3 +155,38 @@ USER_INFO    | Emulator is performing a full startup. This may take upto two min
 WARNING      | Failed to process .ini file C:\Users\Asus\.android\emu-update-last-check.ini for reading.
 WARNING      | Failed to process .ini file C:\Users\Asus\.android\emu-update-last-check.ini for reading.
 INFO         | Boot completed in 177282 ms
+INFO         | Increasing screen off timeout, logcat buffer size to 2M.
+WARNING      | adb command 'C:\Users\Asus\AppData\Local\Android\Sdk\platform-tools\adb.exe -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb.exe: device offline'
+WARNING      | adb command 'C:\Users\Asus\AppData\Local\Android\Sdk\platform-tools\adb.exe -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb.exe: device offline'
+WARNING      | adb command 'C:\Users\Asus\AppData\Local\Android\Sdk\platform-tools\adb.exe -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb.exe: device offline'
+INFO         | IPv4 server found: 10.30.73.160
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | IPv4 server found: 10.30.73.160
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | IPv4 server found: 10.30.73.160
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: c0a2:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: d8a8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+INFO         | Ignore IPv6 address: 50b8:e1c7:cf01:0:109b:e1c7:cf01:0
+ERROR        | detected a hanging thread 'QEMU2 CPU1 thread'. No response for 15001 ms

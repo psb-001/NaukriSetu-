@@ -1,0 +1,133 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+  .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+<div class="flex min-h-screen flex-col bg-white text-[#171717]" data-kid="1" data-name="page layout container" style="font-family:'Inter',sans-serif;">
+    <!-- Header -->
+    <header class="flex items-center gap-3 px-5 pb-2 pt-5" data-kid="1-1" data-name="header bar with back button and title">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fafafa] text-[20px] text-[#171717]" data-kid="1-1-1" data-name="back navigation icon button circle">
+            <i class="icon-arrow-left" data-kid="1-1-1-1" data-name="back arrow icon">
+            </i>
+        </span>
+        <h1 class="font-display text-[18px] font-bold leading-tight" data-kid="1-1-2" data-name="page title heading">
+            How to qualify
+        </h1>
+    </header>
+    <!-- Target card -->
+    <section class="mx-5 mt-3 rounded-xl border border-[#dfdfdf] bg-[#fafafa] p-4" data-kid="1-2" data-name="job target summary card">
+        <p class="text-[11px] font-medium text-[#9a9a9a]" data-kid="1-2-1" data-name="target label text">
+            Target
+        </p>
+        <h2 class="font-display mt-0.5 text-[18px] font-bold leading-snug" data-kid="1-2-2" data-name="job title heading">
+            AC Technician
+        </h2>
+        <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-2-3" data-name="job company and location details">
+            CoolTech Services · Pune · ₹27,000/mo
+        </p>
+        <div class="mt-3 flex items-center gap-2" data-kid="1-2-4" data-name="requirements match indicator row">
+            <span class="h-2 w-2 shrink-0 rounded-full bg-[#3ecf8e]" data-kid="1-2-4-1" data-name="green status dot">
+            </span>
+            <p class="text-[13px] font-medium" data-kid="1-2-4-2" data-name="requirements match status text">
+                You meet 2 of 3 hard requirements
+            </p>
+        </div>
+    </section>
+    <!-- Section heading -->
+    <h3 class="font-display px-5 pt-7 text-[16px] font-semibold" data-kid="1-3" data-name="missing requirements section heading">
+        What's missing
+    </h3>
+    <!-- Row 1 · expanded · has course -->
+    <section class="px-5" data-kid="1-4" data-name="first missing requirement row section">
+        <button class="flex w-full items-center gap-2 py-3.5 text-left" data-kid="1-4-1" data-name="requirement toggle button row">
+            <span class="font-display text-[15px] font-semibold" data-kid="1-4-1-1" data-name="requirement name text">
+                AC Repair & Servicing
+            </span>
+            <span class="rounded-full bg-[#fafafa] px-2 py-0.5 text-[11px] font-medium text-[#707070]" data-kid="1-4-1-2" data-name="requirement type badge">
+                Certificate
+            </span>
+            <span class="ml-auto text-[16px] text-[#707070]" data-kid="1-4-1-3" data-name="expanded chevron indicator">
+                <i class="icon-chevron-down" data-kid="1-4-1-3-1" data-name="chevron down icon">
+                </i>
+            </span>
+        </button>
+        <article class="rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-4-2" data-name="recommended course card">
+            <span class="inline-block rounded-full bg-[#fafafa] px-2.5 py-1 text-[11px] font-semibold leading-none" data-kid="1-4-2-1" data-name="course code badge">
+                HVAC-201
+            </span>
+            <h4 class="font-display mt-2 text-[14px] font-semibold leading-snug" data-kid="1-4-2-2" data-name="course name heading">
+                AC Repair & Servicing
+            </h4>
+            <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-4-2-3" data-name="course provider and duration text">
+                Voltas Academy · 8 weeks
+            </p>
+            <div class="mt-3 flex items-center" data-kid="1-4-2-4" data-name="course action buttons row">
+                <button class="flex items-center gap-1.5 text-[13px] font-medium text-[#171717]" data-kid="1-4-2-4-1" data-name="save course button">
+                    <span class="text-[15px]" data-kid="1-4-2-4-1-1" data-name="heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-4-2-4-1-1-1" data-name="heart icon">
+                        </i>
+                    </span>
+                    Save
+                </button>
+                <button class="ml-auto flex h-8 items-center gap-1.5 rounded-md border border-[#c7c7c7] px-3 text-[12px] font-medium text-[#171717]" data-kid="1-4-2-4-2" data-name="notify me button">
+                    <span class="text-[14px]" data-kid="1-4-2-4-2-1" data-name="bell icon wrapper">
+                        <i class="icon-bell" data-kid="1-4-2-4-2-1-1" data-name="bell icon">
+                        </i>
+                    </span>
+                    Notify me
+                </button>
+            </div>
+        </article>
+        <p class="mt-2 text-[11px] text-[#9a9a9a]" data-kid="1-4-3" data-name="disclaimer footnote text">
+            Saving tracks it — the demo never enrolls you.
+        </p>
+    </section>
+    <div class="mx-5 mt-4 h-px bg-[#dfdfdf]" data-kid="1-5" data-name="section divider line">
+    </div>
+    <!-- Row 2 · expanded · zero courses -->
+    <section class="px-5" data-kid="1-6" data-name="second missing requirement row section">
+        <button class="flex w-full items-center gap-2 py-3.5 text-left" data-kid="1-6-1" data-name="requirement toggle button row">
+            <span class="font-display text-[15px] font-semibold" data-kid="1-6-1-1" data-name="requirement name text">
+                AC gas charging
+            </span>
+            <span class="rounded-full bg-[#fafafa] px-2 py-0.5 text-[11px] font-medium text-[#707070]" data-kid="1-6-1-2" data-name="requirement type badge">
+                Skill
+            </span>
+            <span class="ml-auto text-[16px] text-[#707070]" data-kid="1-6-1-3" data-name="expanded chevron indicator">
+                <i class="icon-chevron-down" data-kid="1-6-1-3-1" data-name="chevron down icon">
+                </i>
+            </span>
+        </button>
+        <div class="rounded-lg bg-[#fafafa] p-3.5" data-kid="1-6-2" data-name="no available course empty state">
+            <p class="text-[13px] leading-snug text-[#707070]" data-kid="1-6-2-1" data-name="empty state message text">
+                No course available yet — check back soon.
+            </p>
+        </div>
+    </section>
+    <div class="mx-5 mt-4 h-px bg-[#dfdfdf]" data-kid="1-7" data-name="section divider line">
+    </div>
+    <!-- Row 3 · collapsed -->
+    <section class="px-5" data-kid="1-8" data-name="third requirement row collapsed section">
+        <div class="py-3.5" data-kid="1-8-1" data-name="collapsed requirement content wrapper">
+            <button class="flex w-full items-center gap-2 text-left" data-kid="1-8-1-1" data-name="requirement toggle button row">
+                <span class="font-display text-[15px] font-semibold" data-kid="1-8-1-1-1" data-name="requirement name text">
+                    Experience ≥ 3 years
+                </span>
+                <span class="rounded-full bg-[#fafafa] px-2 py-0.5 text-[11px] font-medium text-[#707070]" data-kid="1-8-1-1-2" data-name="requirement type badge">
+                    Criterion
+                </span>
+                <span class="ml-auto text-[16px] text-[#707070]" data-kid="1-8-1-1-3" data-name="collapsed chevron indicator">
+                    <i class="icon-chevron-right" data-kid="1-8-1-1-3-1" data-name="chevron right icon">
+                    </i>
+                </span>
+            </button>
+            <p class="mt-1.5 text-[12px] leading-snug text-[#707070]" data-kid="1-8-1-2" data-name="requirement description text">
+                Comes with time on the job — no course adds this.
+            </p>
+        </div>
+    </section>
+    <!-- Footer helper -->
+    <p class="mt-auto px-5 pb-6 pt-8 text-center text-[12px] leading-snug text-[#9a9a9a]" data-kid="1-9" data-name="footer help note text">
+        Courses come from the verified catalogue — nothing is invented.
+    </p>
+</div>

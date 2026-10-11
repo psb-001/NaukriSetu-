@@ -1,0 +1,95 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+</style>
+<div class="flex min-h-screen flex-col bg-white" data-kid="1" data-name="page layout container" style="font-family:'Inter',sans-serif;color:#171717">
+    <header class="flex items-center justify-between px-5 pt-6" data-kid="1-1" data-name="profile creation page header">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fafafa] text-[18px] text-[#171717]" data-kid="1-1-1" data-name="back button container circle">
+            <i class="icon-arrow-left" data-kid="1-1-1-1" data-name="left arrow back icon">
+            </i>
+        </div>
+        <div class="text-[16px] font-bold" data-kid="1-1-2" data-name="page header title text" style="font-family:'Plus Jakarta Sans',sans-serif">
+            Create your profile
+        </div>
+        <div class="min-w-9 text-right text-[12px] text-[#707070]" data-kid="1-1-3" data-name="step progress indicator text">
+            1 of 3
+        </div>
+    </header>
+    <div aria-hidden="true" class="flex items-center gap-2 px-6 pt-5" data-kid="1-2" data-name="step progress indicator track">
+        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[#3ecf8e]" data-kid="1-2-1" data-name="active step dot indicator">
+        </span>
+        <span class="h-[2px] flex-1 rounded-full bg-[#dfdfdf]" data-kid="1-2-2" data-name="connector line between step dots">
+        </span>
+        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[#dfdfdf]" data-kid="1-2-3" data-name="inactive step dot indicator">
+        </span>
+        <span class="h-[2px] flex-1 rounded-full bg-[#dfdfdf]" data-kid="1-2-4" data-name="connector line between step dots">
+        </span>
+        <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-[#dfdfdf]" data-kid="1-2-5" data-name="inactive step dot indicator">
+        </span>
+    </div>
+    <h1 class="px-5 pt-8 text-[22px] font-bold leading-[1.25]" data-kid="1-3" data-name="main question headline" style="font-family:'Plus Jakarta Sans',sans-serif">
+        What describes you best?
+    </h1>
+    <div class="flex flex-col gap-4 px-5 pt-6" data-kid="1-4" data-name="option selection list container">
+        <button class="relative w-full rounded-xl border-[1.5px] border-[#3ecf8e] bg-[#e7f8ef] p-6 text-left" data-kid="1-4-1" data-name="experienced worker option card (selected)">
+            <span class="absolute right-4 top-4 text-[18px] text-[#3ecf8e]" data-kid="1-4-1-1" data-name="selected state checkmark icon">
+                <i class="icon-circle-check" data-kid="1-4-1-1-1" data-name="circle check icon">
+                </i>
+            </span>
+            <div class="flex items-start gap-4" data-kid="1-4-1-2" data-name="option content row">
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-white text-[28px] text-[#171717]" data-kid="1-4-1-2-1" data-name="briefcase icon container (enlarged)">
+                    <i class="icon-briefcase-business" data-kid="1-4-1-2-1-1" data-name="briefcase business icon">
+                    </i>
+                </div>
+                <div class="pr-6" data-kid="1-4-1-2-2" data-name="option text content">
+                    <div class="text-[17px] font-semibold" data-kid="1-4-1-2-2-1" data-name="option title text" style="font-family:'Plus Jakarta Sans',sans-serif">
+                        Experienced worker
+                    </div>
+                    <p class="mt-1 text-[13px] leading-[1.5] text-[#707070]" data-kid="1-4-1-2-2-2" data-name="option description text">
+                        I have hands-on skills and want jobs now.
+                    </p>
+                </div>
+            </div>
+        </button>
+        <button class="relative w-full rounded-xl border border-[#dfdfdf] bg-white p-6 text-left" data-kid="1-4-2" data-name="student option card (unselected)">
+            <div class="flex items-start gap-4" data-kid="1-4-2-1" data-name="option content row">
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[#fafafa] text-[28px] text-[#171717]" data-kid="1-4-2-1-1" data-name="open book icon container">
+                    <i class="icon-book-open" data-kid="1-4-2-1-1-1" data-name="open book icon">
+                    </i>
+                </div>
+                <div data-kid="1-4-2-1-2" data-name="option text content">
+                    <div class="text-[17px] font-semibold" data-kid="1-4-2-1-2-1" data-name="option title text" style="font-family:'Plus Jakarta Sans',sans-serif">
+                        Student
+                    </div>
+                    <p class="mt-1 text-[13px] leading-[1.5] text-[#707070]" data-kid="1-4-2-1-2-2" data-name="option description text">
+                        I'm studying and picking a goal.
+                    </p>
+                </div>
+            </div>
+        </button>
+        <button class="relative w-full rounded-xl border border-[#dfdfdf] bg-white p-6 text-left" data-kid="1-4-3" data-name="trainee option card (unselected)">
+            <div class="flex items-start gap-4" data-kid="1-4-3-1" data-name="option content row">
+                <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[#fafafa] text-[28px] text-[#171717]" data-kid="1-4-3-1-1" data-name="wrench icon container">
+                    <i class="icon-wrench" data-kid="1-4-3-1-1-1" data-name="wrench tool icon">
+                    </i>
+                </div>
+                <div data-kid="1-4-3-1-2" data-name="option text content">
+                    <div class="text-[17px] font-semibold" data-kid="1-4-3-1-2-1" data-name="option title text" style="font-family:'Plus Jakarta Sans',sans-serif">
+                        Trainee
+                    </div>
+                    <p class="mt-1 text-[13px] leading-[1.5] text-[#707070]" data-kid="1-4-3-1-2-2" data-name="option description text">
+                        I'm learning a trade.
+                    </p>
+                </div>
+            </div>
+        </button>
+    </div>
+    <footer class="mt-auto border-t border-[#dfdfdf] bg-white px-5 pb-7 pt-4" data-kid="1-5" data-name="footer action area">
+        <button class="h-12 w-full rounded-md bg-[#3ecf8e] text-[16px] font-semibold text-[#171717]" data-kid="1-5-1" data-name="primary next step button" style="font-family:'Plus Jakarta Sans',sans-serif">
+            Next
+        </button>
+        <p class="mt-3 text-center text-[12px] text-[#9a9a9a]" data-kid="1-5-2" data-name="auto-save status notice text">
+            Saved automatically — come back anytime.
+        </p>
+    </footer>
+</div>

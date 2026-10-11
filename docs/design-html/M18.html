@@ -1,0 +1,75 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="page layout container" style="font-family:'Inter',sans-serif;">
+    <!-- Header + tabs -->
+    <header class="px-5 pt-6" data-kid="1-1" data-name="header with title and tab bar">
+        <h1 class="text-[20px] font-bold leading-tight" data-kid="1-1-1" data-name="page title text" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            Your matches
+        </h1>
+        <div class="mt-4 flex gap-6 border-b border-[#dfdfdf]" data-kid="1-1-2" data-name="tab bar with underline indicator">
+            <button class="pb-3 text-[15px] text-[#707070]" data-kid="1-1-2-1" data-name="eligible tab button">
+                Eligible (8)
+            </button>
+            <button class="-mb-px border-b-2 border-[#171717] pb-3 text-[15px] font-semibold" data-kid="1-1-2-2" data-name="not eligible tab button active" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                Not eligible (0)
+            </button>
+        </div>
+    </header>
+    <!-- Empty state (typographic, centered) -->
+    <main class="flex flex-1 flex-col items-center justify-center px-8 text-center" data-kid="1-2" data-name="empty state main content container">
+        <span class="text-[40px] leading-none text-[#3ecf8e]" data-kid="1-2-1" data-name="success icon wrapper">
+            <i class="icon-circle-check" data-kid="1-2-1-1" data-name="circle check icon">
+            </i>
+        </span>
+        <h2 class="mt-5 text-[18px] font-bold leading-snug" data-kid="1-2-2" data-name="empty state headline text" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            You qualify for everything — nice.
+        </h2>
+        <p class="mt-2 max-w-[280px] text-[13px] leading-relaxed text-[#707070]" data-kid="1-2-3" data-name="empty state description text">
+            Every live job's hard requirements pass with your current profile. New posts land here only if they ask for something you don't have.
+        </p>
+        <button class="mt-6 h-11 rounded-[6px] border border-[#c7c7c7] bg-white px-6 text-[14px] font-medium" data-kid="1-2-4" data-name="view eligible matches button">
+            See your 8 eligible matches
+        </button>
+    </main>
+    <!-- Bottom tab bar -->
+    <nav class="grid grid-cols-4 border-t border-[#dfdfdf] bg-white px-2 pb-4 pt-2" data-kid="1-3" data-name="bottom navigation tab bar">
+        <div class="flex flex-col items-center gap-1" data-kid="1-3-1" data-name="home nav item container">
+            <span class="text-[22px] leading-none text-[#707070]" data-kid="1-3-1-1" data-name="home icon wrapper">
+                <i class="icon-house" data-kid="1-3-1-1-1" data-name="house icon">
+                </i>
+            </span>
+            <span class="text-[11px] font-medium text-[#707070]" data-kid="1-3-1-2" data-name="home label text">
+                Home
+            </span>
+        </div>
+        <div class="flex flex-col items-center gap-1" data-kid="1-3-2" data-name="matches nav item container active">
+            <span class="text-[22px] leading-none text-[#3ecf8e]" data-kid="1-3-2-1" data-name="matches icon wrapper">
+                <i class="icon-briefcase-business" data-kid="1-3-2-1-1" data-name="briefcase icon">
+                </i>
+            </span>
+            <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-3-2-2" data-name="matches label text">
+                Matches
+            </span>
+        </div>
+        <div class="flex flex-col items-center gap-1" data-kid="1-3-3" data-name="courses nav item container">
+            <span class="text-[22px] leading-none text-[#707070]" data-kid="1-3-3-1" data-name="courses icon wrapper">
+                <i class="icon-book-open" data-kid="1-3-3-1-1" data-name="book icon">
+                </i>
+            </span>
+            <span class="text-[11px] font-medium text-[#707070]" data-kid="1-3-3-2" data-name="courses label text">
+                Courses
+            </span>
+        </div>
+        <div class="flex flex-col items-center gap-1" data-kid="1-3-4" data-name="profile nav item container">
+            <span class="text-[22px] leading-none text-[#707070]" data-kid="1-3-4-1" data-name="profile icon wrapper">
+                <i class="icon-user-round" data-kid="1-3-4-1-1" data-name="user icon">
+                </i>
+            </span>
+            <span class="text-[11px] font-medium text-[#707070]" data-kid="1-3-4-2" data-name="profile label text">
+                Profile
+            </span>
+        </div>
+    </nav>
+</div>

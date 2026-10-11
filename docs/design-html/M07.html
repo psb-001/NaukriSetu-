@@ -1,0 +1,315 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+@layer components {
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+</style>
+<div class="min-h-screen bg-white font-['Inter',sans-serif] text-[#171717] antialiased" data-kid="1" data-name="page layout container">
+    <!-- Greeting + search -->
+    <header class="px-5 pt-8" data-kid="1-1" data-name="greeting and search header">
+        <h1 class="font-['Plus_Jakarta_Sans',sans-serif] text-[22px] font-bold leading-tight" data-kid="1-1-1" data-name="greeting headline">
+            Namaste, Ravi
+        </h1>
+        <p class="mt-1 text-[13px] text-[#707070]" data-kid="1-1-2" data-name="new matches subtitle">
+            2 new matches since yesterday
+        </p>
+        <div class="mt-5 flex h-11 w-full items-center gap-2.5 rounded-full bg-[#fafafa] px-4" data-kid="1-1-3" data-name="search bar container">
+            <span class="text-[18px] leading-none text-[#9a9a9a]" data-kid="1-1-3-1" data-name="search icon wrapper">
+                <i class="icon-search" data-kid="1-1-3-1-1" data-name="search magnifier icon">
+                </i>
+            </span>
+            <span class="text-[14px] text-[#9a9a9a]" data-kid="1-1-3-2" data-name="search placeholder text">
+                Search jobs, skills, categories…
+            </span>
+        </div>
+    </header>
+    <!-- Trade chips -->
+    <nav aria-label="Trade categories" class="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1 pl-5" data-kid="1-2" data-name="trade categories filter navigation">
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full bg-[#171717] px-3.5 text-[13px] font-medium text-white" data-kid="1-2-1" data-name="active all categories filter chip">
+            All
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-2" data-name="electrician trade filter chip">
+            Electrician
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-3" data-name="plumber trade filter chip">
+            Plumber
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-4" data-name="carpenter trade filter chip">
+            Carpenter
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-5" data-name="painter trade filter chip">
+            Painter
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-6" data-name="ac and refrigeration trade filter chip">
+            AC & Refrigeration
+        </span>
+        <span class="flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border border-[#dfdfdf] bg-white px-3.5 text-[13px] font-medium" data-kid="1-2-7" data-name="welder trade filter chip">
+            Welder
+        </span>
+    </nav>
+    <!-- Banner card -->
+    <section class="px-5 pt-8" data-kid="1-3" data-name="new intake banner section">
+        <div class="flex items-center gap-3 rounded-xl border border-[#dfdfdf] bg-[#fafafa] p-4" data-kid="1-3-1" data-name="banner card container">
+            <div class="min-w-0 flex-1" data-kid="1-3-1-1" data-name="banner text content wrapper">
+                <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold leading-snug" data-kid="1-3-1-1-1" data-name="banner headline text">
+                    New AC-repair intake
+                </p>
+                <p class="mt-1 text-[12px] leading-snug text-[#707070]" data-kid="1-3-1-1-2" data-name="banner description text">
+                    Voltas service partners hiring in Pune this week
+                </p>
+                <span class="mt-2 inline-block text-[13px] font-medium underline underline-offset-[3px]" data-kid="1-3-1-1-3" data-name="view role call-to-action link">
+                    See the role
+                </span>
+            </div>
+            <img alt="Split AC unit with a wrench — new repair intake" class="h-[70px] w-[88px] shrink-0 object-contain" data-kid="1-3-1-2" data-name="ac unit banner illustration image" decoding="async" loading="lazy" src="/api/local/images/.kombai/canvas/assets/banner-ac-intake.svg"/>
+        </div>
+    </section>
+    <!-- Matches preview -->
+    <section class="px-5 pt-10" data-kid="1-4" data-name="job matches preview section">
+        <div class="flex items-baseline justify-between gap-3" data-kid="1-4-1" data-name="matches header row">
+            <p class="flex items-baseline gap-2" data-kid="1-4-1-1" data-name="matches count label group">
+                <span class="font-['Plus_Jakarta_Sans',sans-serif] text-[34px] font-extrabold leading-none" data-kid="1-4-1-1-1" data-name="matches count number">
+                    5
+                </span>
+                <span class="font-['Plus_Jakarta_Sans',sans-serif] text-[17px] font-semibold leading-tight" data-kid="1-4-1-1-2" data-name="matches count label text">
+                    jobs you qualify for
+                </span>
+            </p>
+            <span class="shrink-0 text-[13px] font-medium underline underline-offset-[3px]" data-kid="1-4-1-2" data-name="see all matches link">
+                See all
+            </span>
+        </div>
+        <div class="mt-3 divide-y divide-[#ebebeb]" data-kid="1-4-2" data-name="matches list container">
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-4-2-1" data-name="first matched job row">
+                <span class="w-6 shrink-0 text-center font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-bold text-[#9a9a9a]" data-kid="1-4-2-1-1" data-name="job position number indicator">
+                    1
+                </span>
+                <div class="min-w-0 flex-1" data-kid="1-4-2-1-2" data-name="job title and details container">
+                    <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold leading-snug" data-kid="1-4-2-1-2-1" data-name="job title text">
+                        AC Technician — Voltas Service Partner
+                    </p>
+                    <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-4-2-1-2-2" data-name="job pay and distance text">
+                        ₹26,000/mo · 3.2 km
+                    </p>
+                </div>
+                <svg class="shrink-0" data-kid="1-4-2-1-3" data-name="job match score progress ring icon" height="26" viewbox="0 0 28 28" width="26">
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#3ecf8e" stroke-dasharray="60.7 65.97" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 14 14)">
+                    </circle>
+                    <text dominant-baseline="central" fill="#171717" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" x="14" y="14.5">
+                        92
+                    </text>
+                </svg>
+                <span class="shrink-0 text-[16px] leading-none text-[#9a9a9a]" data-kid="1-4-2-1-4" data-name="navigation chevron icon wrapper">
+                    <i class="icon-chevron-right" data-kid="1-4-2-1-4-1" data-name="right chevron arrow icon">
+                    </i>
+                </span>
+            </div>
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-4-2-2" data-name="second matched job row">
+                <span class="w-6 shrink-0 text-center font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-bold text-[#9a9a9a]" data-kid="1-4-2-2-1" data-name="job position number indicator">
+                    2
+                </span>
+                <div class="min-w-0 flex-1" data-kid="1-4-2-2-2" data-name="job title and details container">
+                    <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold leading-snug" data-kid="1-4-2-2-2-1" data-name="job title text">
+                        Fan Repair Technician — RBI Colony Society
+                    </p>
+                    <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-4-2-2-2-2" data-name="job pay and distance text">
+                        ₹19,000/mo · 1.1 km
+                    </p>
+                </div>
+                <svg class="shrink-0" data-kid="1-4-2-2-3" data-name="job match score progress ring icon" height="26" viewbox="0 0 28 28" width="26">
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#3ecf8e" stroke-dasharray="58.05 65.97" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 14 14)">
+                    </circle>
+                    <text dominant-baseline="central" fill="#171717" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" x="14" y="14.5">
+                        88
+                    </text>
+                </svg>
+                <span class="shrink-0 text-[16px] leading-none text-[#9a9a9a]" data-kid="1-4-2-2-4" data-name="navigation chevron icon wrapper">
+                    <i class="icon-chevron-right" data-kid="1-4-2-2-4-1" data-name="right chevron arrow icon">
+                    </i>
+                </span>
+            </div>
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-4-2-3" data-name="third matched job row">
+                <span class="w-6 shrink-0 text-center font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-bold text-[#9a9a9a]" data-kid="1-4-2-3-1" data-name="job position number indicator">
+                    3
+                </span>
+                <div class="min-w-0 flex-1" data-kid="1-4-2-3-2" data-name="job title and details container">
+                    <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold leading-snug" data-kid="1-4-2-3-2-1" data-name="job title text">
+                        Plumbing Helper — Rao Constructions
+                    </p>
+                    <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-4-2-3-2-2" data-name="job pay and distance text">
+                        ₹15,500/mo · 5.8 km
+                    </p>
+                </div>
+                <svg class="shrink-0" data-kid="1-4-2-3-3" data-name="job match score progress ring icon" height="26" viewbox="0 0 28 28" width="26">
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="14" cy="14" fill="none" r="10.5" stroke="#3ecf8e" stroke-dasharray="48.82 65.97" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 14 14)">
+                    </circle>
+                    <text dominant-baseline="central" fill="#171717" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" x="14" y="14.5">
+                        74
+                    </text>
+                </svg>
+                <span class="shrink-0 text-[16px] leading-none text-[#9a9a9a]" data-kid="1-4-2-3-4" data-name="navigation chevron icon wrapper">
+                    <i class="icon-chevron-right" data-kid="1-4-2-3-4-1" data-name="right chevron arrow icon">
+                    </i>
+                </span>
+            </div>
+        </div>
+    </section>
+    <!-- Gap of the week -->
+    <section class="px-5 pt-10" data-kid="1-5" data-name="skill gap section">
+        <div class="rounded-xl border border-[#dfdfdf] p-4" data-kid="1-5-1" data-name="skill gap card container">
+            <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold leading-snug" data-kid="1-5-1-1" data-name="skill gap headline text">
+                You're 1 skill away from AC Technician
+            </p>
+            <p class="mt-1 text-[12px] text-[#707070]" data-kid="1-5-1-2" data-name="missing skill description text">
+                Missing: AC Repair & Servicing certificate
+            </p>
+            <span class="mt-2.5 inline-block text-[13px] font-medium underline underline-offset-[3px]" data-kid="1-5-1-3" data-name="qualification details call-to-action link">
+                How to qualify
+            </span>
+        </div>
+    </section>
+    <!-- KYC progress -->
+    <section class="px-5 pt-10" data-kid="1-6" data-name="profile kyc progress section">
+        <div class="rounded-xl border border-[#dfdfdf] p-4" data-kid="1-6-1" data-name="kyc progress card container">
+            <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[15px] font-semibold" data-kid="1-6-1-1" data-name="profile completion headline text">
+                Profile 40% complete
+            </p>
+            <div class="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-6-1-2" data-name="progress bar track">
+                <div class="h-full w-[40%] rounded-full bg-[#3ecf8e]" data-kid="1-6-1-2-1" data-name="progress bar fill">
+                </div>
+            </div>
+            <p class="mt-2 text-[12px] text-[#707070]" data-kid="1-6-1-3" data-name="kyc checks status text">
+                2 of 5 checks done
+            </p>
+            <p class="mt-3 text-[13px] leading-snug" data-kid="1-6-1-4" data-name="kyc benefit description text">
+                Completing KYC unlocks
+                <span class="font-semibold" data-kid="1-6-1-4-1" data-name="unlocked jobs count emphasis">
+                    2 more jobs
+                </span>
+            </p>
+            <button class="mt-3.5 h-11 rounded-md bg-[#3ecf8e] px-5 font-['Plus_Jakarta_Sans',sans-serif] text-[14px] font-bold text-[#171717]" data-kid="1-6-1-5" data-name="continue kyc primary button">
+                Continue KYC
+            </button>
+            <div class="mt-3.5 flex items-start gap-2 rounded-lg bg-[#fff8d6] px-3 py-2.5" data-kid="1-6-1-6" data-name="aadhaar status warning container">
+                <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#ffdb13]" data-kid="1-6-1-6-1" data-name="warning status dot icon">
+                </span>
+                <p class="text-[12px] leading-snug text-[#171717]" data-kid="1-6-1-6-2" data-name="aadhaar warning text">
+                    Aadhaar pending verification — you can browse, some jobs stay locked.
+                </p>
+            </div>
+        </div>
+    </section>
+    <!-- Courses strip -->
+    <section class="pt-10" data-kid="1-7" data-name="courses recommendation section">
+        <div class="flex items-baseline justify-between px-5" data-kid="1-7-1" data-name="courses header row">
+            <p class="font-['Plus_Jakarta_Sans',sans-serif] text-[16px] font-semibold" data-kid="1-7-1-1" data-name="courses section headline">
+                Courses for your gaps
+            </p>
+            <span class="text-[12px] text-[#707070]" data-kid="1-7-1-2" data-name="courses count label">
+                12 courses
+            </span>
+        </div>
+        <div class="no-scrollbar mt-3 flex gap-3 overflow-x-auto px-5 pb-1" data-kid="1-7-2" data-name="horizontal course cards strip">
+            <article class="w-[150px] shrink-0 rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-7-2-1" data-name="house wiring course card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-7-2-1-1" data-name="course card header row">
+                    <span class="rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 text-[11px] font-semibold leading-none" data-kid="1-7-2-1-1-1" data-name="course code badge">
+                        ELEC-101
+                    </span>
+                    <span class="text-[18px] leading-none text-[#707070]" data-kid="1-7-2-1-1-2" data-name="bookmark heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-7-2-1-1-2-1" data-name="bookmark heart icon">
+                        </i>
+                    </span>
+                </div>
+                <p class="mt-2.5 font-['Plus_Jakarta_Sans',sans-serif] text-[14px] font-semibold leading-snug" data-kid="1-7-2-1-2" data-name="course title text">
+                    House Wiring Fundamentals
+                </p>
+                <p class="mt-1 text-[12px] leading-snug text-[#707070]" data-kid="1-7-2-1-3" data-name="course provider and duration text">
+                    NSDC / Skill India · 4 weeks
+                </p>
+            </article>
+            <article class="w-[150px] shrink-0 rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-7-2-2" data-name="ac repair course card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-7-2-2-1" data-name="course card header row">
+                    <span class="rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 text-[11px] font-semibold leading-none" data-kid="1-7-2-2-1-1" data-name="course code badge">
+                        HVAC-201
+                    </span>
+                    <span class="text-[18px] leading-none text-[#707070]" data-kid="1-7-2-2-1-2" data-name="bookmark heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-7-2-2-1-2-1" data-name="bookmark heart icon">
+                        </i>
+                    </span>
+                </div>
+                <p class="mt-2.5 font-['Plus_Jakarta_Sans',sans-serif] text-[14px] font-semibold leading-snug" data-kid="1-7-2-2-2" data-name="course title text">
+                    AC Repair & Servicing
+                </p>
+                <p class="mt-1 text-[12px] leading-snug text-[#707070]" data-kid="1-7-2-2-3" data-name="course provider and duration text">
+                    Voltas Academy · 8 weeks
+                </p>
+            </article>
+            <article class="w-[150px] shrink-0 rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-7-2-3" data-name="basic plumbing course card">
+                <div class="flex items-start justify-between gap-2" data-kid="1-7-2-3-1" data-name="course card header row">
+                    <span class="rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 text-[11px] font-semibold leading-none" data-kid="1-7-2-3-1-1" data-name="course code badge">
+                        PLMB-102
+                    </span>
+                    <span class="text-[18px] leading-none text-[#707070]" data-kid="1-7-2-3-1-2" data-name="bookmark heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-7-2-3-1-2-1" data-name="bookmark heart icon">
+                        </i>
+                    </span>
+                </div>
+                <p class="mt-2.5 font-['Plus_Jakarta_Sans',sans-serif] text-[14px] font-semibold leading-snug" data-kid="1-7-2-3-2" data-name="course title text">
+                    Basic Plumbing
+                </p>
+                <p class="mt-1 text-[12px] leading-snug text-[#707070]" data-kid="1-7-2-3-3" data-name="course provider and duration text">
+                    ITI Pune · 6 weeks
+                </p>
+            </article>
+        </div>
+    </section>
+    <!-- Bottom tab bar -->
+    <nav aria-label="Primary" class="mt-10 border-t border-[#dfdfdf] bg-white" data-kid="1-8" data-name="bottom tab navigation">
+        <div class="grid grid-cols-4 px-2 pb-6 pt-3" data-kid="1-8-1" data-name="tab grid container">
+            <div class="flex flex-col items-center gap-1" data-kid="1-8-1-1" data-name="home tab item">
+                <span class="text-[22px] leading-none text-[#3ecf8e]" data-kid="1-8-1-1-1" data-name="home tab icon wrapper">
+                    <i class="icon-house" data-kid="1-8-1-1-1-1" data-name="home house icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-8-1-1-2" data-name="home tab label">
+                    Home
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1" data-kid="1-8-1-2" data-name="matches tab item">
+                <span class="text-[22px] leading-none text-[#707070]" data-kid="1-8-1-2-1" data-name="matches tab icon wrapper">
+                    <i class="icon-briefcase-business" data-kid="1-8-1-2-1-1" data-name="matches briefcase icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-8-1-2-2" data-name="matches tab label">
+                    Matches
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1" data-kid="1-8-1-3" data-name="courses tab item">
+                <span class="text-[22px] leading-none text-[#707070]" data-kid="1-8-1-3-1" data-name="courses tab icon wrapper">
+                    <i class="icon-book-open" data-kid="1-8-1-3-1-1" data-name="courses open book icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-8-1-3-2" data-name="courses tab label">
+                    Courses
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1" data-kid="1-8-1-4" data-name="profile tab item">
+                <span class="text-[22px] leading-none text-[#707070]" data-kid="1-8-1-4-1" data-name="profile tab icon wrapper">
+                    <i class="icon-user-round" data-kid="1-8-1-4-1-1" data-name="profile user icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-8-1-4-2" data-name="profile tab label">
+                    Profile
+                </span>
+            </div>
+        </div>
+    </nav>
+</div>

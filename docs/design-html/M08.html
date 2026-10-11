@@ -1,0 +1,260 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+  .font-pjs { font-family: 'Plus Jakarta Sans', sans-serif; }
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="matches screen page container" style="font-family:'Inter',sans-serif;">
+    <div class="flex-1 px-4 pb-4 pt-6" data-kid="1-1" data-name="scrollable matches content area">
+        <!-- Header -->
+        <h1 class="font-pjs text-[20px] font-bold leading-tight" data-kid="1-1-1" data-name='page headline "Your matches"'>
+            Your matches
+        </h1>
+        <p class="mt-1 text-[13px] leading-snug text-[#707070]" data-kid="1-1-2" data-name="subtitle explaining eligibility filtering">
+            Hard requirements checked first — only survivors are ranked.
+        </p>
+        <!-- Tabs with live counts -->
+        <div class="mt-4 flex border-b border-[#dfdfdf]" data-kid="1-1-3" data-name="eligibility tab bar">
+            <div class="flex-1 border-b-2 border-[#171717] pb-2.5 text-center text-[15px] font-semibold text-[#171717]" data-kid="1-1-3-1" data-name="active Eligible tab with count">
+                Eligible (5)
+            </div>
+            <div class="flex-1 border-b-2 border-transparent pb-2.5 text-center text-[15px] text-[#707070]" data-kid="1-1-3-2" data-name="inactive Not eligible tab with count">
+                Not eligible (3)
+            </div>
+        </div>
+        <p class="mt-3 text-[12px] text-[#9a9a9a]" data-kid="1-1-4" data-name="ranked-by-fit helper caption">
+            Ranked by fit score. Tap a card for the full breakdown.
+        </p>
+        <!-- Expanded rank-1 card -->
+        <div class="mt-3 rounded-[12px] border border-[#dfdfdf] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.06)]" data-kid="1-1-5" data-name="expanded top-ranked job card">
+            <div class="flex items-start gap-3" data-kid="1-1-5-1" data-name="card header row with score and identity">
+                <svg class="shrink-0" data-dynamic="true" data-kid="1-1-5-1-1" data-name="circular fit-score gauge icon" data-reason="dash, color and inner number reflect the fit score value computed from data" height="44" viewbox="0 0 44 44" width="44">
+                    <circle cx="22" cy="22" fill="none" r="18" stroke="#ebebeb" stroke-width="6">
+                    </circle>
+                    <circle cx="22" cy="22" fill="none" r="18" stroke="#3ecf8e" stroke-dasharray="104.05 113.1" stroke-linecap="round" stroke-width="6" transform="rotate(-90 22 22)">
+                    </circle>
+                    <text dominant-baseline="middle" fill="#171717" font-size="14" font-weight="700" style="font-family:'Plus Jakarta Sans',sans-serif" text-anchor="middle" x="22" y="23.5">
+                        92
+                    </text>
+                </svg>
+                <div class="min-w-0 flex-1" data-kid="1-1-5-1-2" data-name="job title and location block">
+                    <p class="font-pjs text-[16px] font-semibold leading-snug" data-kid="1-1-5-1-2-1" data-name="job title text">
+                        AC Technician
+                    </p>
+                    <p class="mt-0.5 text-[12px] text-[#707070]" data-kid="1-1-5-1-2-2" data-name="company and city subtitle">
+                        Voltas Service Partner · Pune
+                    </p>
+                </div>
+                <span class="shrink-0 whitespace-nowrap rounded-full bg-[#fafafa] px-2 py-1 text-[11px] font-medium text-[#9a9a9a]" data-kid="1-1-5-1-3" data-name="rank position badge">
+                    #1 of 5
+                </span>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px]" data-kid="1-1-5-2" data-name="job detail chips row (pay/distance/hours)">
+                <span class="inline-flex items-center gap-1.5" data-kid="1-1-5-2-1" data-name="monthly pay chip">
+                    <i class="icon-wallet text-[14px] text-[#707070]" data-kid="1-1-5-2-1-1" data-name="wallet icon">
+                    </i>
+                    ₹26,000/mo
+                </span>
+                <span class="inline-flex items-center gap-1.5" data-kid="1-1-5-2-2" data-name="commute distance chip">
+                    <i class="icon-map-pin text-[14px] text-[#707070]" data-kid="1-1-5-2-2-1" data-name="map pin icon">
+                    </i>
+                    3.2 km
+                </span>
+                <span class="inline-flex items-center gap-1.5" data-kid="1-1-5-2-3" data-name="employment type chip">
+                    <i class="icon-clock text-[14px] text-[#707070]" data-kid="1-1-5-2-3-1" data-name="clock icon">
+                    </i>
+                    Full-time
+                </span>
+            </div>
+            <div class="mt-3 rounded-[8px] bg-[#fafafa] p-3 text-[13px] leading-relaxed" data-kid="1-1-5-3" data-name="match summary callout box">
+                <p class="font-medium text-[#171717]" data-kid="1-1-5-3-1" data-name="skill match and distance summary line">
+                    House wiring matches 90% · 3.2 km away
+                </p>
+                <p class="mt-0.5 text-[#707070]" data-kid="1-1-5-3-2" data-name="hard-requirements met description">
+                    You meet every hard requirement for this job.
+                </p>
+            </div>
+            <!-- Factor bars, each with its value -->
+            <div class="mt-4 space-y-3" data-kid="1-1-5-4" data-name="factor bars container">
+                <div class="flex items-center gap-2.5" data-kid="1-1-5-4-1" data-name="skill match factor bar row">
+                    <span class="w-[76px] shrink-0 text-[12px] text-[#707070]" data-kid="1-1-5-4-1-1" data-name="skill match factor label">
+                        Skill match
+                    </span>
+                    <div class="h-[6px] min-w-[56px] flex-1 overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-1-5-4-1-2" data-name="skill match bar track">
+                        <div class="h-full rounded-full bg-[#3ecf8e]" data-dynamic="true" data-kid="1-1-5-4-1-2-1" data-name="skill match filled bar" data-reason="width is the fit score value rendered from data" style="width:90%">
+                        </div>
+                    </div>
+                    <span class="shrink-0 text-right text-[12px] font-medium text-[#171717]" data-kid="1-1-5-4-1-3" data-name="skill match percentage value">
+                        90%
+                    </span>
+                </div>
+                <div class="flex items-center gap-2.5" data-kid="1-1-5-4-2" data-name="commute factor bar row">
+                    <span class="w-[76px] shrink-0 text-[12px] text-[#707070]" data-kid="1-1-5-4-2-1" data-name="commute factor label">
+                        Commute
+                    </span>
+                    <div class="h-[6px] min-w-[56px] flex-1 overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-1-5-4-2-2" data-name="commute bar track">
+                        <div class="h-full rounded-full bg-[#3ecf8e]" data-dynamic="true" data-kid="1-1-5-4-2-2-1" data-name="commute filled bar" data-reason="width is the commute score value rendered from data" style="width:85%">
+                        </div>
+                    </div>
+                    <span class="shrink-0 text-right text-[12px] font-medium text-[#171717]" data-kid="1-1-5-4-2-3" data-name="commute distance and rating value">
+                        3.2 km — good
+                    </span>
+                </div>
+                <div class="flex items-center gap-2.5" data-kid="1-1-5-4-3" data-name="pay factor bar row">
+                    <span class="w-[76px] shrink-0 text-[12px] text-[#707070]" data-kid="1-1-5-4-3-1" data-name="pay factor label">
+                        Pay
+                    </span>
+                    <div class="h-[6px] min-w-[48px] flex-1 overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-1-5-4-3-2" data-name="pay bar track">
+                        <div class="h-full rounded-full bg-[#3ecf8e]" data-dynamic="true" data-kid="1-1-5-4-3-2-1" data-name="pay filled bar" data-reason="width is the pay score value rendered from data" style="width:100%">
+                        </div>
+                    </div>
+                    <span class="shrink-0 text-right text-[12px] font-medium text-[#171717]" data-kid="1-1-5-4-3-3" data-name="pay comparison value vs minimum">
+                        ₹26k vs your ₹24k minimum
+                    </span>
+                </div>
+                <div class="flex items-center gap-2.5" data-kid="1-1-5-4-4" data-name="experience factor bar row">
+                    <span class="w-[76px] shrink-0 text-[12px] text-[#707070]" data-kid="1-1-5-4-4-1" data-name="experience factor label">
+                        Experience
+                    </span>
+                    <div class="h-[6px] min-w-[56px] flex-1 overflow-hidden rounded-full bg-[#ebebeb]" data-kid="1-1-5-4-4-2" data-name="experience bar track">
+                        <div class="h-full rounded-full bg-[#3ecf8e]" data-dynamic="true" data-kid="1-1-5-4-4-2-1" data-name="experience filled bar" data-reason="width is the experience score value rendered from data" style="width:67%">
+                        </div>
+                    </div>
+                    <span class="shrink-0 text-right text-[12px] font-medium text-[#171717]" data-kid="1-1-5-4-4-3" data-name="experience years value">
+                        2 of 3 yrs
+                    </span>
+                </div>
+            </div>
+            <!-- Actions: one outline + one text link -->
+            <div class="mt-4 flex items-center gap-3" data-kid="1-1-5-5" data-name="card actions row">
+                <div class="flex h-10 flex-1 items-center justify-center rounded-[6px] border border-[#c7c7c7] bg-white text-[14px] font-semibold text-[#171717]" data-kid="1-1-5-5-1" data-name="outline How to qualify button">
+                    How to qualify
+                </div>
+                <div class="inline-flex items-center gap-1.5 px-1 text-[13px] font-medium text-[#171717]" data-kid="1-1-5-5-2" data-name="save action text link">
+                    <i class="icon-heart text-[15px]" data-kid="1-1-5-5-2-1" data-name="heart save icon">
+                    </i>
+                    Save
+                </div>
+            </div>
+        </div>
+        <!-- Compact ranked rows 2–5 -->
+        <div class="mt-2 divide-y divide-[#ebebeb]" data-kid="1-1-6" data-name="compact ranked rows list (ranks 2-5)">
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-1-6-1" data-name="ranked job row (rank 2)">
+                <svg class="shrink-0" data-dynamic="true" data-kid="1-1-6-1-1" data-name="circular fit-score mini gauge" data-reason="dash arc encodes the 88% fit score from data" height="22" viewbox="0 0 22 22" width="22">
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#3ecf8e" stroke-dasharray="49.76 56.55" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 11 11)">
+                    </circle>
+                </svg>
+                <div class="min-w-0 flex-1" data-kid="1-1-6-1-2" data-name="job title and meta block">
+                    <p class="font-pjs truncate text-[15px] font-semibold leading-tight" data-kid="1-1-6-1-2-1" data-name="job title text">
+                        Fan Repair Technician
+                    </p>
+                    <p class="mt-0.5 truncate text-[12px] text-[#707070]" data-kid="1-1-6-1-2-2" data-name="company/pay/distance meta line">
+                        RBI Colony Society · ₹19,000/mo · 1.1 km
+                    </p>
+                </div>
+                <span class="shrink-0 text-[11px] font-semibold text-[#9a9a9a]" data-kid="1-1-6-1-3" data-name="fit score percentage">
+                    88%
+                </span>
+                <i class="icon-chevron-right shrink-0 text-[16px] text-[#b2b2b2]" data-kid="1-1-6-1-4" data-name="right chevron affordance icon">
+                </i>
+            </div>
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-1-6-2" data-name="ranked job row (rank 3)">
+                <svg class="shrink-0" data-dynamic="true" data-kid="1-1-6-2-1" data-name="circular fit-score mini gauge" data-reason="dash arc encodes the 74% fit score from data" height="22" viewbox="0 0 22 22" width="22">
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#3ecf8e" stroke-dasharray="41.85 56.55" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 11 11)">
+                    </circle>
+                </svg>
+                <div class="min-w-0 flex-1" data-kid="1-1-6-2-2" data-name="job title and meta block">
+                    <p class="font-pjs truncate text-[15px] font-semibold leading-tight" data-kid="1-1-6-2-2-1" data-name="job title text">
+                        Plumbing Helper
+                    </p>
+                    <p class="mt-0.5 truncate text-[12px] text-[#707070]" data-kid="1-1-6-2-2-2" data-name="company/pay/distance meta line">
+                        Rao Constructions · ₹15,500/mo · 5.8 km
+                    </p>
+                </div>
+                <span class="shrink-0 text-[11px] font-semibold text-[#9a9a9a]" data-kid="1-1-6-2-3" data-name="fit score percentage">
+                    74%
+                </span>
+                <i class="icon-chevron-right shrink-0 text-[16px] text-[#b2b2b2]" data-kid="1-1-6-2-4" data-name="right chevron affordance icon">
+                </i>
+            </div>
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-1-6-3" data-name="ranked job row (rank 4)">
+                <svg class="shrink-0" data-dynamic="true" data-kid="1-1-6-3-1" data-name="circular fit-score mini gauge" data-reason="dash arc encodes the 71% fit score from data" height="22" viewbox="0 0 22 22" width="22">
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#3ecf8e" stroke-dasharray="40.15 56.55" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 11 11)">
+                    </circle>
+                </svg>
+                <div class="min-w-0 flex-1" data-kid="1-1-6-3-2" data-name="job title and meta block">
+                    <p class="font-pjs truncate text-[15px] font-semibold leading-tight" data-kid="1-1-6-3-2-1" data-name="job title text">
+                        Wiring Assistant
+                    </p>
+                    <p class="mt-0.5 truncate text-[12px] text-[#707070]" data-kid="1-1-6-3-2-2" data-name="company/pay/distance meta line">
+                        Kesari Electricals · ₹17,000/mo · 4.2 km
+                    </p>
+                </div>
+                <span class="shrink-0 text-[11px] font-semibold text-[#9a9a9a]" data-kid="1-1-6-3-3" data-name="fit score percentage">
+                    71%
+                </span>
+                <i class="icon-chevron-right shrink-0 text-[16px] text-[#b2b2b2]" data-kid="1-1-6-3-4" data-name="right chevron affordance icon">
+                </i>
+            </div>
+            <div class="flex items-center gap-3 py-3.5" data-kid="1-1-6-4" data-name="ranked job row (rank 5)">
+                <svg class="shrink-0" data-dynamic="true" data-kid="1-1-6-4-1" data-name="circular fit-score mini gauge" data-reason="dash arc encodes the 65% fit score from data" height="22" viewbox="0 0 22 22" width="22">
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#ebebeb" stroke-width="3.5">
+                    </circle>
+                    <circle cx="11" cy="11" fill="none" r="9" stroke="#3ecf8e" stroke-dasharray="36.76 56.55" stroke-linecap="round" stroke-width="3.5" transform="rotate(-90 11 11)">
+                    </circle>
+                </svg>
+                <div class="min-w-0 flex-1" data-kid="1-1-6-4-2" data-name="job title and meta block">
+                    <p class="font-pjs truncate text-[15px] font-semibold leading-tight" data-kid="1-1-6-4-2-1" data-name="job title text">
+                        Pump Repair Helper
+                    </p>
+                    <p class="mt-0.5 truncate text-[12px] text-[#707070]" data-kid="1-1-6-4-2-2" data-name="company/pay/distance meta line">
+                        City Water Works · ₹14,000/mo · 6.5 km
+                    </p>
+                </div>
+                <span class="shrink-0 text-[11px] font-semibold text-[#9a9a9a]" data-kid="1-1-6-4-3" data-name="fit score percentage">
+                    65%
+                </span>
+                <i class="icon-chevron-right shrink-0 text-[16px] text-[#b2b2b2]" data-kid="1-1-6-4-4" data-name="right chevron affordance icon">
+                </i>
+            </div>
+        </div>
+    </div>
+    <!-- Bottom tab bar — seeker, Matches active -->
+    <div class="mt-auto border-t border-[#dfdfdf] bg-white px-2 pb-3 pt-2" data-kid="1-2" data-name="bottom navigation bar">
+        <div class="grid grid-cols-4" data-kid="1-2-1" data-name="tabs grid">
+            <div class="flex flex-col items-center gap-1 py-0.5" data-kid="1-2-1-1" data-name="home tab">
+                <i class="icon-house text-[22px] text-[#707070]" data-kid="1-2-1-1-1" data-name="house home icon">
+                </i>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-2-1-1-2" data-name="home tab label">
+                    Home
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 py-0.5" data-kid="1-2-1-2" data-name="matches tab (active)">
+                <i class="icon-briefcase-business text-[22px] text-[#3ecf8e]" data-kid="1-2-1-2-1" data-name="briefcase matches icon">
+                </i>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-2-1-2-2" data-name="matches tab label">
+                    Matches
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 py-0.5" data-kid="1-2-1-3" data-name="courses tab">
+                <i class="icon-book-open text-[22px] text-[#707070]" data-kid="1-2-1-3-1" data-name="open book courses icon">
+                </i>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-2-1-3-2" data-name="courses tab label">
+                    Courses
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 py-0.5" data-kid="1-2-1-4" data-name="profile tab">
+                <i class="icon-user-round text-[22px] text-[#707070]" data-kid="1-2-1-4-1" data-name="user profile icon">
+                </i>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-2-1-4-2" data-name="profile tab label">
+                    Profile
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

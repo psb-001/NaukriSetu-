@@ -1,0 +1,222 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+.font-display{font-family:'Plus Jakarta Sans',sans-serif;}
+</style>
+<div class="flex min-h-screen w-full flex-col bg-white text-[#171717]" data-kid="1" data-name="courses page container" style="font-family:'Inter',sans-serif;">
+    <!-- Header -->
+    <header class="px-5 pt-6" data-kid="1-1" data-name="page header block">
+        <h1 class="font-display text-[20px] font-bold leading-[1.25]" data-kid="1-1-1" data-name="page title text">
+            Courses
+        </h1>
+        <p class="mt-1 text-[13px] leading-[1.4] text-[#707070]" data-kid="1-1-2" data-name="page subtitle text">
+            From the verified catalogue — never invented.
+        </p>
+    </header>
+    <!-- Search -->
+    <div class="px-5 pt-4" data-kid="1-2" data-name="search field wrapper">
+        <div class="flex h-11 items-center gap-2.5 rounded-full border border-[#ebebeb] bg-[#fafafa] px-4" data-kid="1-2-1" data-name="search input pill">
+            <span class="text-[18px] leading-none text-[#9a9a9a]" data-kid="1-2-1-1" data-name="search icon container">
+                <i class="icon-search" data-kid="1-2-1-1-1" data-name="search magnifier icon">
+                </i>
+            </span>
+            <span class="text-[14px] text-[#9a9a9a]" data-kid="1-2-1-2" data-name="search placeholder text">
+                Search courses or skills — try “wiring”
+            </span>
+        </div>
+    </div>
+    <!-- Filter row -->
+    <div class="flex flex-wrap items-center gap-2 px-5 pt-3" data-kid="1-3" data-name="filter row container">
+        <button class="flex h-9 items-center gap-1.5 rounded-full border border-[#c7c7c7] bg-white px-3.5 text-[13px] font-medium" data-kid="1-3-1" data-name="trade filter dropdown button">
+            Trade: All
+            <span class="text-[14px] leading-none text-[#707070]" data-kid="1-3-1-1" data-name="chevron indicator wrapper">
+                <i class="icon-chevron-down" data-kid="1-3-1-1-1" data-name="down chevron icon">
+                </i>
+            </span>
+        </button>
+        <button class="flex h-9 items-center rounded-full border border-[#c7c7c7] bg-white px-3.5 text-[13px] font-medium" data-kid="1-3-2" data-name="short duration filter button">
+            <4 wks
+        </button>
+        <button class="flex h-9 items-center rounded-full border border-[#c7c7c7] bg-white px-3.5 text-[13px] font-medium" data-kid="1-3-3" data-name="mid duration filter button">
+            4–8 wks
+        </button>
+        <button class="flex h-9 items-center rounded-full border border-[#c7c7c7] bg-white px-3.5 text-[13px] font-medium" data-kid="1-3-4" data-name="long duration filter button">
+            8+ wks
+        </button>
+        <span class="ml-auto pt-1 text-[12px] text-[#707070]" data-kid="1-3-5" data-name="sort order label">
+            Sort: A–Z
+        </span>
+    </div>
+    <!-- Course list -->
+    <div class="flex flex-col gap-3 px-5 pt-4" data-kid="1-4" data-name="course list container">
+        <article class="rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-4-1" data-name="course card">
+            <span class="inline-block rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 font-display text-[11px] font-semibold leading-none" data-kid="1-4-1-1" data-name="course code badge">
+                ELEC-101
+            </span>
+            <h2 class="font-display mt-2 text-[15px] font-semibold leading-snug" data-kid="1-4-1-2" data-name="course title text">
+                House Wiring Fundamentals
+            </h2>
+            <p class="mt-1 flex items-center gap-1.5 text-[12px] text-[#707070]" data-kid="1-4-1-3" data-name="course provider and duration row">
+                <span class="text-[14px] leading-none" data-kid="1-4-1-3-1" data-name="clock icon wrapper">
+                    <i class="icon-clock" data-kid="1-4-1-3-1-1" data-name="clock icon">
+                    </i>
+                </span>
+                NSDC / Skill India · 4 weeks
+            </p>
+            <div class="mt-3 flex items-center gap-4 border-t border-[#ebebeb] pt-3" data-kid="1-4-1-4" data-name="course actions row">
+                <button class="flex items-center gap-1.5 text-[13px] font-medium" data-kid="1-4-1-4-1" data-name="save course button">
+                    <span class="text-[16px] leading-none text-[#707070]" data-kid="1-4-1-4-1-1" data-name="heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-4-1-4-1-1-1" data-name="heart icon">
+                        </i>
+                    </span>
+                    Save
+                </button>
+                <button class="flex h-8 items-center gap-1.5 rounded-full border border-[#c7c7c7] px-3 text-[12px] font-medium" data-kid="1-4-1-4-2" data-name="notify me button">
+                    <span class="text-[14px] leading-none text-[#707070]" data-kid="1-4-1-4-2-1" data-name="bell icon wrapper">
+                        <i class="icon-bell" data-kid="1-4-1-4-2-1-1" data-name="bell icon">
+                        </i>
+                    </span>
+                    Notify me
+                </button>
+            </div>
+        </article>
+        <article class="rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-4-2" data-name="course card">
+            <span class="inline-block rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 font-display text-[11px] font-semibold leading-none" data-kid="1-4-2-1" data-name="course code badge">
+                HVAC-201
+            </span>
+            <h2 class="font-display mt-2 text-[15px] font-semibold leading-snug" data-kid="1-4-2-2" data-name="course title text">
+                AC Repair & Servicing
+            </h2>
+            <p class="mt-1 flex items-center gap-1.5 text-[12px] text-[#707070]" data-kid="1-4-2-3" data-name="course provider and duration row">
+                <span class="text-[14px] leading-none" data-kid="1-4-2-3-1" data-name="clock icon wrapper">
+                    <i class="icon-clock" data-kid="1-4-2-3-1-1" data-name="clock icon">
+                    </i>
+                </span>
+                Voltas Academy · 8 weeks
+            </p>
+            <div class="mt-3 flex items-center gap-4 border-t border-[#ebebeb] pt-3" data-kid="1-4-2-4" data-name="course actions row">
+                <button class="flex items-center gap-1.5 text-[13px] font-medium" data-kid="1-4-2-4-1" data-name="save course button">
+                    <span class="text-[16px] leading-none text-[#707070]" data-kid="1-4-2-4-1-1" data-name="heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-4-2-4-1-1-1" data-name="heart icon">
+                        </i>
+                    </span>
+                    Save
+                </button>
+                <button class="flex h-8 items-center gap-1.5 rounded-full border border-[#c7c7c7] px-3 text-[12px] font-medium" data-kid="1-4-2-4-2" data-name="notify me button">
+                    <span class="text-[14px] leading-none text-[#707070]" data-kid="1-4-2-4-2-1" data-name="bell icon wrapper">
+                        <i class="icon-bell" data-kid="1-4-2-4-2-1-1" data-name="bell icon">
+                        </i>
+                    </span>
+                    Notify me
+                </button>
+            </div>
+        </article>
+        <article class="rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-4-3" data-name="course card">
+            <span class="inline-block rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 font-display text-[11px] font-semibold leading-none" data-kid="1-4-3-1" data-name="course code badge">
+                ELEC-104
+            </span>
+            <h2 class="font-display mt-2 text-[15px] font-semibold leading-snug" data-kid="1-4-3-2" data-name="course title text">
+                Fan Motor Repair
+            </h2>
+            <p class="mt-1 flex items-center gap-1.5 text-[12px] text-[#707070]" data-kid="1-4-3-3" data-name="course provider and duration row">
+                <span class="text-[14px] leading-none" data-kid="1-4-3-3-1" data-name="clock icon wrapper">
+                    <i class="icon-clock" data-kid="1-4-3-3-1-1" data-name="clock icon">
+                    </i>
+                </span>
+                NSDC / Skill India · 3 weeks
+            </p>
+            <div class="mt-3 flex items-center gap-4 border-t border-[#ebebeb] pt-3" data-kid="1-4-3-4" data-name="course actions row">
+                <button class="flex items-center gap-1.5 text-[13px] font-medium" data-kid="1-4-3-4-1" data-name="save course button">
+                    <span class="text-[16px] leading-none text-[#707070]" data-kid="1-4-3-4-1-1" data-name="heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-4-3-4-1-1-1" data-name="heart icon">
+                        </i>
+                    </span>
+                    Save
+                </button>
+                <button class="flex h-8 items-center gap-1.5 rounded-full border border-[#c7c7c7] px-3 text-[12px] font-medium" data-kid="1-4-3-4-2" data-name="notify me button">
+                    <span class="text-[14px] leading-none text-[#707070]" data-kid="1-4-3-4-2-1" data-name="bell icon wrapper">
+                        <i class="icon-bell" data-kid="1-4-3-4-2-1-1" data-name="bell icon">
+                        </i>
+                    </span>
+                    Notify me
+                </button>
+            </div>
+        </article>
+        <article class="rounded-xl border border-[#dfdfdf] p-3.5" data-kid="1-4-4" data-name="course card">
+            <span class="inline-block rounded-full border border-[#ebebeb] bg-[#fafafa] px-2.5 py-1 font-display text-[11px] font-semibold leading-none" data-kid="1-4-4-1" data-name="course code badge">
+                PLMB-102
+            </span>
+            <h2 class="font-display mt-2 text-[15px] font-semibold leading-snug" data-kid="1-4-4-2" data-name="course title text">
+                Basic Plumbing
+            </h2>
+            <p class="mt-1 flex items-center gap-1.5 text-[12px] text-[#707070]" data-kid="1-4-4-3" data-name="course provider and duration row">
+                <span class="text-[14px] leading-none" data-kid="1-4-4-3-1" data-name="clock icon wrapper">
+                    <i class="icon-clock" data-kid="1-4-4-3-1-1" data-name="clock icon">
+                    </i>
+                </span>
+                ITI Pune · 6 weeks
+            </p>
+            <div class="mt-3 flex items-center gap-4 border-t border-[#ebebeb] pt-3" data-kid="1-4-4-4" data-name="course actions row">
+                <button class="flex items-center gap-1.5 text-[13px] font-medium" data-kid="1-4-4-4-1" data-name="save course button">
+                    <span class="text-[16px] leading-none text-[#707070]" data-kid="1-4-4-4-1-1" data-name="heart icon wrapper">
+                        <i class="icon-heart" data-kid="1-4-4-4-1-1-1" data-name="heart icon">
+                        </i>
+                    </span>
+                    Save
+                </button>
+                <button class="flex h-8 items-center gap-1.5 rounded-full border border-[#c7c7c7] px-3 text-[12px] font-medium" data-kid="1-4-4-4-2" data-name="notify me button">
+                    <span class="text-[14px] leading-none text-[#707070]" data-kid="1-4-4-4-2-1" data-name="bell icon wrapper">
+                        <i class="icon-bell" data-kid="1-4-4-4-2-1-1" data-name="bell icon">
+                        </i>
+                    </span>
+                    Notify me
+                </button>
+            </div>
+        </article>
+    </div>
+    <!-- Footnote -->
+    <p class="px-5 pb-4 pt-3 text-[11px] leading-[1.5] text-[#9a9a9a]" data-kid="1-5" data-name="footnote text">
+        Skills taught are matched through the standard taxonomy — “wiring” finds ELEC-101.
+    </p>
+    <!-- Bottom tab bar -->
+    <nav class="mt-auto border-t border-[#dfdfdf] bg-white" data-kid="1-6" data-name="bottom navigation bar">
+        <div class="flex items-stretch justify-around px-2 pb-5 pt-2.5" data-kid="1-6-1" data-name="nav items row">
+            <div class="flex flex-col items-center gap-1 px-3" data-kid="1-6-1-1" data-name="home nav item">
+                <span class="text-[20px] leading-none text-[#707070]" data-kid="1-6-1-1-1" data-name="home icon wrapper">
+                    <i class="icon-house" data-kid="1-6-1-1-1-1" data-name="home icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-6-1-1-2" data-name="home nav label">
+                    Home
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 px-3" data-kid="1-6-1-2" data-name="matches nav item">
+                <span class="text-[20px] leading-none text-[#707070]" data-kid="1-6-1-2-1" data-name="briefcase icon wrapper">
+                    <i class="icon-briefcase-business" data-kid="1-6-1-2-1-1" data-name="briefcase icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-6-1-2-2" data-name="matches nav label">
+                    Matches
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 px-3" data-kid="1-6-1-3" data-name="courses nav item active">
+                <span class="text-[20px] leading-none text-[#3ecf8e]" data-kid="1-6-1-3-1" data-name="book icon wrapper">
+                    <i class="icon-book-open" data-kid="1-6-1-3-1-1" data-name="open book icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-semibold text-[#171717]" data-kid="1-6-1-3-2" data-name="courses nav label active">
+                    Courses
+                </span>
+            </div>
+            <div class="flex flex-col items-center gap-1 px-3" data-kid="1-6-1-4" data-name="profile nav item">
+                <span class="text-[20px] leading-none text-[#707070]" data-kid="1-6-1-4-1" data-name="user icon wrapper">
+                    <i class="icon-user-round" data-kid="1-6-1-4-1-1" data-name="user icon">
+                    </i>
+                </span>
+                <span class="text-[11px] font-medium text-[#707070]" data-kid="1-6-1-4-2" data-name="profile nav label">
+                    Profile
+                </span>
+            </div>
+        </div>
+    </nav>
+</div>

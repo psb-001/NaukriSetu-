@@ -1,0 +1,66 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/lucide-static@1.48.0/font/lucide.css');
+.font-display { font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, sans-serif; }
+.font-body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+</style>
+<div class="min-h-screen bg-white font-body text-[#171717] antialiased" data-kid="1" data-name="verification page root">
+    <div class="flex min-h-screen flex-col px-6 pb-8 pt-5" data-kid="1-1" data-name="authentication form container">
+        <!-- Top bar: back -->
+        <div class="flex items-center justify-between" data-kid="1-1-1" data-name="top navigation bar">
+            <button aria-label="Back" class="flex h-9 w-9 items-center justify-center rounded-full bg-[#fafafa] text-[20px] leading-none text-[#171717]" data-kid="1-1-1-1" data-name="back navigation button">
+                <i class="icon-arrow-left" data-kid="1-1-1-1-1" data-name="left arrow icon">
+                </i>
+            </button>
+        </div>
+        <!-- Heading -->
+        <h1 class="font-display mt-9 text-[22px] font-bold leading-[1.2] tracking-[-0.01em]" data-kid="1-1-2" data-name="page heading text">
+            Enter the code
+        </h1>
+        <p class="mt-2 text-[14px] leading-[1.5] text-[#707070]" data-kid="1-1-3" data-name="recipient email description">
+            Sent to
+            <span class="font-medium text-[#171717]" data-kid="1-1-3-1" data-name="highlighted email address">
+                ravi.kadam@gmail.com
+            </span>
+        </p>
+        <button class="mt-1 self-start text-[13px] font-medium text-[#171717] underline underline-offset-[3px]" data-kid="1-1-4" data-name="switch account link">
+            Use a different Gmail
+        </button>
+        <!-- OTP boxes -->
+        <div class="mt-10 flex items-center justify-between" data-kid="1-1-5" data-name="OTP input row">
+            <div class="flex h-14 w-14 items-center justify-center rounded-[8px] border border-[#c7c7c7] bg-white" data-kid="1-1-5-1" data-name="first OTP digit box">
+                <span class="font-display text-[24px] font-bold leading-none" data-kid="1-1-5-1-1" data-name="first OTP entered digit">
+                    1
+                </span>
+            </div>
+            <div class="flex h-14 w-14 items-center justify-center rounded-[8px] border-2 border-[#3ecf8e] bg-[#e7f8ef]" data-kid="1-1-5-2" data-name="second OTP digit box active">
+                <span class="font-display text-[24px] font-bold leading-none" data-kid="1-1-5-2-1" data-name="second OTP entered digit">
+                    2
+                </span>
+            </div>
+            <div class="flex h-14 w-14 items-center justify-center rounded-[8px] border border-[#c7c7c7] bg-white" data-kid="1-1-5-3" data-name="third OTP empty box">
+            </div>
+            <div class="flex h-14 w-14 items-center justify-center rounded-[8px] border border-[#c7c7c7] bg-white" data-kid="1-1-5-4" data-name="fourth OTP empty box">
+            </div>
+        </div>
+        <p class="mt-3 text-[12px] leading-[1.5] text-[#707070]" data-kid="1-1-6" data-name="demo OTP hint text">
+            Demo OTP is 1234 — boxes auto-advance.
+        </p>
+        <!-- Resend -->
+        <div class="mt-5 flex items-center gap-1.5 text-[13px] text-[#707070]" data-kid="1-1-7" data-name="resend countdown row">
+            <span class="text-[16px] leading-none" data-kid="1-1-7-1" data-name="clock icon container">
+                <i class="icon-clock" data-kid="1-1-7-1-1" data-name="clock icon">
+                </i>
+            </span>
+            <span data-dynamic="true" data-kid="1-1-7-2" data-name="resend countdown text" data-reason="countdown text replaced every second by timer script">
+                Resend in 0:24
+            </span>
+        </div>
+        <div class="grow" data-kid="1-1-8" data-name="flex spacer">
+        </div>
+        <!-- Primary action -->
+        <button class="h-12 w-full rounded-[6px] bg-[#3ecf8e] font-display text-[16px] font-semibold text-[#171717]" data-kid="1-1-9" data-name="primary verify button">
+            Verify & continue
+        </button>
+    </div>
+</div>
