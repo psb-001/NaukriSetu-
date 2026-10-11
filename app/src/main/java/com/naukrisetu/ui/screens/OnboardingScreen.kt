@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.engine.Seeker
+import com.naukrisetu.engine.SkillTaxonomy
 import com.naukrisetu.engine.canonicalSkills
 import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.onboarding.OnboardingValidator
@@ -202,13 +203,79 @@ private fun SkillsStep(
     goal: String,
     onGoal: (String) -> Unit,
 ) {
+    var naturalSpeechInput by remember { mutableStateOf("") }
+    var isAnalyzing by remember { mutableStateOf(false) }
+    var aiStatusMessage by remember { mutableStateOf<String?>(null) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+
+    // AI Natural Language Skill Assistant Card
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+        shape = RoundedCornerShape(ThemeRadii.Card.dp),
+        border = BorderStroke(1.dp, ThemeColors.Hairline),
+        colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+    ) {
+        Column(Modifier.padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("✨ AI Skill Assistant", fontWeight = FontWeight.Medium, fontSize = 14.sp, color = ThemeColors.Ink)
+            }
+            Text(
+                "Tell us in your own words what you know or study (e.g., 'Maine ITI wiring aur fan repair seekha hai'). AI will map it to standard skills.",
+                fontSize = 12.sp,
+                color = ThemeColors.InkMute,
+                modifier = Modifier.padding(vertical = 4.dp),
+            )
+            OutlinedTextField(
+                value = naturalSpeechInput,
+                onValueChange = { naturalSpeechInput = it },
+                placeholder = { Text("Type here in English, Hindi, or Hinglish…", fontSize = 13.sp) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = false,
+                maxLines = 3,
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (aiStatusMessage != null) {
+                    Text(aiStatusMessage!!, fontSize = 11.sp, color = ThemeColors.Primary, modifier = Modifier.weight(1f))
+                } else {
+                    Spacer(Modifier.weight(1f))
+                }
+                Button(
+                    onClick = {
+                        if (naturalSpeechInput.isBlank()) return@Button
+                        // Offline-capable semantic extraction using our SkillTaxonomy engine
+                        val matched = SkillTaxonomy.findCanonicalEquivalents(naturalSpeechInput)
+                        if (matched.isNotEmpty()) {
+                            val merged = (skills + matched).distinct().take(12)
+                            onSkills(merged)
+                            aiStatusMessage = "Extracted ${matched.size} skills into standard list"
+                        } else {
+                            aiStatusMessage = "No direct trade skills detected. Try words like wiring, plumbing, ac, fan."
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = ThemeColors.Primary,
+                        contentColor = ThemeColors.OnPrimary,
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                ) {
+                    Text("Auto-Extract Skills", fontSize = 12.sp)
+                }
+            }
+        }
+    }
+
     if (profileRole == "Student") {
         Text("What are you studying?", fontSize = 16.sp, color = ThemeColors.Ink)
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(value = goal, onValueChange = onGoal, label = { Text("What do you want to become?") }, supportingText = { Text("Pick from the standard skills list.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-        return
-    }
-    if (profileRole == "Trainee") {
+        Spacer(Modifier.height(12.dp))
+        Text("Your acquired skills or coursework", fontSize = 15.sp, color = ThemeColors.Ink)
+    } else if (profileRole == "Trainee") {
         Text("Your interests", fontSize = 16.sp, color = ThemeColors.Ink)
         Text("Pick the trades you want to learn.", fontSize = 13.sp, color = ThemeColors.InkMute)
         Spacer(Modifier.height(8.dp))
