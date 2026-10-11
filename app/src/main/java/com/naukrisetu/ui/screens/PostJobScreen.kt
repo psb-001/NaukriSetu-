@@ -43,6 +43,7 @@ import com.naukrisetu.data.DemoStore
 import com.naukrisetu.engine.Criterion
 import com.naukrisetu.engine.OppStatus
 import com.naukrisetu.engine.Opportunity
+import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.ui.components.EmployerTabs
 import com.naukrisetu.ui.icons.Lucide
 import com.naukrisetu.ui.nav.Routes
@@ -359,7 +360,9 @@ fun PostJobScreen(
                         employerId = employerId,
                     )
 
-                    store.submitPost(newOpp)
+                    val pending = store.submitPost(newOpp)
+                    // Adder portal publishes Live instantly (same board students see)
+                    store.approvePost(pending.id)
                     successMsg = "✓ Role published Live to NaukriSetu matching engine!"
                     onSubmitted()
                 },
@@ -392,10 +395,13 @@ fun MyPostingsScreen(
     store: DemoStore,
     onNavigate: (String) -> Unit,
 ) {
-    val employerId = store.currentSeeker()?.email ?: "officer.nic@gov.in"
-    val postings = store.postingsByEmployer(employerId).ifEmpty {
-        // Show all recent added postings or all system opps for demo
-        store.allOpportunities().take(5)
+    var refreshTrigger by remember { mutableStateOf(0) }
+    val employerId = remember(refreshTrigger) { store.currentSeeker()?.email ?: "officer.nic@gov.in" }
+    // Same Live board that students & employees see — engine filters Live only.
+    // Adders see EVERYTHING live (seed + every adder's posts), with "Yours" badge on their own.
+    val allLive = remember(refreshTrigger) { seekerVisibleOpps(store.allOpportunities()) }
+    val pendingMine = remember(refreshTrigger) {
+        store.allOpportunities().filter { it.status == OppStatus.Pending }
     }
 
     Scaffold(
@@ -415,8 +421,8 @@ fun MyPostingsScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
-                    Text("Published Opportunities", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Ink)
-                    Text("Live in NaukriSetu matching engine", fontSize = 13.sp, color = ThemeColors.InkMute)
+                    Text("All Live Opportunities", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Ink)
+                    Text("Same board students & employees see · ${allLive.size} live", fontSize = 13.sp, color = ThemeColors.InkMute)
                 }
                 Button(
                     onClick = { onNavigate(Routes.postJob) },
@@ -430,9 +436,15 @@ fun MyPostingsScreen(
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
 
-            postings.forEach { opp ->
+            if (pendingMine.isNotEmpty()) {
+                Text("⏳ Pending approval (${pendingMine.size})", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = ThemeColors.InkSecondary)
+                Spacer(Modifier.height(6.dp))
+            }
+
+            allLive.forEach { opp ->
+                val isMine = opp.employerId.equals(employerId, ignoreCase = true)
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
                     shape = RoundedCornerShape(ThemeRadii.Card.dp),
@@ -445,18 +457,16 @@ fun MyPostingsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(opp.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = ThemeColors.Ink)
-                            Surface(
-                                shape = RoundedCornerShape(4.dp),
-                                color = ThemeColors.PrimarySoft,
-                            ) {
-                                Text(
-                                    "LIVE",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = ThemeColors.PrimaryDeep,
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                )
+                            Text(opp.title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = ThemeColors.Ink, modifier = Modifier.weight(1f))
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                if (isMine) {
+                                    Surface(shape = RoundedCornerShape(4.dp), color = ThemeColors.Primary) {
+                                        Text("YOURS", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.White, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+                                    }
+                                }
+                                Surface(shape = RoundedCornerShape(4.dp), color = ThemeColors.PrimarySoft) {
+                                    Text("LIVE", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = ThemeColors.PrimaryDeep, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
+                                }
                             }
                         }
 
@@ -483,9 +493,11 @@ fun MyPostingsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text("⚡ Matched to eligible students", fontSize = 12.sp, color = ThemeColors.PrimaryDeep)
-                            TextButton(onClick = { store.deletePost(opp.id); onNavigate(Routes.myPostings) }) {
-                                Text("Remove", color = ThemeColors.Danger, fontSize = 12.sp)
+                            Text("⚡ Live for matched students", fontSize = 12.sp, color = ThemeColors.PrimaryDeep)
+                            if (isMine) {
+                                TextButton(onClick = { store.deletePost(opp.id); refreshTrigger++ }) {
+                                    Text("Remove", color = ThemeColors.Danger, fontSize = 12.sp)
+                                }
                             }
                         }
                     }
