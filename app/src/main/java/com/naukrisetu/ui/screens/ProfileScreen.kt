@@ -56,7 +56,7 @@ fun ProfileScreen(
     onNavigate: (String) -> Unit,
     onLogout: () -> Unit,
 ) {
-    var seeker = store.seeker("seeker-ravi") ?: Seed.demoSeeker
+    var seeker = store.currentSeeker() ?: Seed.demoSeeker
     val done = KycLogic.checksDone(seeker)
     val pct = KycLogic.progressPct(seeker)
     var aadhaarInput by remember(seeker.aadhaar) { mutableStateOf(seeker.aadhaar ?: "") }
@@ -115,7 +115,7 @@ fun ProfileScreen(
                 isLast = true,
             )
 
-            // Input forms for each step
+            // Input forms — step-by-step KYC progression
             if (seeker.aadhaar == null) {
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
@@ -127,12 +127,12 @@ fun ProfileScreen(
                     supportingText = { if (aadhaarError != null) Text(aadhaarError!!) },
                     modifier = Modifier.fillMaxWidth(),
                 )
-                androidx.compose.material3.TextButton(onClick = {
+                TextButton(onClick = {
                     if (!KycLogic.aadhaarValid(aadhaarInput)) {
                         aadhaarError = "Enter all 12 digits"
                     } else {
                         store.upsertSeeker(seeker.copy(aadhaar = aadhaarInput))
-                        seeker = store.seeker("seeker-ravi")!!
+                        seeker = store.currentSeeker() ?: seeker
                     }
                 }) { Text("Save Aadhaar") }
             }
@@ -141,26 +141,28 @@ fun ProfileScreen(
                 Spacer(Modifier.height(8.dp))
                 OutlinedTextField(value = addressInput, onValueChange = { addressInput = it }, label = { Text("Full address") }, modifier = Modifier.fillMaxWidth())
                 OutlinedTextField(value = seeker.city, onValueChange = {
-                    store.upsertSeeker(seeker.copy(city = it)); seeker = store.seeker("seeker-ravi")!!
+                    store.upsertSeeker(seeker.copy(city = it)); seeker = store.currentSeeker() ?: seeker
                 }, label = { Text("City") }, supportingText = { Text("Changing city re-runs your matches instantly.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                androidx.compose.material3.TextButton(onClick = {
+                TextButton(onClick = {
                     if (addressInput.isNotBlank()) {
-                        store.upsertSeeker(seeker.copy(addressProof = true)); seeker = store.seeker("seeker-ravi")!!
+                        store.upsertSeeker(seeker.copy(addressProof = true)); seeker = store.currentSeeker() ?: seeker
                     }
                 }) { Text("Take photo or upload address proof") }
             }
 
             if (seeker.addressProof && seeker.certificates.isEmpty()) {
                 Spacer(Modifier.height(8.dp))
+                seeker.certificates.forEach { c -> Text("• $c", fontSize = 14.sp, color = ThemeColors.Ink) }
                 OutlinedTextField(value = certInput, onValueChange = { certInput = it }, label = { Text("Add certificate") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                androidx.compose.material3.TextButton(onClick = {
+                TextButton(onClick = {
                     if (certInput.isNotBlank()) {
                         store.upsertSeeker(seeker.copy(certificates = seeker.certificates + certInput.trim()))
-                        seeker = store.seeker("seeker-ravi")!!
+                        seeker = store.currentSeeker() ?: seeker
                         certInput = ""
                     }
                 }) { Text("Add") }
             }
+            Text("Documents stay on this device in the demo.", fontSize = 12.sp, color = ThemeColors.InkMute2)
 
             Spacer(Modifier.height(12.dp))
             Text("Settings", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)

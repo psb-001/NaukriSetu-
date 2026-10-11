@@ -47,9 +47,10 @@ fun GapsScreen(
     onNavigate: (String) -> Unit,
     onOpenCourses: () -> Unit,
 ) {
-    val seeker = store.seeker("seeker-ravi") ?: Seed.demoSeeker
+    val seeker = store.currentSeeker() ?: Seed.demoSeeker
     val opp = store.allOpportunities().firstOrNull { it.id == oppId }
         ?: Seed.opportunities.firstOrNull { it.id == oppId }
+    val savedCourses = remember { mutableStateOf(store.savedCourseCodes()) }
 
     Scaffold(
         bottomBar = { SeekerTabs(current = Routes.matches, onNavigate = onNavigate) },
@@ -88,13 +89,20 @@ fun GapsScreen(
                             Text("Comes with time on the job — no course adds this.", fontSize = 13.sp, color = ThemeColors.InkMute)
                         }
                         gap.courses.forEach { c ->
-                            Spacer(Modifier.height(8.dp))
-                            Text("${c.code} — ${c.title}", fontSize = 14.sp, color = ThemeColors.Ink)
-                            Text("${c.provider} · ${c.weeks} weeks", fontSize = 13.sp, color = ThemeColors.InkMute)
-                            Row {
-                                TextButton(onClick = {}) { Text("Save") }
-                                TextButton(onClick = {}) { Text("Notify me") }
-                            }
+                                    Spacer(Modifier.height(8.dp))
+                                    Text("${c.code} — ${c.title}", fontSize = 14.sp, color = ThemeColors.Ink)
+                                    Text("${c.provider} · ${c.weeks} weeks", fontSize = 13.sp, color = ThemeColors.InkMute)
+                                    val isSaved = savedCourses.value.contains(c.code)
+                                    Row {
+                                        TextButton(onClick = {
+                                            store.toggleSaveCourse(c.code)
+                                            savedCourses.value = store.savedCourseCodes()
+                                        }) { Text(if (isSaved) "Saved ✓" else "Save") }
+                                        TextButton(onClick = {
+                                            store.toggleSaveCourse(c.code)
+                                            savedCourses.value = store.savedCourseCodes()
+                                        }) { Text("Notify me") }
+                                    }
                         }
                         if ((gap.kind == "Skill" || gap.kind == "Certificate") && gap.courses.isEmpty()) {
                             Text("No course available yet — check back soon.", fontSize = 13.sp, color = ThemeColors.InkMute)

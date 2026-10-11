@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
-import com.naukrisetu.data.Seed
+import com.naukrisetu.data.KycStatus
 import com.naukrisetu.engine.OppStatus
 import com.naukrisetu.ui.components.VerifierTabs
 import com.naukrisetu.ui.nav.Routes
@@ -42,15 +42,14 @@ fun VerifierScreen(
     var tab by remember { mutableStateOf(0) }
     var rejectNote by remember { mutableStateOf("") }
     var rejectingId by remember { mutableStateOf<String?>(null) }
-    val seeker = store.seeker("seeker-ravi") ?: Seed.demoSeeker
+    var kycRejectingEmail by remember { mutableStateOf<String?>(null) }
+    var kycRejectNote by remember { mutableStateOf("") }
 
-    // KYC docs queue: derived from the demo seeker (pending items).
-    val kycDocs = buildList {
-        if (seeker.aadhaar == null) add(Triple("Ravi Kadam", "Aadhaar card", "2 min ago"))
-        if (!seeker.addressProof) add(Triple("Ravi Kadam", "Address proof", "just now"))
-        add(Triple("Meena Iyer", "Aadhaar card", "18 min ago"))
-        add(Triple("Suresh Pawar", "Certificate: ITI Electrician", "1 hr ago"))
-    }
+    // Live from store — recomposes when store state changes
+    val kycDocs = remember { mutableStateOf(store.kycSubmissions()) }
+    val pendingKyc = kycDocs.value.filter { it.status == KycStatus.Pending }
+    val decidedKyc = kycDocs.value.filter { it.status != KycStatus.Pending }
+
     val pendingPosts = store.allOpportunities().filter { it.status == OppStatus.Pending }
     val decidedPosts = store.allOpportunities().filter { it.status != OppStatus.Pending }
 
@@ -64,7 +63,7 @@ fun VerifierScreen(
             Spacer(Modifier.height(8.dp))
             Row {
                 TextButton(onClick = { tab = 0 }) {
-                    Text("KYC docs (${kycDocs.size})", color = if (tab == 0) ThemeColors.Primary else ThemeColors.InkMute)
+                    Text("KYC docs (${pendingKyc.size})", color = if (tab == 0) ThemeColors.Primary else ThemeColors.InkMute)
                 }
                 TextButton(onClick = { tab = 1 }) {
                     Text("Jobs (${pendingPosts.size})", color = if (tab == 1) ThemeColors.Primary else ThemeColors.InkMute)
@@ -73,7 +72,11 @@ fun VerifierScreen(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 if (tab == 0) {
                     Text("Approvals update that seeker's matches immediately.", fontSize = 13.sp, color = ThemeColors.InkMute)
-                    kycDocs.forEach { (name, doc, ago) ->
+                    if (pendingKyc.isEmpty()) {
+                        Spacer(Modifier.height(16.dp))
+                        Text("No pending KYC submissions.", fontSize = 14.sp, color = ThemeColors.InkMute)
+                    }
+                    pendingKyc.forEach { entry ->
                         Card(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                             shape = RoundedCornerShape(ThemeRadii.Card.dp),
@@ -81,16 +84,51 @@ fun VerifierScreen(
                             colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
                         ) {
                             Column(Modifier.padding(16.dp)) {
-                                Text(name, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                                Text("$doc · $ago", fontSize = 13.sp, color = ThemeColors.InkMute)
-                                Row {
-                                    TextButton(onClick = {}) { Text("Approve") }
-                                    TextButton(onClick = {}) { Text("Reject") }
+                                Text(entry.seekerName, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                                Text("${entry.document} · ${entry.ago}", fontSize = 13.sp, color = ThemeColors.InkMute)
+                                Text(entry.seekerEmail, fontSize = 12.sp, color = ThemeColors.InkMute2)
+                                if (kycRejectingEmail == entry.seekerEmail) {
+                                    OutlinedTextField(
+                                        value = kycRejectNote,
+                                        onValueChange = { kycRejectNote = it },
+                                        label = { Text("Reason (required to reject)") },
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                    Row {
+                                        TextButton(onClick = {
+                                            if (kycRejectNote.isNotBlank()) {
+                                                store.rejectKyc(entry.seekerEmail)
+                                                kycDocs.value = store.kycSubmissions()
+                                                kycRejectingEmail = null
+                                                kycRejectNote = ""
+                                            }
+                                        }) { Text("Reject with note") }
+                                        TextButton(onClick = { kycRejectingEmail = null }) { Text("Cancel") }
+                                    }
+                                } else {
+                                    Row {
+                                        TextButton(onClick = {
+                                            store.approveKyc(entry.seekerEmail)
+                                            kycDocs.value = store.kycSubmissions()
+                                        }) { Text("Approve") }
+                                        TextButton(onClick = { kycRejectingEmail = entry.seekerEmail }) { Text("Reject") }
+                                    }
                                 }
                             }
                         }
                     }
-                    Text("Demo data — nothing leaves this device.", fontSize = 12.sp, color = ThemeColors.InkMute2)
+                    if (decidedKyc.isNotEmpty()) {
+                        Spacer(Modifier.height(8.dp))
+                        Text("Decided", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                        decidedKyc.forEach { entry ->
+                            Text(
+                                "• ${entry.seekerName} — ${entry.status.name}",
+                                fontSize = 13.sp,
+                                color = if (entry.status == KycStatus.Approved) ThemeColors.Primary else ThemeColors.Danger,
+                            )
+                        }
+                    }
+                    Text("Approvals sync to Supabase — visible across sessions.", fontSize = 12.sp, color = ThemeColors.InkMute2)
                 } else {
                     Text("Approve once — the post is live for every seeker instantly.", fontSize = 13.sp, color = ThemeColors.InkMute)
                     pendingPosts.forEach { opp ->
@@ -104,6 +142,9 @@ fun VerifierScreen(
                                 Text(opp.employer, fontSize = 13.sp, color = ThemeColors.InkMute)
                                 Text(opp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
                                 Text("${opp.criteria.size} criteria · pay ${opp.payMin}–${opp.payMax} · ${opp.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
+                                if (opp.description.isNotBlank()) {
+                                    Text(opp.description, fontSize = 13.sp, color = ThemeColors.InkMute)
+                                }
                                 if (rejectingId == opp.id) {
                                     OutlinedTextField(
                                         value = rejectNote,
@@ -127,7 +168,6 @@ fun VerifierScreen(
                                         TextButton(onClick = { rejectingId = opp.id }) { Text("Reject") }
                                     }
                                 }
-                                TextButton(onClick = {}) { Text("View full post") }
                             }
                         }
                     }

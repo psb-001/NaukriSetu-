@@ -59,7 +59,7 @@ fun OnboardingScreen(
     var basicsError by remember { mutableStateOf<String?>(null) }
 
     fun persist() {
-        val existing = store.seeker("seeker-ravi")
+        val existing = store.seeker(email)
         store.upsertSeeker(
             (existing ?: Seeker(id = "seeker-ravi", name = "", email = email, phone = "", city = "")).copy(
                 name = name.ifBlank { existing?.name ?: "" },

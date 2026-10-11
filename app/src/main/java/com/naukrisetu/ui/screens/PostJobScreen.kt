@@ -44,6 +44,9 @@ fun PostJobScreen(
     onNavigate: (String) -> Unit,
     onSubmitted: () -> Unit,
 ) {
+    // Use the employer's email as the canonical employerId so
+    // postingsByEmployer() correctly filters their own posts.
+    val employerId = store.currentSeeker()?.email?.let { "emp-$it" } ?: "emp-you"
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var skillQuery by remember { mutableStateOf("") }
@@ -137,7 +140,7 @@ fun PostJobScreen(
                             status = OppStatus.Pending,
                             description = description.trim(),
                             workInvolved = work.trim(),
-                            employerId = "emp-you",
+                            employerId = employerId,
                         ),
                     )
                     confirmation = "Sent for verification — live after approval."
@@ -164,8 +167,8 @@ fun MyPostingsScreen(
     store: DemoStore,
     onNavigate: (String) -> Unit,
 ) {
-    val postings = store.postingsByEmployer("emp-you") +
-        store.allOpportunities().filter { it.employerId.isNotEmpty() && it.employerId != "emp-you" }.take(0)
+    val employerId = store.currentSeeker()?.email?.let { "emp-$it" } ?: "emp-you"
+    val postings = store.postingsByEmployer(employerId)
 
     Scaffold(
         bottomBar = { EmployerTabs(current = Routes.myPostings, onNavigate = onNavigate) },

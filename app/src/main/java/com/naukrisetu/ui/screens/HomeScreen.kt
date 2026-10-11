@@ -1,6 +1,7 @@
 package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -12,12 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -26,7 +28,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,33 +35,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.layout.ContentScale
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.data.Seed
-import com.naukrisetu.engine.canonicalSkills
 import com.naukrisetu.engine.gapsFor
 import com.naukrisetu.engine.homeHeroCount
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
 import com.naukrisetu.ui.components.AmberBox
 import com.naukrisetu.ui.components.CompactJobCard
-import com.naukrisetu.ui.components.ScoreRing
 import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.components.UnderlineLink
 import com.naukrisetu.ui.icons.Lucide
+import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 
 @Composable
 fun HomeScreen(
@@ -72,6 +67,8 @@ fun HomeScreen(
     val visible = seekerVisibleOpps(store)
     val (eligible, _) = splitMatches(seeker, visible)
     val hero = homeHeroCount(seeker, visible)
+    val kycPct = KycLogic.progressPct(seeker)
+    val kycDone = KycLogic.checksDone(seeker)
     var query by remember { mutableStateOf("") }
     var chip by remember { mutableStateOf("All") }
 
@@ -80,6 +77,10 @@ fun HomeScreen(
             (query.isBlank() || r.opportunity.title.contains(query, ignoreCase = true) ||
                 r.opportunity.requiredSkills.any { it.contains(query, ignoreCase = true) })
     }
+
+    val gapCourses = eligible.firstOrNull()?.let {
+        gapsFor(seeker, it.opportunity).flatMap { g -> g.courses }
+    }.orEmpty().ifEmpty { Seed.courses }
 
     Scaffold(
         bottomBar = { SeekerTabs(current = Routes.home, onNavigate = onNavigate) },
@@ -90,9 +91,9 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text("Namaste, ${seeker.name.split(" ").firstOrNull() ?: "there"}", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("2 new matches since yesterday", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Text("$hero new matches since yesterday", fontSize = 13.sp, color = ThemeColors.InkMute)
             Spacer(Modifier.height(12.dp))
-            
+
             // Pill search bar with search icon
             OutlinedTextField(
                 value = query,
@@ -104,52 +105,51 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))
-            
+
             // Selectable chips (selected = black fill)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("All", "Electrician", "Plumber", "Carpenter", "Painter", "AC & Refrigeration", "Welder").forEach { c ->
                     val selected = chip == c
-                    val container = if (selected) ThemeColors.Ink else ThemeColors.CanvasSoft
-                    val labelCol = if (selected) ThemeColors.Canvas else ThemeColors.Ink
-                    androidx.compose.material3.Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                    Card(
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
                         shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = container),
+                        colors = CardDefaults.cardColors(containerColor = if (selected) ThemeColors.Ink else ThemeColors.CanvasSoft),
                         border = BorderStroke(1.dp, if (selected) ThemeColors.Ink else ThemeColors.Hairline),
                         onClick = { chip = c },
                     ) {
-                        Text(c, color = if (selected) ThemeColors.Canvas else ThemeColors.Ink, fontSize = 13.sp)
+                        Text(c, color = if (selected) ThemeColors.Canvas else ThemeColors.Ink, fontSize = 13.sp,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp))
                     }
                 }
             }
             Spacer(Modifier.height(12.dp))
-            
-            // Banner card with illustration on right
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(ThemeRadii.Card.dp),
-                border = BorderStroke(1.dp, ThemeColors.Hairline),
-                colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
-            ) {
-                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("New AC-repair intake", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                        Text("Voltas service partners hiring in Pune this week", fontSize = 13.sp, color = ThemeColors.InkMute)
-                        UnderlineLink(text = "See the role", onClick = { onNavigate(Routes.matches) })
+
+            // Banner card with live top job + illustration
+            if (eligible.isNotEmpty()) {
+                val topOpp = eligible.first().opportunity
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                    border = BorderStroke(1.dp, ThemeColors.Hairline),
+                    colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+                ) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(topOpp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                            Text("${topOpp.employer} · ${topOpp.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
+                            UnderlineLink(text = "See the role", onClick = { onHowToQualify(topOpp.id) })
+                        }
+                        Image(
+                            painter = painterResource(com.naukrisetu.R.drawable.ill_banner_ac),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(120.dp),
+                        )
                     }
-                    // Illustration on right
-                    Image(
-                        painter = painterResource(com.naukrisetu.R.drawable.ill_banner_ac),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(120.dp),
-                    )
                 }
             }
             Spacer(Modifier.height(12.dp))
-            
+
             // Hero number + inline label + underlined See all
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -160,7 +160,7 @@ fun HomeScreen(
                 UnderlineLink(text = "See all", onClick = { onNavigate(Routes.matches) })
             }
             Spacer(Modifier.height(8.dp))
-            
+
             // Top 3 eligible as compact ranked rows
             filtered.take(3).forEachIndexed { i, r ->
                 CompactJobCard(
@@ -171,7 +171,7 @@ fun HomeScreen(
                 )
             }
             Spacer(Modifier.height(12.dp))
-            
+
             // Gap card with underlined How to qualify
             val topGap = eligible.firstOrNull()?.let { gapsFor(seeker, it.opportunity).firstOrNull() }
             if (topGap != null) {
@@ -189,8 +189,8 @@ fun HomeScreen(
                 }
             }
             Spacer(Modifier.height(12.dp))
-            
-            // KYC card with bar + small green Continue KYC + amber warning
+
+            // KYC card with real live progress bar + amber warning
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Card.dp),
@@ -198,39 +198,37 @@ fun HomeScreen(
                 colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("Profile 40% complete", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                    Text("2 of 5 checks done. Completing KYC unlocks 2 more jobs.", fontSize = 13.sp, color = ThemeColors.InkMute)
+                    Text("Profile $kycPct% complete", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                    Text("$kycDone of 5 checks done. Completing KYC unlocks more jobs.", fontSize = 13.sp, color = ThemeColors.InkMute)
                     LinearProgressIndicator(
-                        progress = 0.4f,
+                        progress = { kycPct / 100f },
                         modifier = Modifier.fillMaxWidth(),
                         color = ThemeColors.Primary,
                         trackColor = ThemeColors.Hairline,
                     )
                     Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                        Button(
-                            onClick = { onNavigate(Routes.profile) },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = ThemeColors.Primary,
-                                contentColor = ThemeColors.OnPrimary,
-                            ),
-                            modifier = Modifier.padding(top = 8.dp),
-                        ) { Text("Continue KYC", fontSize = 14.sp) }
-                    }
+                    Button(
+                        onClick = { onNavigate(Routes.profile) },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = ThemeColors.Primary,
+                            contentColor = ThemeColors.OnPrimary,
+                        ),
+                        modifier = Modifier.padding(top = 4.dp),
+                    ) { Text("Continue KYC", fontSize = 14.sp) }
                     AmberBox(text = "Aadhaar pending verification — you can browse, some jobs stay locked.")
                 }
             }
             Spacer(Modifier.height(12.dp))
-            
-            // Courses horizontal strip
+
+            // Courses horizontal strip — gap-relevant or fallback
             Text("Courses for your gaps", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("${Seed.courses.size} courses", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Text("${Seed.courses.size} courses available", fontSize = 13.sp, color = ThemeColors.InkMute)
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(vertical = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
             ) {
-                items(Seed.courses.take(3)) { c ->
+                items(gapCourses.take(3)) { c ->
                     CourseCard(course = c)
                 }
             }
@@ -239,7 +237,6 @@ fun HomeScreen(
         }
     }
 }
-
 
 @Composable
 fun CourseCard(course: com.naukrisetu.engine.Course) {
@@ -256,10 +253,6 @@ fun CourseCard(course: com.naukrisetu.engine.Course) {
             Text(course.code, fontSize = 11.sp, color = ThemeColors.InkMute2)
             Text(course.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text("${course.provider} · ${course.weeks} weeks", fontSize = 11.sp, color = ThemeColors.InkMute)
-            Row {
-                TextButton(onClick = {}) { Text("Save") }
-                TextButton(onClick = {}) { Text("Notify") }
-            }
         }
     }
 }

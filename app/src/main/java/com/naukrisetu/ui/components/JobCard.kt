@@ -48,6 +48,8 @@ fun EligibleJobCard(
     position: Int,
     total: Int,
     onHowToQualify: () -> Unit,
+    onSave: (() -> Unit)? = null,
+    isSaved: Boolean = false,
 ) {
     val opp = ranked.opportunity
     var expanded by remember { mutableStateOf(false) }
@@ -80,7 +82,9 @@ fun EligibleJobCard(
                     Text("Pay ${inr(opp.payMax)} vs minimum", fontSize = 13.sp, color = ThemeColors.Ink)
                     Row {
                         TextButton(onClick = onHowToQualify) { Text("How to qualify") }
-                        TextButton(onClick = {}) { Text("Save") }
+                        TextButton(onClick = { onSave?.invoke() }) {
+                            Text(if (isSaved) "Saved ✓" else "Save")
+                        }
                     }
                 }
             }

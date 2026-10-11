@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp",
+      "description": "Supabase project management: SQL, tables, migrations, auth, edge functions, logs"
+    },
     "kombai": {
       "command": "C:\\Users\\Asus\\AppData\\Local\\Programs\\@kombaielectron-app\\Kombai.exe",
       "args": [

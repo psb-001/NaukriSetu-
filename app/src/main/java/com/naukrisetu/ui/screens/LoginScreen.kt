@@ -1,5 +1,6 @@
 package com.naukrisetu.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,9 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.naukrisetu.auth.GoogleAuthHelper
 import com.naukrisetu.ui.auth.EmailCheck
 import com.naukrisetu.ui.auth.Role
 import com.naukrisetu.ui.components.InfoBox
@@ -46,6 +49,7 @@ import com.naukrisetu.ui.theme.ThemeRadii
 fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
     var email by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
 
     fun submit(role: Role) {
         if (!EmailCheck.valid(email)) {
@@ -65,9 +69,9 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
         Text(Strings.loginTitle, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
         Text(Strings.loginSubtitle, fontSize = 14.sp, color = ThemeColors.InkMute)
         Spacer(Modifier.height(20.dp))
-        // White Google button (per M02) — same action as Continue for seekers.
+        // Real Google OAuth via Supabase Custom Tab (falls back to demo if not configured)
         Button(
-            onClick = { submit(Role.Seeker) },
+            onClick = { GoogleAuthHelper.launchGoogleSignIn(context) },
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(ThemeRadii.Button.dp),
             border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
@@ -81,6 +85,7 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
             Text(Strings.continueWithGoogle, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         }
         InfoBox(icon = Lucide.Info, text = "${Strings.demoHintPrefix} ${Strings.demoOtp}")
+        Spacer(Modifier.height(12.dp))
         Text(Strings.gmailLabel, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(

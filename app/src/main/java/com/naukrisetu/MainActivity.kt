@@ -1,24 +1,27 @@
 package com.naukrisetu
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.naukrisetu.auth.GoogleAuthHelper
 import com.naukrisetu.data.DemoStore
+import com.naukrisetu.data.RemoteStore
 import com.naukrisetu.ui.auth.Role
-import com.naukrisetu.ui.copy.Strings
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.screens.CoursesScreen
 import com.naukrisetu.ui.screens.GapsScreen
@@ -35,8 +38,16 @@ import com.naukrisetu.ui.screens.SplashScreen
 import com.naukrisetu.ui.theme.ThemeColors
 
 class MainActivity : ComponentActivity() {
+
+    // Mutable state hoisted outside setContent so onNewIntent can push into it.
+    private val oauthResult = mutableStateOf<GoogleAuthHelper.OAuthResult?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Handle cold-start OAuth callback (app not yet running)
+        intent?.data?.let { handleOAuthUri(it) }
+
         setContent {
             MaterialTheme(
                 colorScheme = MaterialTheme.colorScheme.copy(
@@ -50,9 +61,27 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(modifier = Modifier.fillMaxSize(), color = ThemeColors.Canvas) {
                     val nav = rememberNavController()
-                    val store = remember { DemoStore() }
+                    var store by remember { mutableStateOf<DemoStore>(DemoStore()) }
                     var pendingEmail by remember { mutableStateOf("") }
                     var pendingRole by remember { mutableStateOf(Role.Seeker) }
+
+                    // React to OAuth callback delivered via onNewIntent
+                    val latestOAuth by oauthResult
+                    if (latestOAuth is GoogleAuthHelper.OAuthResult.Success) {
+                        val result = latestOAuth as GoogleAuthHelper.OAuthResult.Success
+                        oauthResult.value = null // consume
+                        pendingEmail = result.email.ifBlank { "google@user.com" }
+                        pendingRole = Role.Seeker
+                        val remote = RemoteStore(pendingEmail)
+                        lifecycleScope.launch {
+                            remote.load()
+                            store = remote
+                            nav.navigate(routeFor(pendingRole)) {
+                                popUpTo(Routes.splash) { inclusive = true }
+                            }
+                        }
+                    }
+
                     NavHost(navController = nav, startDestination = Routes.splash) {
                         composable(Routes.splash) {
                             SplashScreen(onGetStarted = { nav.navigate(Routes.login) })
@@ -68,8 +97,13 @@ class MainActivity : ComponentActivity() {
                             OtpScreen(
                                 email = pendingEmail,
                                 onVerified = {
-                                    nav.navigate(routeFor(pendingRole)) {
-                                        popUpTo(Routes.splash) { inclusive = true }
+                                    val remote = RemoteStore(pendingEmail)
+                                    lifecycleScope.launch {
+                                        remote.load()
+                                        store = remote
+                                        nav.navigate(routeFor(pendingRole)) {
+                                            popUpTo(Routes.splash) { inclusive = true }
+                                        }
                                     }
                                 },
                                 onChangeEmail = { nav.popBackStack() },
@@ -116,6 +150,8 @@ class MainActivity : ComponentActivity() {
                                 store = store,
                                 onNavigate = { nav.navigate(it) },
                                 onLogout = {
+                                    store.clear()
+                                    store = DemoStore()
                                     nav.navigate(Routes.login) {
                                         popUpTo(Routes.splash) { inclusive = true }
                                     }
@@ -143,10 +179,22 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    /** Called when the OAuth redirect brings the app back to the foreground (singleTask). */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intent.data?.let { handleOAuthUri(it) }
+    }
+
+    private fun handleOAuthUri(uri: Uri) {
+        if (uri.scheme == "naukrisetu" && uri.host == "auth") {
+            oauthResult.value = GoogleAuthHelper.parseCallback(uri)
+        }
+    }
 }
 
 private fun routeFor(role: Role): String = when (role) {
-    Role.Seeker -> Routes.onboarding
+    Role.Seeker   -> Routes.onboarding
     Role.Employer -> Routes.postJob
     Role.Verifier -> Routes.kycQueue
 }
