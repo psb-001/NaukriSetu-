@@ -112,7 +112,11 @@ fun skillMatchPct(have: List<String>, need: List<String>): Int {
 }
 
 private fun coursesForSkill(skill: String): List<Course> =
-    Seed.courses.filter { c -> c.skillsTaught.any { it.equals(skill, ignoreCase = true) } }
+    Seed.courses.filter { c ->
+        c.skillsTaught.any { taught ->
+            taught.equals(skill, ignoreCase = true) || SkillTaxonomy.matchScore(taught, skill) >= 0.70f
+        }
+    }
 
 /** Missing items for (seeker, opportunity) — entry point is always a match card, never blank. */
 fun gapsFor(seeker: Seeker, opp: Opportunity): List<Gap> {

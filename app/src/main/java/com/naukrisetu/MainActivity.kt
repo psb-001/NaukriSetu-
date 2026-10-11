@@ -1,5 +1,6 @@
 package com.naukrisetu
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,13 +52,40 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(modifier = Modifier.fillMaxSize(), color = ThemeColors.Canvas) {
                     val nav = rememberNavController()
+                    val prefs = getSharedPreferences("naukrisetu_session", Context.MODE_PRIVATE)
+                    val savedEmail = prefs.getString("user_email", null)
+                    val savedRoleStr = prefs.getString("user_role", null)
+                    val savedRole = if (savedRoleStr != null) {
+                        runCatching { Role.valueOf(savedRoleStr) }.getOrDefault(Role.Seeker)
+                    } else Role.Seeker
+
                     var store by remember { mutableStateOf<DemoStore>(DemoStore()) }
-                    var pendingEmail by remember { mutableStateOf("") }
-                    var pendingRole by remember { mutableStateOf(Role.Seeker) }
+                    var pendingEmail by remember { mutableStateOf(savedEmail ?: "") }
+                    var pendingRole by remember { mutableStateOf(savedRole) }
+
+                    // Restore persistent session on launch
+                    androidx.compose.runtime.LaunchedEffect(savedEmail) {
+                        if (!savedEmail.isNullOrBlank()) {
+                            val remote = RemoteStore(savedEmail)
+                            remote.load()
+                            store = remote
+                            nav.navigate(Routes.home) {
+                                popUpTo(Routes.splash) { inclusive = true }
+                            }
+                        }
+                    }
 
                     NavHost(navController = nav, startDestination = Routes.splash) {
                         composable(Routes.splash) {
-                            SplashScreen(onGetStarted = { nav.navigate(Routes.login) })
+                            SplashScreen(onGetStarted = {
+                                if (prefs.getString("user_email", null).isNullOrBlank()) {
+                                    nav.navigate(Routes.login)
+                                } else {
+                                    nav.navigate(Routes.home) {
+                                        popUpTo(Routes.splash) { inclusive = true }
+                                    }
+                                }
+                            })
                         }
                         composable(Routes.login) {
                             LoginScreen(onLoggedIn = { email, role ->
@@ -70,6 +98,12 @@ class MainActivity : ComponentActivity() {
                             OtpScreen(
                                 email = pendingEmail,
                                 onVerified = {
+                                    // Save session to SharedPreferences
+                                    prefs.edit()
+                                        .putString("user_email", pendingEmail)
+                                        .putString("user_role", pendingRole.name)
+                                        .apply()
+
                                     // OTP verified by Supabase — load remote profile
                                     val remote = RemoteStore(pendingEmail)
                                     lifecycleScope.launch {
@@ -124,8 +158,10 @@ class MainActivity : ComponentActivity() {
                                 store = store,
                                 onNavigate = { nav.navigate(it) },
                                 onLogout = {
+                                    prefs.edit().clear().apply()
                                     store.clear()
                                     store = DemoStore()
+                                    pendingEmail = ""
                                     nav.navigate(Routes.login) {
                                         popUpTo(Routes.splash) { inclusive = true }
                                     }

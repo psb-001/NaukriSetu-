@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChip
@@ -180,17 +182,59 @@ private fun BasicsStep(
 ) {
     Text("The basics", fontSize = 16.sp, color = ThemeColors.Ink)
     Spacer(Modifier.height(8.dp))
-    OutlinedTextField(value = name, onValueChange = onName, label = { Text("Full name") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    OutlinedTextField(
+        value = name,
+        onValueChange = onName,
+        label = { Text("Full name") },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
     Spacer(Modifier.height(8.dp))
-    OutlinedTextField(value = phone, onValueChange = onPhone, label = { Text("Phone") }, prefix = { Text("+91 ") }, supportingText = { Text("10 digits, starts with 6–9.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    OutlinedTextField(
+        value = phone,
+        onValueChange = onPhone,
+        label = { Text("Phone") },
+        prefix = { Text("+91 ") },
+        supportingText = { Text("10 digits, starts with 6–9.") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
     Spacer(Modifier.height(8.dp))
-    OutlinedTextField(value = city, onValueChange = onCity, label = { Text("City") }, supportingText = { Text("Needed to find jobs near you — matches are filtered by city.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    OutlinedTextField(
+        value = city,
+        onValueChange = onCity,
+        label = { Text("City") },
+        supportingText = { Text("Matches are strictly filtered by your city.") },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
     Spacer(Modifier.height(8.dp))
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedTextField(value = age, onValueChange = onAge, label = { Text("Age (optional)") }, singleLine = true, modifier = Modifier.weight(1f))
-        OutlinedTextField(value = experience, onValueChange = onExperience, label = { Text("Experience, yrs (optional)") }, singleLine = true, modifier = Modifier.weight(1f))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        OutlinedTextField(
+            value = age,
+            onValueChange = { onAge(it.filter { c -> c.isDigit() }.take(2)) },
+            label = { Text("Age (years)") },
+            placeholder = { Text("e.g. 21") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            modifier = Modifier.weight(1f),
+        )
+        OutlinedTextField(
+            value = experience,
+            onValueChange = { onExperience(it.filter { c -> c.isDigit() }.take(2)) },
+            label = { Text("Experience (years)") },
+            placeholder = { Text("0 for fresher") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            modifier = Modifier.weight(1f),
+        )
     }
-    Text("Some jobs need this — add it anytime in Profile.", fontSize = 12.sp, color = ThemeColors.InkMute2)
+    Spacer(Modifier.height(4.dp))
+    Text("Enter 0 experience if fresher. Age/exp can be updated anytime in Profile.", fontSize = 12.sp, color = ThemeColors.InkMute2)
     if (error != null) {
         Spacer(Modifier.height(8.dp))
         Text(error, color = ThemeColors.Danger, fontSize = 13.sp)

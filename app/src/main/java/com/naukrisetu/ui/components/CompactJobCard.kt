@@ -32,6 +32,7 @@ fun CompactJobCard(
 ) {
     val opp = ranked.opportunity
     Card(
+        onClick = onHowToQualify,
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         shape = RoundedCornerShape(ThemeRadii.Card.dp),
         border = BorderStroke(1.dp, ThemeColors.Hairline),
@@ -43,9 +44,9 @@ fun CompactJobCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(opp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
                 Text("${opp.employer} · ${opp.city}", fontSize = 12.sp, color = ThemeColors.InkMute)
-                Text("#$position of $total", fontSize = 11.sp, color = ThemeColors.InkMute2)
-                Text("${opportunityPay(opp)} · ${"%.1f".format(opp.distanceKm)} km", fontSize = 12.sp, color = ThemeColors.Ink)
-                Text(ranked.reason, fontSize = 12.sp, color = ThemeColors.InkSecondary)
+                Text("#$position of $total · ${opportunityPay(opp)} · ${"%.1f".format(opp.distanceKm)} km", fontSize = 11.sp, color = ThemeColors.InkMute2)
+                Spacer(Modifier.padding(top = 2.dp))
+                Text(ranked.reason, fontSize = 12.sp, color = ThemeColors.Primary)
             }
             androidx.compose.material3.Icon(
                 imageVector = com.naukrisetu.ui.icons.Lucide.ChevronRight,
