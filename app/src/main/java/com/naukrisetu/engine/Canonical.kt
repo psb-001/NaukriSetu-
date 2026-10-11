@@ -2,6 +2,7 @@ package com.naukrisetu.engine
 
 /** Standard skills list — feeds onboarding autocomplete, taxonomy search, gap matching. */
 fun canonicalSkills(): List<String> = listOf(
+    // Vocational & Trades
     "House wiring",
     "Fan repair",
     "Fan Motor Repair",
@@ -17,4 +18,15 @@ fun canonicalSkills(): List<String> = listOf(
     "Split-AC install",
     "Switchboard fitting",
     "Pipe fitting",
+    // Tech, Programming & Modern Student Skills
+    "Python",
+    "JavaScript",
+    "Web Development",
+    "Android Development",
+    "Data Entry & Excel",
+    "Graphic Design",
+    "Digital Marketing",
+    "Customer Support",
+    "AI & Prompting",
+    "Hardware & Networking",
 )

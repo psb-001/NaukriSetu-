@@ -34,6 +34,24 @@ class SkillTaxonomyTest {
     }
 
     @Test
+    fun `programming and tech student skills match across synonyms`() {
+        // "react" vs "Web Development"
+        assertTrue(SkillTaxonomy.matchScore("react", "Web Development") >= 0.80f)
+
+        // "kotlin" vs "Android Development"
+        assertTrue(SkillTaxonomy.matchScore("kotlin", "Android Development") >= 0.80f)
+
+        // "machine learning" vs "Python"
+        assertTrue(SkillTaxonomy.matchScore("machine learning", "Python") >= 0.80f)
+
+        // "excel" vs "Data Entry & Excel"
+        assertTrue(SkillTaxonomy.matchScore("excel", "Data Entry & Excel") >= 0.85f)
+
+        // "figma" vs "Graphic Design"
+        assertTrue(SkillTaxonomy.matchScore("figma", "Graphic Design") >= 0.80f)
+    }
+
+    @Test
     fun `unrelated skills score zero`() {
         val score = SkillTaxonomy.matchScore("Painting", "House wiring")
         assertEquals(0.0f, score, 0.01f)

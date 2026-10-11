@@ -77,8 +77,10 @@ fun rankEligible(seeker: Seeker, opps: List<Opportunity>): List<Ranked> {
         val expPts = if ((seeker.experienceYears ?: 0) >= needExp) 15 else 5
         val score = (skillPts + commutePts + payPts + expPts).coerceIn(0, 100)
         val topSkill = opp.requiredSkills.firstOrNull() ?: "General"
+        val isStudent = seeker.role.equals("Student", ignoreCase = true) || seeker.role.equals("Trainee", ignoreCase = true)
         val reasonText = buildString {
             append("$topSkill ${skillPct}% fit")
+            if (isStudent && (seeker.experienceYears ?: 0) == 0) append(" · Fresher friendly")
             if (opp.distanceKm > 0) append(" · ${"%.1f".format(opp.distanceKm)} km away")
             append(" · ₹${opp.payMin / 1000}k/mo")
         }

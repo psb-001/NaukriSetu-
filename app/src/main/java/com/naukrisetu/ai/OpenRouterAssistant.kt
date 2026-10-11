@@ -38,11 +38,11 @@ object OpenRouterAssistant {
         }
 
         val prompt = """
-You are RozgarLink's Skill Assistant for Indian blue-collar workers, technicians, and ITI students.
-Extract the candidate's skills, trade role, and experience from what they say (English or Hindi/Hinglish).
+You are RozgarLink's Skill Assistant for Indian job seekers, vocational workers, ITI students, and college graduates.
+Extract the candidate's skills, trade/tech role, and experience from what they say (English, Hindi, or Hinglish).
 
 Standard available canonical skills:
-[House wiring, Fan repair, Fan Motor Repair, Basic plumbing, AC Repair & Servicing, AC gas charging, Carpentry, Painting, Welding, Masonry, Pump repair, Refrigeration, Split-AC install, Switchboard fitting, Pipe fitting]
+[House wiring, Fan repair, Fan Motor Repair, Basic plumbing, AC Repair & Servicing, AC gas charging, Carpentry, Painting, Welding, Masonry, Pump repair, Refrigeration, Split-AC install, Switchboard fitting, Pipe fitting, Python, JavaScript, Web Development, Android Development, Data Entry & Excel, Graphic Design, Digital Marketing, Customer Support, AI & Prompting, Hardware & Networking]
 
 User input:
 "$userInput"
@@ -50,7 +50,7 @@ User input:
 Return ONLY a valid JSON object with this exact structure (no markdown fences, no explanation):
 {
   "skills": ["Canonical Skill 1", "Canonical Skill 2"],
-  "suggested_role": "Electrician / Plumber / Student / Technician",
+  "suggested_role": "Software Developer / Student / Electrician / Designer / Technician",
   "estimated_exp_years": 0,
   "summary": "Brief 1-line friendly summary of what was understood"
 }

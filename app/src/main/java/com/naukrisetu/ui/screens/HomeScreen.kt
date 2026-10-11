@@ -108,7 +108,7 @@ fun HomeScreen(
 
             // Selectable chips (selected = black fill)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("All", "Electrician", "Plumber", "Carpenter", "Painter", "AC & Refrigeration", "Welder").forEach { c ->
+                listOf("All", "Electrician", "Programming", "Web Dev", "Plumber", "AC & Refrigeration", "Design", "Data Entry").forEach { c ->
                     val selected = chip == c
                     Card(
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
