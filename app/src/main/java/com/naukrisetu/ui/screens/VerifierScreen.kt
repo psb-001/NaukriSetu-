@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.data.Seed
 import com.naukrisetu.engine.OppStatus
-import com.naukrisetu.ui.components.VerifierBottomTabs
+import com.naukrisetu.ui.components.VerifierTabs
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
@@ -55,7 +55,7 @@ fun VerifierScreen(
     val decidedPosts = store.allOpportunities().filter { it.status != OppStatus.Pending }
 
     Scaffold(
-        bottomBar = { VerifierBottomTabs(current = Routes.kycQueue, onNavigate = onNavigate) },
+        bottomBar = { VerifierTabs(current = Routes.kycQueue, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp)) {

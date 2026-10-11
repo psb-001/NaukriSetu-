@@ -34,7 +34,7 @@ import com.naukrisetu.data.DemoStore
 import com.naukrisetu.data.Seed
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
-import com.naukrisetu.ui.components.SeekerBottomTabs
+import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
@@ -57,7 +57,7 @@ fun ProfileScreen(
     val (eligible, _) = splitMatches(seeker, seekerVisibleOpps(store))
 
     Scaffold(
-        bottomBar = { SeekerBottomTabs(current = Routes.profile, onNavigate = onNavigate) },
+        bottomBar = { SeekerTabs(current = Routes.profile, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {

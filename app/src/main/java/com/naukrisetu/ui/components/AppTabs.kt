@@ -44,23 +44,24 @@ fun UnderlineLink(text: String, onClick: () -> Unit, fontSize: Int = 14) {
 
 private data class Tab(val label: String, val route: String, val icon: ImageVector)
 
+/** Exact Kombai tab sets (M07/M13/M16). Selected = emerald, unselected = grey. */
 private val seekerTabs = listOf(
     Tab("Home", Routes.home, Lucide.Home),
-    Tab("Matches", Routes.matches, Lucide.Briefcase),
+    Tab("Matches", Routes.matches, Lucide.BriefcaseBusiness),
     Tab("Courses", Routes.courses, Lucide.BookOpen),
-    Tab("Profile", Routes.profile, Lucide.User),
+    Tab("Profile", Routes.profile, Lucide.UserRound),
 )
 
 private val employerTabs = listOf(
-    Tab("Post Job", Routes.postJob, Lucide.Plus),
-    Tab("My Postings", Routes.myPostings, Lucide.Briefcase),
-    Tab("Profile", Routes.profile, Lucide.User),
+    Tab("Post Job", Routes.postJob, Lucide.PlusCircle),
+    Tab("My Postings", Routes.myPostings, Lucide.List),
+    Tab("Profile", Routes.profile, Lucide.UserRound),
 )
 
 private val verifierTabs = listOf(
     Tab("KYC Queue", Routes.kycQueue, Lucide.ShieldCheck),
-    Tab("Jobs Queue", Routes.jobsQueue, Lucide.FileText),
-    Tab("Profile", Routes.profile, Lucide.User),
+    Tab("Jobs Queue", Routes.jobsQueue, Lucide.FileCheck2),
+    Tab("Profile", Routes.profile, Lucide.UserRound),
 )
 
 @Composable
@@ -79,7 +80,7 @@ private fun IconTabs(tabs: List<Tab>, current: String, onNavigate: (String) -> U
                         modifier = Modifier.size(22.dp),
                     )
                 },
-                label = { Text(t.label, fontSize = 12.sp) },
+                label = { Text(t.label, fontSize = 11.sp) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedTextColor = ThemeColors.Ink,
                     unselectedTextColor = ThemeColors.InkMute,
@@ -112,19 +113,13 @@ fun MetaItem(icon: ImageVector, text: String) {
 /** Small amber info box (pending verification etc.). */
 @Composable
 fun AmberBox(text: String) {
-    androidx.compose.foundation.layout.Box(
-        modifier = Modifier
-            .padding(vertical = 8.dp),
+    Row(
+        modifier = Modifier.padding(vertical = 8.dp),
+        verticalAlignment = Alignment.Top,
     ) {
-        Row(
-            modifier = Modifier
-                .padding(12.dp),
-            verticalAlignment = Alignment.Top,
-        ) {
-            Text("●", fontSize = 10.sp, color = ThemeColors.Warning)
-            Spacer(Modifier.width(8.dp))
-            Text(text, fontSize = 13.sp, color = ThemeColors.InkSecondary)
-        }
+        Text("●", fontSize = 10.sp, color = ThemeColors.Warning)
+        Spacer(Modifier.width(8.dp))
+        Text(text, fontSize = 13.sp, color = ThemeColors.InkSecondary)
     }
 }
 

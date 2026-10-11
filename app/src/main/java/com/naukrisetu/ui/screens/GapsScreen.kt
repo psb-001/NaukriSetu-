@@ -34,7 +34,7 @@ import com.naukrisetu.data.Seed
 import com.naukrisetu.engine.gapsFor
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
-import com.naukrisetu.ui.components.SeekerBottomTabs
+import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
@@ -52,7 +52,7 @@ fun GapsScreen(
         ?: Seed.opportunities.firstOrNull { it.id == oppId }
 
     Scaffold(
-        bottomBar = { SeekerBottomTabs(current = Routes.matches, onNavigate = onNavigate) },
+        bottomBar = { SeekerTabs(current = Routes.matches, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
@@ -138,7 +138,7 @@ fun CoursesScreen(
     }
 
     Scaffold(
-        bottomBar = { SeekerBottomTabs(current = Routes.courses, onNavigate = onNavigate) },
+        bottomBar = { SeekerTabs(current = Routes.courses, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp)) {

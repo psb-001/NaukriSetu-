@@ -33,10 +33,18 @@ object Lucide {
         moveTo(9f, 20f); verticalLineTo(14f); horizontalLineTo(15f); verticalLineTo(20f)
     })
 
-    val Briefcase: ImageVector = icon({
-        moveTo(2f, 7f); horizontalLineTo(22f); verticalLineTo(20f); horizontalLineTo(2f); close()
-        moveTo(16f, 7f); verticalLineTo(5f); horizontalLineTo(8f); verticalLineTo(7f); close()
-        moveTo(2f, 13f); horizontalLineTo(22f)
+    /** lucide briefcase-business: body + handle + middle line + clasp. */
+    val BriefcaseBusiness: ImageVector = icon({
+        moveTo(22f, 17f); arcTo(2f, 2f, 0f, false, true, 20f, 19f)
+        horizontalLineTo(4f); arcTo(2f, 2f, 0f, false, true, 2f, 17f)
+        verticalLineTo(9f); arcTo(2f, 2f, 0f, false, true, 4f, 7f)
+        horizontalLineTo(8f)
+        moveTo(6f, 12f); verticalLineTo(7f)
+        arcTo(2f, 2f, 0f, false, true, 8f, 5f); horizontalLineTo(16f)
+        arcTo(2f, 2f, 0f, false, true, 18f, 7f); verticalLineTo(12f)
+        moveTo(22f, 12f); verticalLineTo(17f); arcTo(2f, 2f, 0f, false, true, 20f, 19f)
+        moveTo(2f, 12f); horizontalLineTo(20f)
+        moveTo(12f, 12f); horizontalLineTo(12.01f)
     })
 
     val BookOpen: ImageVector = icon({
@@ -45,9 +53,10 @@ object Lucide {
         moveTo(12f, 5f); verticalLineTo(20f)
     })
 
-    val User: ImageVector = icon({
-        moveTo(19f, 21f); curveTo(19f, 17f, 16f, 14f, 12f, 14f); curveTo(8f, 14f, 5f, 17f, 5f, 21f)
-        arcTo(4f, 4f, 0f, false, true, 9f, 7f); arcTo(4f, 4f, 0f, false, true, 15f, 7f); arcTo(4f, 4f, 0f, false, true, 19f, 21f)
+    /** lucide user-round: circle head + round shoulders. */
+    val UserRound: ImageVector = icon({
+        arcTo(5f, 5f, 0f, true, true, 17f, 8f); arcTo(5f, 5f, 0f, true, true, 7f, 8f)
+        moveTo(20f, 21f); arcTo(8f, 8f, 0f, false, true, 4f, 21f)
     })
 
     val Search: ImageVector = icon({
@@ -89,6 +98,31 @@ object Lucide {
     val Plus: ImageVector = icon({
         moveTo(12f, 5f); verticalLineTo(19f)
         moveTo(5f, 12f); horizontalLineTo(19f)
+    })
+
+    /** lucide plus-circle. */
+    val PlusCircle: ImageVector = icon({
+        arcTo(10f, 10f, 0f, true, true, 22f, 12f); arcTo(10f, 10f, 0f, true, true, 2f, 12f)
+        moveTo(8f, 12f); horizontalLineTo(16f)
+        moveTo(12f, 8f); verticalLineTo(16f)
+    })
+
+    /** lucide list. */
+    val List: ImageVector = icon({
+        moveTo(3f, 5f); horizontalLineTo(3.01f)
+        moveTo(3f, 12f); horizontalLineTo(3.01f)
+        moveTo(3f, 19f); horizontalLineTo(3.01f)
+        moveTo(8f, 5f); horizontalLineTo(21f)
+        moveTo(8f, 12f); horizontalLineTo(21f)
+        moveTo(8f, 19f); horizontalLineTo(21f)
+    })
+
+    /** lucide file-check-2. */
+    val FileCheck2: ImageVector = icon({
+        moveTo(4f, 22f); horizontalLineTo(14f); arcTo(2f, 2f, 0f, false, true, 16f, 20f); verticalLineTo(7f)
+        lineTo(11f, 2f); horizontalLineTo(6f); arcTo(2f, 2f, 0f, false, true, 4f, 4f); verticalLineTo(18f)
+        moveTo(14f, 2f); verticalLineTo(4f); arcTo(2f, 2f, 0f, false, true, 16f, 6f); horizontalLineTo(11f)
+        moveTo(3f, 15f); lineTo(5f, 17f); lineTo(9f, 13f)
     })
 
     val Camera: ImageVector = icon({

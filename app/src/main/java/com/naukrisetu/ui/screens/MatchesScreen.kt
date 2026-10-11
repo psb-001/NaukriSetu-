@@ -26,7 +26,7 @@ import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
 import com.naukrisetu.ui.components.EligibleJobCard
 import com.naukrisetu.ui.components.IneligibleJobCard
-import com.naukrisetu.ui.components.SeekerBottomTabs
+import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 
@@ -41,7 +41,7 @@ fun MatchesScreen(
     var tab by remember { mutableStateOf(0) }
 
     Scaffold(
-        bottomBar = { SeekerBottomTabs(current = Routes.matches, onNavigate = onNavigate) },
+        bottomBar = { SeekerTabs(current = Routes.matches, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp)) {

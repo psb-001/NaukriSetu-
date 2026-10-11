@@ -33,7 +33,7 @@ import com.naukrisetu.engine.Criterion
 import com.naukrisetu.engine.OppStatus
 import com.naukrisetu.engine.Opportunity
 import com.naukrisetu.engine.canonicalSkills
-import com.naukrisetu.ui.components.EmployerBottomTabs
+import com.naukrisetu.ui.components.EmployerTabs
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
@@ -64,7 +64,7 @@ fun PostJobScreen(
     }
 
     Scaffold(
-        bottomBar = { EmployerBottomTabs(current = Routes.postJob, onNavigate = onNavigate) },
+        bottomBar = { EmployerTabs(current = Routes.postJob, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
@@ -168,7 +168,7 @@ fun MyPostingsScreen(
         store.allOpportunities().filter { it.employerId.isNotEmpty() && it.employerId != "emp-you" }.take(0)
 
     Scaffold(
-        bottomBar = { EmployerBottomTabs(current = Routes.myPostings, onNavigate = onNavigate) },
+        bottomBar = { EmployerTabs(current = Routes.myPostings, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
