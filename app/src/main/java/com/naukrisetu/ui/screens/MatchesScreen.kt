@@ -2,6 +2,7 @@ package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,26 +66,50 @@ fun MatchesScreen(
                 color = ThemeColors.InkMute,
             )
             Spacer(Modifier.height(8.dp))
-            // Underline segment tabs (per M08/M09)
-            Row {
-                TextButton(onClick = { tab = 0 }) {
+            // Segmented Action Buttons for Eligible vs Not Eligible
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Button(
+                    onClick = { tab = 0 },
+                    modifier = Modifier.weight(1f).height(44.dp),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (tab == 0) ThemeColors.Primary else ThemeColors.CanvasSoft,
+                        contentColor = if (tab == 0) Color.White else ThemeColors.InkSecondary,
+                    ),
+                    border = BorderStroke(
+                        1.dp,
+                        if (tab == 0) ThemeColors.Primary else ThemeColors.Hairline,
+                    ),
+                ) {
                     Text(
-                        "Eligible (${eligible.size})",
-                        fontWeight = if (tab == 0) FontWeight.Medium else null,
-                        color = if (tab == 0) ThemeColors.Primary else ThemeColors.InkMute,
-                        style = androidx.compose.ui.text.TextStyle(
-                            textDecoration = if (tab == 0) androidx.compose.ui.text.style.TextDecoration.Underline else null,
-                        ),
+                        text = "✓ Eligible (${eligible.size})",
+                        fontSize = 14.sp,
+                        fontWeight = if (tab == 0) FontWeight.Bold else FontWeight.Medium,
                     )
                 }
-                TextButton(onClick = { tab = 1 }) {
+
+                Button(
+                    onClick = { tab = 1 },
+                    modifier = Modifier.weight(1f).height(44.dp),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (tab == 1) ThemeColors.Danger else ThemeColors.CanvasSoft,
+                        contentColor = if (tab == 1) Color.White else ThemeColors.InkSecondary,
+                    ),
+                    border = BorderStroke(
+                        1.dp,
+                        if (tab == 1) ThemeColors.Danger else ThemeColors.Hairline,
+                    ),
+                ) {
                     Text(
-                        "Not eligible (${ineligible.size})",
-                        fontWeight = if (tab == 1) FontWeight.Medium else null,
-                        color = if (tab == 1) ThemeColors.Danger else ThemeColors.InkMute,
-                        style = androidx.compose.ui.text.TextStyle(
-                            textDecoration = if (tab == 1) androidx.compose.ui.text.style.TextDecoration.Underline else null,
-                        ),
+                        text = "✕ Not eligible (${ineligible.size})",
+                        fontSize = 14.sp,
+                        fontWeight = if (tab == 1) FontWeight.Bold else FontWeight.Medium,
                     )
                 }
             }
