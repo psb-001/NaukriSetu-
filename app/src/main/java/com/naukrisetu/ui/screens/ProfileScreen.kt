@@ -56,13 +56,15 @@ fun ProfileScreen(
     onNavigate: (String) -> Unit,
     onLogout: () -> Unit,
 ) {
-    var seeker = store.currentSeeker() ?: Seed.demoSeeker
+    var seeker by remember { mutableStateOf(store.currentSeeker() ?: Seed.demoSeeker) }
     val done = KycLogic.checksDone(seeker)
     val pct = KycLogic.progressPct(seeker)
     var aadhaarInput by remember(seeker.aadhaar) { mutableStateOf(seeker.aadhaar ?: "") }
     var addressInput by remember { mutableStateOf("") }
+    var cityInput by remember(seeker.city) { mutableStateOf(seeker.city) }
     var certInput by remember { mutableStateOf("") }
     var aadhaarError by remember { mutableStateOf<String?>(null) }
+    var addressSaved by remember { mutableStateOf(false) }
 
     val (eligible, _) = splitMatches(seeker, seekerVisibleOpps(store))
 
@@ -73,7 +75,12 @@ fun ProfileScreen(
         Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
             Text("Profile", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
             Text("${seeker.name} · ${seeker.email}", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Text("Verification pending — you can browse, some jobs stay locked.", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Text(
+                if (pct == 100) "Profile fully verified — all job matches unlocked!"
+                else "Verification in progress — completing KYC unlocks all jobs.",
+                fontSize = 13.sp,
+                color = if (pct == 100) ThemeColors.Primary else ThemeColors.InkMute,
+            )
             Spacer(Modifier.height(8.dp))
             Text("Profile $pct% complete", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
             Text("$done of 5 checks done", fontSize = 13.sp, color = ThemeColors.InkMute)
@@ -86,85 +93,197 @@ fun ProfileScreen(
             Text("You currently qualify for ${eligible.size} jobs — completing KYC unlocks more.", fontSize = 13.sp, color = ThemeColors.InkMute)
             Spacer(Modifier.height(12.dp))
 
-            // KYC timeline steps (per M10)
+            // KYC timeline steps
+            val aadhaarDone = seeker.aadhaar != null && KycLogic.aadhaarValid(seeker.aadhaar ?: "")
             KycTimelineStep(
                 number = 1,
                 title = "Aadhaar",
-                status = if (seeker.aadhaar != null) "Pending" else "Pending",
-                subtitle = if (seeker.aadhaar != null) "Uploaded · awaiting check" else "Pending",
+                status = if (aadhaarDone) "Verified" else "Pending",
+                subtitle = if (aadhaarDone) "Verified · format check passed" else "Pending upload",
                 hint = "12-digit format check only — demo does not contact UIDAI.",
                 isActive = true,
+                isCompleted = aadhaarDone,
                 isLast = false,
             )
+            val addressDone = seeker.addressProof
             KycTimelineStep(
                 number = 2,
-                title = "Address",
-                status = if (seeker.addressProof) "Uploaded" else "Pending",
-                subtitle = if (seeker.addressProof) "Uploaded · awaiting check" else "Pending",
+                title = "Address & City",
+                status = if (addressDone) "Verified" else "Pending",
+                subtitle = if (addressDone) "${seeker.city} · Proof uploaded" else "Pending upload",
                 hint = "Changing city re-runs your matches instantly.",
-                isActive = seeker.aadhaar != null,
+                isActive = aadhaarDone,
+                isCompleted = addressDone,
                 isLast = false,
             )
+            val certsDone = seeker.certificates.isNotEmpty()
             KycTimelineStep(
                 number = 3,
                 title = "Certificates",
-                status = if (seeker.certificates.isNotEmpty()) "Uploaded" else "Pending",
-                subtitle = seeker.certificates.joinToString(", ") { "$it · awaiting check" },
+                status = if (certsDone) "Verified (${seeker.certificates.size})" else "Optional",
+                subtitle = if (certsDone) seeker.certificates.joinToString(", ") else "Add trade/degree certificates",
                 hint = "Write the name exactly as on the certificate — it is matched letter for letter.",
-                isActive = seeker.addressProof,
+                isActive = addressDone,
+                isCompleted = certsDone,
                 isLast = true,
             )
 
-            // Input forms — step-by-step KYC progression
-            if (seeker.aadhaar == null) {
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = aadhaarInput,
-                    onValueChange = { aadhaarInput = it.filter { c -> c.isDigit() }.take(12); aadhaarError = null },
-                    label = { Text("12-digit Aadhaar number") },
-                    singleLine = true,
-                    isError = aadhaarError != null,
-                    supportingText = { if (aadhaarError != null) Text(aadhaarError!!) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                TextButton(onClick = {
-                    if (!KycLogic.aadhaarValid(aadhaarInput)) {
-                        aadhaarError = "Enter all 12 digits"
+            // Section 1: Aadhaar
+            Spacer(Modifier.height(12.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("1. Aadhaar Verification", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(4.dp))
+                    if (aadhaarDone) {
+                        Text("✓ Aadhaar ${seeker.aadhaar?.take(4)}••••${seeker.aadhaar?.takeLast(4)} saved", fontSize = 13.sp, color = ThemeColors.Primary)
                     } else {
-                        store.upsertSeeker(seeker.copy(aadhaar = aadhaarInput))
-                        seeker = store.currentSeeker() ?: seeker
+                        OutlinedTextField(
+                            value = aadhaarInput,
+                            onValueChange = { aadhaarInput = it.filter { c -> c.isDigit() }.take(12); aadhaarError = null },
+                            label = { Text("12-digit Aadhaar number") },
+                            singleLine = true,
+                            isError = aadhaarError != null,
+                            supportingText = { if (aadhaarError != null) Text(aadhaarError!!) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Button(
+                            onClick = {
+                                if (!KycLogic.aadhaarValid(aadhaarInput)) {
+                                    aadhaarError = "Enter all 12 digits"
+                                } else {
+                                    val updated = seeker.copy(aadhaar = aadhaarInput)
+                                    store.upsertSeeker(updated)
+                                    seeker = store.currentSeeker() ?: updated
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = ThemeColors.OnPrimary,
+                            ),
+                        ) { Text("Verify Aadhaar") }
                     }
-                }) { Text("Save Aadhaar") }
+                }
             }
 
-            if (seeker.aadhaar != null && !seeker.addressProof) {
-                Spacer(Modifier.height(8.dp))
-                OutlinedTextField(value = addressInput, onValueChange = { addressInput = it }, label = { Text("Full address") }, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(value = seeker.city, onValueChange = {
-                    store.upsertSeeker(seeker.copy(city = it)); seeker = store.currentSeeker() ?: seeker
-                }, label = { Text("City") }, supportingText = { Text("Changing city re-runs your matches instantly.") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                TextButton(onClick = {
-                    if (addressInput.isNotBlank()) {
-                        store.upsertSeeker(seeker.copy(addressProof = true)); seeker = store.currentSeeker() ?: seeker
+            // Section 2: Address & City
+            Spacer(Modifier.height(8.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("2. Address & Location", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(4.dp))
+                    OutlinedTextField(
+                        value = cityInput,
+                        onValueChange = {
+                            cityInput = it
+                            val updated = seeker.copy(city = it)
+                            store.upsertSeeker(updated)
+                            seeker = store.currentSeeker() ?: updated
+                        },
+                        label = { Text("City") },
+                        supportingText = { Text("Changing city re-runs your matches instantly.") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    if (addressDone) {
+                        Text("✓ Address proof uploaded (${seeker.city})", fontSize = 13.sp, color = ThemeColors.Primary)
+                    } else {
+                        OutlinedTextField(
+                            value = addressInput,
+                            onValueChange = { addressInput = it },
+                            label = { Text("Full Address / Utility Bill Details") },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Button(
+                            onClick = {
+                                val updated = seeker.copy(addressProof = true, city = cityInput.ifBlank { seeker.city })
+                                store.upsertSeeker(updated)
+                                seeker = store.currentSeeker() ?: updated
+                                addressSaved = true
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = ThemeColors.OnPrimary,
+                            ),
+                        ) { Text("Upload Address Proof") }
                     }
-                }) { Text("Take photo or upload address proof") }
+                }
             }
 
-            if (seeker.addressProof && seeker.certificates.isEmpty()) {
-                Spacer(Modifier.height(8.dp))
-                seeker.certificates.forEach { c -> Text("• $c", fontSize = 14.sp, color = ThemeColors.Ink) }
-                OutlinedTextField(value = certInput, onValueChange = { certInput = it }, label = { Text("Add certificate") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                TextButton(onClick = {
-                    if (certInput.isNotBlank()) {
-                        store.upsertSeeker(seeker.copy(certificates = seeker.certificates + certInput.trim()))
-                        seeker = store.currentSeeker() ?: seeker
-                        certInput = ""
+            // Section 3: Certificates
+            Spacer(Modifier.height(8.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(ThemeRadii.Card.dp),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
+                colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text("3. Certificates & Qualifications", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                    Spacer(Modifier.height(4.dp))
+                    if (seeker.certificates.isNotEmpty()) {
+                        seeker.certificates.forEach { c ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text("✓ $c", fontSize = 14.sp, color = ThemeColors.Ink)
+                                TextButton(onClick = {
+                                    val updated = seeker.copy(certificates = seeker.certificates - c)
+                                    store.upsertSeeker(updated)
+                                    seeker = store.currentSeeker() ?: updated
+                                }) { Text("Remove", fontSize = 12.sp, color = ThemeColors.Danger) }
+                            }
+                        }
+                        Spacer(Modifier.height(4.dp))
                     }
-                }) { Text("Add") }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        OutlinedTextField(
+                            value = certInput,
+                            onValueChange = { certInput = it },
+                            label = { Text("e.g. ITI Electrician, Python, B.Tech") },
+                            singleLine = true,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Button(
+                            onClick = {
+                                if (certInput.isNotBlank()) {
+                                    val updated = seeker.copy(certificates = seeker.certificates + certInput.trim())
+                                    store.upsertSeeker(updated)
+                                    seeker = store.currentSeeker() ?: updated
+                                    certInput = ""
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ThemeColors.Primary,
+                                contentColor = ThemeColors.OnPrimary,
+                            ),
+                        ) { Text("Add") }
+                    }
+                }
             }
+
+            Spacer(Modifier.height(8.dp))
             Text("Documents stay on this device in the demo.", fontSize = 12.sp, color = ThemeColors.InkMute2)
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
             Text("Settings", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
             
             SettingsRow(icon = Lucide.Globe, label = "App language", trailing = "English", subtitle = "Hindi / Marathi coming", onClick = {})
@@ -176,7 +295,6 @@ fun ProfileScreen(
             SettingsRow(icon = Lucide.LogOut, label = "Log out", trailing = "", subtitle = "", isDestructive = true, onClick = onLogout)
 
             Spacer(Modifier.height(8.dp))
-            Text("Documents stay on this device in the demo.", fontSize = 12.sp, color = ThemeColors.InkMute2)
         }
     }
 }
@@ -189,6 +307,7 @@ fun KycTimelineStep(
     subtitle: String,
     hint: String,
     isActive: Boolean,
+    isCompleted: Boolean = false,
     isLast: Boolean,
 ) {
     val lineColor = if (isLast) androidx.compose.ui.graphics.Color.Transparent else ThemeColors.Hairline
@@ -204,9 +323,9 @@ fun KycTimelineStep(
                 .padding(top = 12.dp),
         ) {
             androidx.compose.foundation.Canvas(modifier = Modifier.size(24.dp)) {
-                val circleColor = if (number <= 2) ThemeColors.Primary else ThemeColors.InkMute
+                val circleColor = if (isCompleted) ThemeColors.Primary else if (isActive) ThemeColors.Ink else ThemeColors.InkMute
                 drawCircle(circleColor, radius = 12f, style = androidx.compose.ui.graphics.drawscope.Stroke(2f))
-                if (number <= 2) {
+                if (isCompleted) {
                     drawCircle(ThemeColors.Primary, radius = 6f)
                 }
             }
@@ -221,7 +340,7 @@ fun KycTimelineStep(
             Row {
                 Text("$number. $title", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
                 Spacer(Modifier.width(8.dp))
-                Text(status, fontSize = 11.sp, color = if (status == "Pending") ThemeColors.Warning else ThemeColors.Primary)
+                Text(status, fontSize = 11.sp, color = if (isCompleted) ThemeColors.Primary else ThemeColors.Warning)
             }
             Text(subtitle, fontSize = 13.sp, color = ThemeColors.InkMute)
             Text(hint, fontSize = 11.sp, color = ThemeColors.InkMute2)

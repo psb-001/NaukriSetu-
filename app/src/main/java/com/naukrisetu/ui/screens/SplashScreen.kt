@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,12 +42,12 @@ fun SplashScreen(onGetStarted: () -> Unit) {
         modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(Modifier.height(64.dp))
+        Spacer(Modifier.height(48.dp))
         Image(
-            painter = painterResource(R.drawable.ill_splash_bridge),
-            contentDescription = null,
+            painter = painterResource(R.drawable.app_logo),
+            contentDescription = "NaukriSetu Logo",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxWidth(0.85f).aspectRatio(2048f / 1331f),
+            modifier = Modifier.size(160.dp),
         )
         Spacer(Modifier.height(24.dp))
         Wordmark()

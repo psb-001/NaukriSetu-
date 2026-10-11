@@ -63,7 +63,7 @@ fun HomeScreen(
     onNavigate: (String) -> Unit,
     onHowToQualify: (oppId: String) -> Unit,
 ) {
-    val seeker = store.seeker("seeker-ravi") ?: Seed.demoSeeker
+    val seeker = store.currentSeeker() ?: Seed.demoSeeker
     val visible = seekerVisibleOpps(store)
     val (eligible, _) = splitMatches(seeker, visible)
     val hero = homeHeroCount(seeker, visible)
@@ -221,19 +221,25 @@ fun HomeScreen(
             Spacer(Modifier.height(12.dp))
 
             // Courses horizontal strip — gap-relevant or fallback
-            Text("Courses for your gaps", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("${Seed.courses.size} courses available", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("Courses for your gaps", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+                UnderlineLink(text = "View catalog", onClick = { onNavigate(Routes.courses) })
+            }
+            Text("${gapCourses.size} courses recommended based on missing skills", fontSize = 13.sp, color = ThemeColors.InkMute)
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
             ) {
-                items(gapCourses.take(3)) { c ->
+                items(gapCourses.take(4)) { c ->
                     CourseCard(course = c)
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Text("Aadhaar pending verification — you can browse, some jobs stay locked.", fontSize = 12.sp, color = ThemeColors.InkMute2)
         }
     }
 }
