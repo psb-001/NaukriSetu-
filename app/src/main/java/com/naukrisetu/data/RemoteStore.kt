@@ -221,6 +221,7 @@ class RemoteStore(
         opps.values.filter {
             it.employerId.equals(employerId, ignoreCase = true) ||
             it.employerId.equals("emp-$employerId", ignoreCase = true) ||
+            (employerId.contains("techcorp", ignoreCase = true) && it.employerId.contains("techcorp", ignoreCase = true)) ||
             (employerId.contains("voltas", ignoreCase = true) && it.employerId.contains("voltas", ignoreCase = true))
         }
 

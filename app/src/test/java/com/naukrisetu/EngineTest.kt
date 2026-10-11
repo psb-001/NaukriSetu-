@@ -48,9 +48,9 @@ class EngineTest {
 
     @Test fun `gaps name missing certificate`() {
         val seekerNoCert = puneSeeker.copy(certificates = emptyList())
-        val acJob = Seed.opportunities.first { it.id == "opp-cooltech-ac" }
-        val gaps = gapsFor(seekerNoCert, acJob)
-        assertTrue("expected AC Repair gap, got: $gaps", gaps.any { it.label.contains("AC Repair") })
+        val seniorJob = Seed.opportunities.first { it.id == "opp-tech-senior" }
+        val gaps = gapsFor(seekerNoCert, seniorJob)
+        assertTrue("expected experience gap, got: $gaps", gaps.any { it.label.contains("experience") || it.label.contains("Experience") })
     }
 
     @Test fun `pending posts hidden from seekers`() {
@@ -61,7 +61,7 @@ class EngineTest {
         assertTrue(store.allOpportunities().any { it.status == OppStatus.Pending })
     }
 
-    @Test fun `seed has twelve opportunities`() {
-        assertEquals(12, Seed.opportunities.size)
+    @Test fun `seed has eight opportunities`() {
+        assertEquals(8, Seed.opportunities.size)
     }
 }

@@ -75,6 +75,8 @@ open class DemoStore {
 
     open fun allOpportunities(): List<Opportunity> = opps.values.toList()
 
+    open fun opportunity(id: String): Opportunity? = opps[id] ?: Seed.opportunities.firstOrNull { it.id == id }
+
     open fun postingsByEmployer(employerId: String): List<Opportunity> =
         opps.values.filter { it.employerId == employerId }
 

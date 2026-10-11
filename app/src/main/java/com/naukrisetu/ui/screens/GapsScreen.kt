@@ -1,13 +1,18 @@
 package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,109 +20,132 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
-import com.naukrisetu.data.Seed
 import com.naukrisetu.engine.gapsFor
-import com.naukrisetu.engine.seekerVisibleOpps
-import com.naukrisetu.engine.splitMatches
 import com.naukrisetu.ui.components.SeekerTabs
-import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
-import com.naukrisetu.ui.theme.ThemeRadii
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GapsScreen(
     oppId: String,
     store: DemoStore,
     onNavigate: (String) -> Unit,
-    onOpenCourses: () -> Unit,
+    onOpenCourses: () -> Unit = {},
 ) {
-    val seeker = store.currentSeeker() ?: Seed.demoSeeker
-    val opp = store.allOpportunities().firstOrNull { it.id == oppId }
-        ?: Seed.opportunities.firstOrNull { it.id == oppId }
-    val savedCourses = remember { mutableStateOf(store.savedCourseCodes()) }
+    val seeker = store.currentSeeker() ?: com.naukrisetu.data.Seed.demoSeeker
+    val opportunity = store.opportunity(oppId) ?: com.naukrisetu.data.Seed.opportunities.first()
+    val gaps = gapsFor(seeker, opportunity)
 
     Scaffold(
         bottomBar = { SeekerTabs(current = Routes.matches, onNavigate = onNavigate) },
         containerColor = ThemeColors.Canvas,
     ) { pad ->
-        Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp).verticalScroll(rememberScrollState())) {
-            Text("How to qualify", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            if (opp == null) {
-                Text("Pick a job from Matches to see what it needs.", fontSize = 14.sp, color = ThemeColors.InkMute)
-                TextButton(onClick = { onNavigate(Routes.matches) }) { Text("Go to Matches") }
-                return@Column
-            }
-            Text("Target", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Text(opp.title, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("${opp.employer} · ${opp.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
-            val total = opp.criteria.size + opp.requiredSkills.size
-            val gaps = gapsFor(seeker, opp)
-            val met = total - gaps.size
-            Text("You meet $met of $total hard requirements", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Spacer(Modifier.height(12.dp))
-            Text("What's missing", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(pad)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Text("Skill & Eligibility Gap Analysis", fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
+            Spacer(Modifier.height(4.dp))
+            Text("Target Role: ${opportunity.title}", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+            Text("${opportunity.employer} · ${opportunity.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
+
+            Spacer(Modifier.height(16.dp))
+
+            // What's missing
             if (gaps.isEmpty()) {
-                Text("Nothing — you qualify for this job.", fontSize = 14.sp, color = ThemeColors.Ink)
-            }
-            gaps.forEach { gap ->
                 Card(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(ThemeRadii.Card.dp),
-                    border = BorderStroke(1.dp, ThemeColors.Hairline),
-                    colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+                    border = BorderStroke(1.dp, ThemeColors.Primary),
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        Text(gap.label, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                        Text(gap.kind, fontSize = 12.sp, color = ThemeColors.InkMute2)
-                        if (gap.kind == "Criterion" && gap.courses.isEmpty()) {
-                            Text("Comes with time on the job — no course adds this.", fontSize = 13.sp, color = ThemeColors.InkMute)
-                        }
-                        gap.courses.forEach { c ->
-                                    Spacer(Modifier.height(8.dp))
-                                    Text("${c.code} — ${c.title}", fontSize = 14.sp, color = ThemeColors.Ink)
-                                    Text("${c.provider} · ${c.weeks} weeks", fontSize = 13.sp, color = ThemeColors.InkMute)
-                                    val isSaved = savedCourses.value.contains(c.code)
-                                    Row {
-                                        TextButton(onClick = {
-                                            store.toggleSaveCourse(c.code)
-                                            savedCourses.value = store.savedCourseCodes()
-                                        }) { Text(if (isSaved) "Saved ✓" else "Save") }
-                                        TextButton(onClick = {
-                                            store.toggleSaveCourse(c.code)
-                                            savedCourses.value = store.savedCourseCodes()
-                                        }) { Text("Notify me") }
-                                    }
-                        }
-                        if ((gap.kind == "Skill" || gap.kind == "Certificate") && gap.courses.isEmpty()) {
-                            Text("No course available yet — check back soon.", fontSize = 13.sp, color = ThemeColors.InkMute)
+                        Text("🎉 You meet all criteria!", fontWeight = FontWeight.Bold, color = ThemeColors.Ink)
+                        Text("You can apply or be ranked at top priority for this opportunity.", fontSize = 13.sp, color = ThemeColors.InkMute)
+                    }
+                }
+            } else {
+                Text("What's missing for this role:", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
+                Spacer(Modifier.height(8.dp))
+
+                gaps.forEach { gap ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = ThemeColors.CanvasSoft),
+                        border = BorderStroke(1.dp, ThemeColors.Hairline),
+                    ) {
+                        Column(Modifier.padding(14.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Surface(
+                                    shape = RoundedCornerShape(4.dp),
+                                    color = ThemeColors.Warning,
+                                    modifier = Modifier.size(8.dp),
+                                ) {}
+                                Spacer(Modifier.width(8.dp))
+                                Text(gap.label, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
+                            }
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                "Type: ${gap.kind} · Add this project/skill to your profile or pass assessment to unlock.",
+                                fontSize = 12.sp,
+                                color = ThemeColors.InkMute,
+                            )
                         }
                     }
                 }
             }
-            Spacer(Modifier.height(8.dp))
-            Text("Saving tracks it — the demo never enrolls you.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-            Text("Courses come from the verified catalogue — nothing is invented.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-            Spacer(Modifier.height(8.dp))
-            // Live unlock preview: how many more jobs KYC would open.
-            val (eligible, _) = splitMatches(seeker, seekerVisibleOpps(store))
-            Text("You currently qualify for ${eligible.size} jobs.", fontSize = 13.sp, color = ThemeColors.InkMute)
-            TextButton(onClick = onOpenCourses) { Text("Browse all courses") }
+
+            Spacer(Modifier.height(20.dp))
+
+            // Candidate current skills
+            Text("Your current skills:", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
+            Spacer(Modifier.height(6.dp))
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                seeker.skills.forEach { sk ->
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = ThemeColors.CanvasSoft,
+                        border = BorderStroke(1.dp, ThemeColors.Hairline),
+                    ) {
+                        Text(
+                            "✓ $sk",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = ThemeColors.Ink,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            Button(
+                onClick = { onNavigate(Routes.matches) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = ThemeColors.Ink),
+            ) {
+                Text("Back to All Matches")
+            }
         }
     }
 }
@@ -126,71 +154,9 @@ fun GapsScreen(
 fun CoursesScreen(
     onNavigate: (String) -> Unit,
 ) {
-    var query by remember { mutableStateOf("") }
-    var trade by remember { mutableStateOf("All") }
-    var duration by remember { mutableStateOf("Any") }
-
-    val results = remember(query, trade, duration) {
-        Seed.courses.filter { c ->
-            (query.isBlank() || c.title.contains(query, ignoreCase = true) ||
-                c.skillsTaught.any { it.contains(query, ignoreCase = true) } ||
-                c.code.contains(query, ignoreCase = true)) &&
-                (trade == "All" || c.skillsTaught.any { it.contains(trade, ignoreCase = true) }) &&
-                when (duration) {
-                    "<4" -> c.weeks < 4
-                    "4–8" -> c.weeks in 4..8
-                    "8+" -> c.weeks > 8
-                    else -> true
-                }
-        }.sortedBy { it.title }
-    }
-
-    Scaffold(
-        bottomBar = { SeekerTabs(current = Routes.courses, onNavigate = onNavigate) },
-        containerColor = ThemeColors.Canvas,
-    ) { pad ->
-        Column(modifier = Modifier.fillMaxSize().padding(pad).padding(16.dp)) {
-            Text("Courses", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("From the verified catalogue — never invented.", fontSize = 13.sp, color = ThemeColors.InkMute)
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
-                label = { Text("Search courses or skills — try “wiring”") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(8.dp))
-            Text("Skills taught are matched through the standard taxonomy — “wiring” finds ELEC-101.", fontSize = 12.sp, color = ThemeColors.InkMute2)
-            Row {
-                TextButton(onClick = { trade = "All" }) { Text("Trade: $trade", color = if (trade == "All") ThemeColors.Primary else ThemeColors.InkMute) }
-                TextButton(onClick = {
-                    duration = when (duration) {
-                        "Any" -> "<4"; "<4" -> "4–8"; "4–8" -> "8+"; else -> "Any"
-                    }
-                }) { Text(if (duration == "Any") "Duration: any" else "$duration wks") }
-                TextButton(onClick = {}) { Text("Sort: A–Z") }
-            }
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                results.forEach { c ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-                        border = BorderStroke(1.dp, ThemeColors.Hairline),
-                        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-                    ) {
-                        Column(Modifier.padding(16.dp)) {
-                            Text(c.code, fontSize = 12.sp, color = ThemeColors.InkMute2)
-                            Text(c.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                            Text("${c.provider} · ${c.weeks} weeks", fontSize = 13.sp, color = ThemeColors.InkMute)
-                            Row {
-                                TextButton(onClick = {}) { Text("Save") }
-                                TextButton(onClick = {}) { Text("Notify me") }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    GapsScreen(
+        oppId = "",
+        store = com.naukrisetu.data.DemoStore(),
+        onNavigate = onNavigate,
+    )
 }

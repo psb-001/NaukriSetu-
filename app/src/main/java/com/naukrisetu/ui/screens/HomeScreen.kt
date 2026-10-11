@@ -76,9 +76,6 @@ fun HomeScreen(
                 r.opportunity.requiredSkills.any { it.contains(query, ignoreCase = true) })
     }
 
-    val gapCourses = eligible.firstOrNull()?.let {
-        gapsFor(seeker, it.opportunity).flatMap { g -> g.courses }
-    }.orEmpty().ifEmpty { Seed.courses }
 
     Scaffold(
         bottomBar = { SeekerTabs(current = Routes.home, onNavigate = onNavigate) },
@@ -157,7 +154,7 @@ fun HomeScreen(
 
             // Selectable chips (selected = black fill)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("All", "Electrician", "Programming", "Web Dev", "Plumber", "AC & Refrigeration", "Design", "Data Entry").forEach { c ->
+                listOf("All", "Android", "Python", "Web Dev", "Full Stack", "Data & AI", "UI/UX Design").forEach { c ->
                     val selected = chip == c
                     Card(
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),

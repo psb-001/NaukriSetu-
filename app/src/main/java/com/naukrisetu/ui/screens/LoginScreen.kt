@@ -142,11 +142,11 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
                 border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
             ) {
-                Text("🎓 Student: Aman", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                Text("🎓 Aman (CS Student)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
             Button(
                 onClick = {
-                    email = "ravi.kadam@gmail.com"
+                    email = "student.web@naukrisetu.com"
                     submit(Role.Seeker)
                 },
                 shape = RoundedCornerShape(8.dp),
@@ -157,11 +157,11 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
                 border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
             ) {
-                Text("⚡ Worker: Ravi", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                Text("👩‍💻 Pooja (Web Intern)", fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
             Button(
                 onClick = {
-                    email = "employer@voltas.com"
+                    email = "employer@techcorp.com"
                     submit(Role.Employer)
                 },
                 shape = RoundedCornerShape(8.dp),
@@ -172,11 +172,11 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
                 border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
             ) {
-                Text("🏢 Employer: Voltas", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                Text("🏢 Tech Recruiter", fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
             Button(
                 onClick = {
-                    email = "verifier@yolo.com"
+                    email = "verifier@campus.edu"
                     submit(Role.Verifier)
                 },
                 shape = RoundedCornerShape(8.dp),
@@ -187,7 +187,7 @@ fun LoginScreen(onLoggedIn: (email: String, role: Role) -> Unit) {
                 border = BorderStroke(1.dp, ThemeColors.HairlineStrong),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
             ) {
-                Text("🛡️ Verifier: Meera", fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                Text("🏛️ Campus Verifier", fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
         }
 
