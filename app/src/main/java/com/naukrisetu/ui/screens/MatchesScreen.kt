@@ -32,13 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.naukrisetu.data.DemoStore
 import com.naukrisetu.data.Seed
+import com.naukrisetu.engine.gapsFor
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
 import com.naukrisetu.ui.components.CompactJobCard
 import com.naukrisetu.ui.components.IneligibleJobCard
 import com.naukrisetu.ui.components.SeekerTabs
-import com.naukrisetu.ui.components.UnderlineLink
-import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 
@@ -51,7 +50,6 @@ fun MatchesScreen(
     val seeker = store.currentSeeker() ?: Seed.demoSeeker
     val (eligible, ineligible) = splitMatches(seeker, seekerVisibleOpps(store))
     var tab by remember { mutableStateOf(0) }
-    val savedJobs = remember { mutableStateOf(store.savedJobIds()) }
 
     Scaffold(
         bottomBar = { SeekerTabs(current = Routes.matches, onNavigate = onNavigate) },
@@ -156,12 +154,16 @@ fun MatchesScreen(
                     } else {
                         Text("These jobs list the exact conditions that failed.", fontSize = 13.sp, color = ThemeColors.InkMute)
                         ineligible.forEach { (opp, reasons) ->
+                            val bridge = remember(opp.id, seeker) {
+                                gapsFor(seeker, opp).flatMap { it.courses }.distinctBy { it.title }.take(3)
+                            }
                             IneligibleJobCard(
                                 title = opp.title,
                                 employer = opp.employer,
                                 city = opp.city,
                                 payMin = opp.payMin,
                                 reasons = reasons,
+                                courses = bridge,
                                 onHowToQualify = { onHowToQualify(opp.id) },
                             )
                         }

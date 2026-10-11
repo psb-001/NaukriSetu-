@@ -111,7 +111,9 @@ fun skillMatchPct(have: List<String>, need: List<String>): Int {
     return ((totalPoints / need.size) * 100).toInt().coerceIn(0, 100)
 }
 
-private fun coursesForSkill(skill: String): List<Course> = emptyList()
+/** Bridge pathway: every missing skill maps to free learning resources (offline catalogue). */
+private fun coursesForSkill(skill: String): List<Course> =
+    LearningResources.coursesForSkill(skill)
 
 /** Missing items for (seeker, opportunity) — entry point is always a match card, never blank. */
 fun gapsFor(seeker: Seeker, opp: Opportunity): List<Gap> {

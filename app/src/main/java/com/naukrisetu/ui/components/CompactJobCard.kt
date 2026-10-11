@@ -72,7 +72,7 @@ fun CompactJobCard(
 
             Spacer(Modifier.height(8.dp))
 
-            // Semantic Skill Matching Badges (G-01 RozgarLink engine evidence)
+            // Semantic Skill Matching Badges (G-01 NaukriSetu engine evidence)
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp),

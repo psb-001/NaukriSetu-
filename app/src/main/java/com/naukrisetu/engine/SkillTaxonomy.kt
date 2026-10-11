@@ -1,7 +1,7 @@
 package com.naukrisetu.engine
 
 /**
- * Skill Equivalence and Taxonomy Engine for RozgarLink / NaukriSetu.
+ * Skill Equivalence and Taxonomy Engine for NaukriSetu.
  *
  * Problem Statement Requirement:
  * "Recognise skills described in different words as the same skill. AI may extract skills

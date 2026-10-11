@@ -111,6 +111,37 @@ fun GapsScreen(
                                 fontSize = 12.sp,
                                 color = ThemeColors.InkMute,
                             )
+                            if (gap.courses.isNotEmpty()) {
+                                Spacer(Modifier.height(8.dp))
+                                Surface(
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = ThemeColors.PrimarySoft,
+                                    border = BorderStroke(1.dp, ThemeColors.Primary),
+                                ) {
+                                    Column(Modifier.padding(10.dp)) {
+                                        Text(
+                                            "📚 Free bridge to unlock",
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = ThemeColors.PrimaryDeep,
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        gap.courses.take(3).forEach { c ->
+                                            Text(
+                                                "• ${c.title}",
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = ThemeColors.Ink,
+                                            )
+                                            Text(
+                                                "  ${c.provider} · ~${c.weeks} wk · free",
+                                                fontSize = 11.sp,
+                                                color = ThemeColors.InkMute,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

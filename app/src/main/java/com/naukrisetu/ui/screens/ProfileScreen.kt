@@ -165,7 +165,7 @@ fun ProfileScreen(
             ) {
                 Column(Modifier.padding(16.dp)) {
                     Text("2. Verified Skills & Technologies", fontWeight = FontWeight.SemiBold, color = ThemeColors.Ink)
-                    Text("RozgarLink uses these to rank and compute your match fit score.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                    Text("NaukriSetu uses these to rank and compute your match fit score.", fontSize = 12.sp, color = ThemeColors.InkMute)
                     Spacer(Modifier.height(10.dp))
 
                     FlowRow(

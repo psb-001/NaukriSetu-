@@ -22,7 +22,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -47,12 +46,10 @@ import com.naukrisetu.engine.gapsFor
 import com.naukrisetu.engine.homeHeroCount
 import com.naukrisetu.engine.seekerVisibleOpps
 import com.naukrisetu.engine.splitMatches
-import com.naukrisetu.ui.components.AmberBox
 import com.naukrisetu.ui.components.CompactJobCard
 import com.naukrisetu.ui.components.SeekerTabs
 import com.naukrisetu.ui.components.UnderlineLink
 import com.naukrisetu.ui.icons.Lucide
-import com.naukrisetu.ui.kyc.KycLogic
 import com.naukrisetu.ui.nav.Routes
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
@@ -68,8 +65,6 @@ fun HomeScreen(
     val visible = remember(refreshTrigger) { seekerVisibleOpps(store) }
     val (eligible, _) = remember(refreshTrigger, seeker) { splitMatches(seeker, visible) }
     val hero = remember(refreshTrigger, seeker) { homeHeroCount(seeker, visible) }
-    val kycPct = KycLogic.progressPct(seeker)
-    val kycDone = KycLogic.checksDone(seeker)
     var query by remember { mutableStateOf("") }
     var chip by remember { mutableStateOf("All") }
     var applyFeedback by remember { mutableStateOf<String?>(null) }
@@ -90,10 +85,10 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text("Namaste, ${seeker.name.split(" ").firstOrNull() ?: "there"}", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-            Text("$hero new matches qualified by RozgarLink engine", fontSize = 13.sp, color = ThemeColors.InkMute)
+            Text("$hero new matches qualified by NaukriSetu engine", fontSize = 13.sp, color = ThemeColors.InkMute)
             Spacer(Modifier.height(10.dp))
 
-            // RozgarLink G-01 Engine Banner
+            // NaukriSetu G-01 Engine Banner
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Card.dp),
@@ -109,7 +104,7 @@ fun HomeScreen(
                         ) {}
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "ROZGARLINK G-01 MATCHING ENGINE",
+                            "NAUKRISETU G-01 MATCHING ENGINE",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = ThemeColors.Primary,
@@ -382,15 +377,4 @@ fun HomeScreen(
     }
 }
 
-private fun opportunityPay(opp: com.naukrisetu.engine.Opportunity): String {
-    val s = opp.payMin.toString()
-    val out = StringBuilder()
-    var count = 0
-    for (i in s.length - 1 downTo 0) {
-        out.append(s[i])
-        count++
-        if (count == 3 && i != 0) { out.append(','); count = -100 }
-        else if (count > 3 && (count - 3) % 2 == 0 && i != 0) out.append(',')
-    }
-    return "₹" + out.reverse().toString() + "/mo"
-}
+

@@ -94,7 +94,7 @@ fun PostJobScreen(
                         color = ThemeColors.Ink,
                     )
                     Text(
-                        "Add opportunities directly to the RozgarLink matching engine",
+                        "Add opportunities directly to the NaukriSetu matching engine",
                         fontSize = 13.sp,
                         color = ThemeColors.InkMute,
                     )
@@ -227,7 +227,7 @@ fun PostJobScreen(
             ) {
                 Column(Modifier.padding(14.dp)) {
                     Text("3. Required Tech Skills", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = ThemeColors.Ink)
-                    Text("RozgarLink engine uses these for fit scoring and semantic ranking.", fontSize = 12.sp, color = ThemeColors.InkMute)
+                    Text("NaukriSetu engine uses these for fit scoring and semantic ranking.", fontSize = 12.sp, color = ThemeColors.InkMute)
                     Spacer(Modifier.height(8.dp))
 
                     // Preset quick toggle chips
@@ -360,7 +360,7 @@ fun PostJobScreen(
                     )
 
                     store.submitPost(newOpp)
-                    successMsg = "✓ Role published Live to RozgarLink matching engine!"
+                    successMsg = "✓ Role published Live to NaukriSetu matching engine!"
                     onSubmitted()
                 },
                 modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -370,7 +370,7 @@ fun PostJobScreen(
                     contentColor = Color.White,
                 ),
             ) {
-                Text("Publish to RozgarLink Engine", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text("Publish to NaukriSetu Engine", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(Modifier.height(12.dp))
@@ -416,7 +416,7 @@ fun MyPostingsScreen(
             ) {
                 Column {
                     Text("Published Opportunities", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = ThemeColors.Ink)
-                    Text("Live in RozgarLink matching engine", fontSize = 13.sp, color = ThemeColors.InkMute)
+                    Text("Live in NaukriSetu matching engine", fontSize = 13.sp, color = ThemeColors.InkMute)
                 }
                 Button(
                     onClick = { onNavigate(Routes.postJob) },

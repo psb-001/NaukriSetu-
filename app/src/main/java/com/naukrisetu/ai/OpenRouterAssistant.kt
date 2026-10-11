@@ -38,7 +38,7 @@ object OpenRouterAssistant {
         }
 
         val prompt = """
-You are RozgarLink's Skill Assistant for Indian job seekers, vocational workers, ITI students, and college graduates.
+You are NaukriSetu's Skill Assistant for Indian job seekers, vocational workers, ITI students, and college graduates.
 Extract the candidate's skills, trade/tech role, and experience from what they say (English, Hindi, or Hinglish).
 
 Standard available canonical skills:
@@ -63,7 +63,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown fences, n
             conn.setRequestProperty("Content-Type", "application/json")
             conn.setRequestProperty("Authorization", "Bearer $apiKey")
             conn.setRequestProperty("HTTP-Referer", "https://github.com/psb-001/NaukriSetu-")
-            conn.setRequestProperty("X-Title", "NaukriSetu RozgarLink")
+            conn.setRequestProperty("X-Title", "NaukriSetu")
             conn.connectTimeout = 12000
             conn.readTimeout = 15000
             conn.doOutput = true

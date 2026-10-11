@@ -2,30 +2,22 @@ package com.naukrisetu.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.naukrisetu.engine.Ranked
+import com.naukrisetu.engine.Course
 import com.naukrisetu.ui.theme.ThemeColors
 import com.naukrisetu.ui.theme.ThemeRadii
 
@@ -42,73 +34,11 @@ private fun inr(n: Int): String {
     return "₹" + out.reverse().toString()
 }
 
-@Composable
-fun EligibleJobCard(
-    ranked: Ranked,
-    position: Int,
-    total: Int,
-    onHowToQualify: () -> Unit,
-    onSave: (() -> Unit)? = null,
-    isSaved: Boolean = false,
-) {
-    val opp = ranked.opportunity
-    var expanded by remember { mutableStateOf(false) }
-    Card(
-        onClick = { expanded = !expanded },
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        shape = RoundedCornerShape(ThemeRadii.Card.dp),
-        border = BorderStroke(1.dp, ThemeColors.Hairline),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-    ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            ScoreRing(ranked.score)
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Text(opp.title, fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-                Text("${opp.employer} · ${opp.city}", fontSize = 13.sp, color = ThemeColors.InkMute)
-                Text("#$position of $total", fontSize = 12.sp, color = ThemeColors.InkMute2)
-                Text("${inr(opp.payMin)}/mo · ${"%.1f".format(opp.distanceKm)} km", fontSize = 13.sp, color = ThemeColors.Ink)
-                Text(ranked.reason, fontSize = 13.sp, color = ThemeColors.InkSecondary)
-                if (expanded) {
-                    Spacer(Modifier.height(8.dp))
-                    Text("Skill match ${ranked.skillPct}%", fontSize = 13.sp, color = ThemeColors.Ink)
-                    LinearProgressIndicator(
-                        progress = { ranked.skillPct / 100f },
-                        modifier = Modifier.fillMaxWidth(),
-                        color = ThemeColors.Primary,
-                        trackColor = ThemeColors.Hairline,
-                    )
-                    Text("Commute ${"%.1f".format(opp.distanceKm)} km", fontSize = 13.sp, color = ThemeColors.Ink)
-                    Text("Pay ${inr(opp.payMax)} vs minimum", fontSize = 13.sp, color = ThemeColors.Ink)
-                    Row {
-                        TextButton(onClick = onHowToQualify) { Text("How to qualify") }
-                        TextButton(onClick = { onSave?.invoke() }) {
-                            Text(if (isSaved) "Saved ✓" else "Save")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ScoreRing(score: Int) {
-    Card(
-        shape = RoundedCornerShape(50.dp),
-        border = BorderStroke(2.dp, ThemeColors.Primary),
-        colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
-        modifier = Modifier.size(52.dp),
-    ) {
-        androidx.compose.foundation.layout.Box(
-            modifier = Modifier.fillMaxWidth().height(48.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text("$score", fontWeight = FontWeight.Medium, color = ThemeColors.Ink)
-        }
-    }
-}
-
+/**
+ * Locked role card — shows the exact hard-gate failure reasons plus the
+ * free learning bridge that unlocks it (G-01: courses are bridge pathways,
+ * never a standalone platform).
+ */
 @Composable
 fun IneligibleJobCard(
     title: String,
@@ -116,6 +46,7 @@ fun IneligibleJobCard(
     city: String,
     payMin: Int,
     reasons: List<String>,
+    courses: List<Course> = emptyList(),
     onHowToQualify: () -> Unit,
 ) {
     Card(
@@ -129,7 +60,40 @@ fun IneligibleJobCard(
             Text("$employer · $city", fontSize = 13.sp, color = ThemeColors.InkMute)
             Text("Not eligible", fontSize = 12.sp, color = ThemeColors.Danger)
             Text(inr(payMin) + "/mo", fontSize = 13.sp, color = ThemeColors.Ink)
-            reasons.forEach { r -> Text(r, fontSize = 13.sp, color = ThemeColors.InkSecondary) }
+            reasons.forEach { r -> Text("✕ $r", fontSize = 13.sp, color = ThemeColors.InkSecondary) }
+
+            if (courses.isNotEmpty()) {
+                Spacer(Modifier.height(10.dp))
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = ThemeColors.PrimarySoft,
+                    border = BorderStroke(1.dp, ThemeColors.Primary),
+                ) {
+                    Column(Modifier.padding(10.dp)) {
+                        Text(
+                            "📚 Unlock this role — free learning path",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = ThemeColors.PrimaryDeep,
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        courses.take(3).forEach { c ->
+                            Text(
+                                "• ${c.title}",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = ThemeColors.Ink,
+                            )
+                            Text(
+                                "  ${c.provider} · ~${c.weeks} wk · free",
+                                fontSize = 11.sp,
+                                color = ThemeColors.InkMute,
+                            )
+                        }
+                    }
+                }
+            }
+
             TextButton(onClick = onHowToQualify) { Text("How to qualify →") }
         }
     }
