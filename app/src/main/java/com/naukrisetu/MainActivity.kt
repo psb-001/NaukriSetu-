@@ -25,8 +25,11 @@ import com.naukrisetu.ui.screens.GapsScreen
 import com.naukrisetu.ui.screens.HomeScreen
 import com.naukrisetu.ui.screens.LoginScreen
 import com.naukrisetu.ui.screens.MatchesScreen
+import com.naukrisetu.ui.screens.MyPostingsScreen
 import com.naukrisetu.ui.screens.OnboardingScreen
+import com.naukrisetu.ui.screens.PostJobScreen
 import com.naukrisetu.ui.screens.ProfileScreen
+import com.naukrisetu.ui.screens.VerifierScreen
 import com.naukrisetu.ui.screens.OtpScreen
 import com.naukrisetu.ui.screens.SplashScreen
 import com.naukrisetu.ui.theme.ThemeColors
@@ -119,22 +122,27 @@ class MainActivity : ComponentActivity() {
                                 },
                             )
                         }
-                        composable(Routes.courses) { Placeholder(Routes.courses) }
-                        composable(Routes.profile) { Placeholder(Routes.profile) }
-                        composable(Routes.postJob) { Placeholder(Routes.postJob) }
-                        composable(Routes.myPostings) { Placeholder(Routes.myPostings) }
-                        composable(Routes.kycQueue) { Placeholder(Routes.kycQueue) }
-                        composable(Routes.jobsQueue) { Placeholder(Routes.jobsQueue) }
+                        composable(Routes.postJob) {
+                            PostJobScreen(
+                                store = store,
+                                onNavigate = { nav.navigate(it) },
+                                onSubmitted = { nav.navigate(Routes.myPostings) },
+                            )
+                        }
+                        composable(Routes.myPostings) {
+                            MyPostingsScreen(store = store, onNavigate = { nav.navigate(it) })
+                        }
+                        composable(Routes.kycQueue) {
+                            VerifierScreen(store = store, onNavigate = { nav.navigate(it) })
+                        }
+                        composable(Routes.jobsQueue) {
+                            VerifierScreen(store = store, onNavigate = { nav.navigate(it) })
+                        }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-private fun Placeholder(text: String) {
-    Text(text = text, color = ThemeColors.Ink)
 }
 
 private fun routeFor(role: Role): String = when (role) {
