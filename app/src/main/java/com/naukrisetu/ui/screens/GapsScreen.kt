@@ -24,6 +24,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -140,14 +144,43 @@ fun GapsScreen(
 
             Spacer(Modifier.height(24.dp))
 
+            var applied by remember(opportunity.id) {
+                mutableStateOf(store.isJobApplied(opportunity.id))
+            }
+
+            Button(
+                onClick = {
+                    store.applyJob(opportunity.id)
+                    applied = true
+                },
+                enabled = !applied,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(ThemeRadii.Button.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (applied) ThemeColors.PrimarySoft else ThemeColors.Primary,
+                    contentColor = if (applied) ThemeColors.PrimaryDeep else Color.White,
+                    disabledContainerColor = ThemeColors.PrimarySoft,
+                    disabledContentColor = ThemeColors.PrimaryDeep,
+                ),
+            ) {
+                Text(
+                    text = if (applied) "✓ Application Submitted" else "1-Tap Apply to ${opportunity.employer}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                )
+            }
+
+            Spacer(Modifier.height(10.dp))
+
             Button(
                 onClick = { onNavigate(Routes.matches) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(ThemeRadii.Button.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ThemeColors.Primary,
-                    contentColor = Color.White,
+                    containerColor = ThemeColors.CanvasSoft,
+                    contentColor = ThemeColors.Ink,
                 ),
+                border = BorderStroke(1.dp, ThemeColors.Hairline),
             ) {
                 Text("Back to All Matches", fontWeight = FontWeight.SemiBold)
             }

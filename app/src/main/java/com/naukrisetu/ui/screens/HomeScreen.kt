@@ -2,6 +2,7 @@ package com.naukrisetu.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -62,14 +63,16 @@ fun HomeScreen(
     onNavigate: (String) -> Unit,
     onHowToQualify: (oppId: String) -> Unit,
 ) {
-    val seeker = store.currentSeeker() ?: Seed.demoSeeker
-    val visible = seekerVisibleOpps(store)
-    val (eligible, _) = splitMatches(seeker, visible)
-    val hero = homeHeroCount(seeker, visible)
+    var refreshTrigger by remember { mutableStateOf(0) }
+    val seeker = remember(refreshTrigger) { store.currentSeeker() ?: Seed.demoSeeker }
+    val visible = remember(refreshTrigger) { seekerVisibleOpps(store) }
+    val (eligible, _) = remember(refreshTrigger, seeker) { splitMatches(seeker, visible) }
+    val hero = remember(refreshTrigger, seeker) { homeHeroCount(seeker, visible) }
     val kycPct = KycLogic.progressPct(seeker)
     val kycDone = KycLogic.checksDone(seeker)
     var query by remember { mutableStateOf("") }
     var chip by remember { mutableStateOf("All") }
+    var applyFeedback by remember { mutableStateOf<String?>(null) }
 
     val filtered = eligible.filter { r ->
         (chip == "All" || r.opportunity.requiredSkills.any { it.contains(chip, ignoreCase = true) }) &&
@@ -114,12 +117,37 @@ fun HomeScreen(
                         )
                     }
                     Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = "${seeker.name} · ${if (seeker.experienceYears == 0) "Student / Fresher friendly" else "${seeker.experienceYears}y experience"} · ${seeker.city.ifBlank { "Pune" }}",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = ThemeColors.Ink
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "${seeker.name} · ${if (seeker.experienceYears == 0) "Student / Fresher friendly" else "${seeker.experienceYears}y exp (Employee)"} · ${seeker.city.ifBlank { "Pune" }}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = ThemeColors.Ink,
+                            modifier = Modifier.weight(1f),
+                        )
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = if (seeker.experienceYears == 0) ThemeColors.PrimarySoft else ThemeColors.Canvas,
+                            border = BorderStroke(1.dp, if (seeker.experienceYears == 0) ThemeColors.Primary else ThemeColors.Hairline),
+                            modifier = Modifier.clickable {
+                                val nextYears = if (seeker.experienceYears == 0) 3 else 0
+                                store.upsertSeeker(seeker.copy(experienceYears = nextYears))
+                                refreshTrigger++
+                            }
+                        ) {
+                            Text(
+                                text = if (seeker.experienceYears == 0) "💼 Switch to Employee" else "🎓 Switch to Student",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (seeker.experienceYears == 0) ThemeColors.PrimaryDeep else ThemeColors.Ink,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                            )
+                        }
+                    }
                     Spacer(Modifier.height(6.dp))
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         seeker.skills.take(6).forEach { sk ->
@@ -154,6 +182,30 @@ fun HomeScreen(
             Spacer(Modifier.height(8.dp))
 
             // Selectable chips (selected = brand primary fill, unselected = soft clean pill)
+            if (applyFeedback != null) {
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = ThemeColors.PrimarySoft,
+                    border = BorderStroke(1.dp, ThemeColors.Primary),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = applyFeedback!!,
+                            color = ThemeColors.PrimaryDeep,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        TextButton(onClick = { applyFeedback = null }) {
+                            Text("Dismiss", fontSize = 11.sp, color = ThemeColors.PrimaryDeep)
+                        }
+                    }
+                }
+            }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("All", "Android", "Python", "Web Dev", "Full Stack", "Data & AI", "UI/UX Design").forEach { c ->
                     val selected = chip == c
@@ -221,11 +273,20 @@ fun HomeScreen(
             // Top 3 eligible as compact ranked rows
             if (filtered.isNotEmpty()) {
                 filtered.take(3).forEachIndexed { i, r ->
+                    var isApplied by remember(r.opportunity.id) {
+                        mutableStateOf(store.isJobApplied(r.opportunity.id))
+                    }
                     CompactJobCard(
                         ranked = r,
                         position = i + 1,
                         total = eligible.size,
                         seeker = seeker,
+                        isApplied = isApplied,
+                        onApply = {
+                            store.applyJob(r.opportunity.id)
+                            isApplied = true
+                            applyFeedback = "✓ Applied for ${r.opportunity.title}!"
+                        },
                         onHowToQualify = { onHowToQualify(r.opportunity.id) },
                     )
                 }

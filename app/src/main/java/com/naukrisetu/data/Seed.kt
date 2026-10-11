@@ -22,6 +22,20 @@ object Seed {
 
     val studentSeeker = demoSeeker
 
+    val experiencedSeeker = Seeker(
+        id = "seeker-employee-rahul",
+        name = "Rahul Sharma",
+        email = "employee@naukrisetu.com",
+        phone = "9823055555",
+        city = "Pune",
+        age = 26,
+        experienceYears = 3,
+        role = "Employee",
+        skills = listOf("Python", "Java", "SQL", "Git", "Problem Solving"),
+        certificates = listOf("B.Tech Computer Science", "AWS Certified Developer"),
+        payMinimum = 60000,
+    )
+
     val opportunities: List<Opportunity> = listOf(
         Opportunity(
             id = "opp-tech-android",

@@ -17,6 +17,8 @@ open class DemoStore {
 
     /** Saved job IDs for the current seeker. */
     protected val _savedJobs = mutableSetOf<String>()
+    /** Applied job IDs for the current seeker. */
+    protected val _appliedJobs = mutableSetOf<String>()
     /** Saved course codes for the current seeker. */
     protected val _savedCourses = mutableSetOf<String>()
 
@@ -28,6 +30,7 @@ open class DemoStore {
     /** Seeds the local demo dataset. RemoteStore overrides this to load from Supabase. */
     open fun seedLocal() {
         seekers[Seed.demoSeeker.id] = Seed.demoSeeker
+        seekers[Seed.experiencedSeeker.id] = Seed.experiencedSeeker
         for (opp in Seed.opportunities) opps[opp.id] = opp
         // One pending + one rejected post so visibility rules have data.
         opps["opp-pending-fan"] = Opportunity(
@@ -65,10 +68,11 @@ open class DemoStore {
     }
 
     /** The signed-in user's own profile. Demo uses the fixed demo seeker. */
-    open fun currentSeeker(): Seeker? = seeker("seeker-ravi")
+    open fun currentSeeker(): Seeker? = seekers[Seed.demoSeeker.id] ?: seekers.values.firstOrNull() ?: Seed.demoSeeker
 
     open fun upsertSeeker(seeker: Seeker) {
         seekers[seeker.id] = seeker
+        seekers[seeker.email] = seeker
     }
 
     open fun seeker(id: String): Seeker? = seekers[id]
@@ -106,6 +110,16 @@ open class DemoStore {
         if (id in _savedJobs) _savedJobs.remove(id) else _savedJobs.add(id)
     }
 
+    // ---------- applied jobs ----------
+
+    open fun appliedJobIds(): Set<String> = _appliedJobs.toSet()
+
+    open fun isJobApplied(id: String): Boolean = id in _appliedJobs
+
+    open fun applyJob(id: String) {
+        _appliedJobs.add(id)
+    }
+
     // ---------- saved courses ----------
 
     open fun savedCourseCodes(): Set<String> = _savedCourses.toSet()
@@ -136,6 +150,7 @@ open class DemoStore {
         seekers.clear()
         opps.clear()
         _savedJobs.clear()
+        _appliedJobs.clear()
         _savedCourses.clear()
         kycQueue.clear()
     }

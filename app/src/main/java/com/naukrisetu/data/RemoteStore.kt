@@ -39,6 +39,7 @@ class RemoteStore(
         Seed.opportunities.forEach { opps[it.id] = it }
         seekers[Seed.demoSeeker.email] = Seed.demoSeeker
         seekers[Seed.studentSeeker.email] = Seed.studentSeeker
+        seekers[Seed.experiencedSeeker.email] = Seed.experiencedSeeker
     }
 
     // ---------- remote I/O ----------
@@ -61,6 +62,10 @@ class RemoteStore(
                     val s = profileFromJson(profArr.getJSONObject(i))
                     seekers[s.email] = s
                 }
+            }
+
+            if (email.equals(Seed.experiencedSeeker.email, ignoreCase = true)) {
+                seekers[email] = Seed.experiencedSeeker
             }
 
             // Load KYC submissions queue
@@ -90,8 +95,8 @@ class RemoteStore(
 
             // If profile for current user doesn't exist yet, insert with sensible defaults
             if (seekers[email] == null) {
-                val fallback = if (email.contains("student")) Seed.studentSeeker else Seed.demoSeeker
-                val cleanName = email.substringBefore("@")
+                val fallback = if (email.contains("employee")) Seed.experiencedSeeker else if (email.contains("student")) Seed.studentSeeker else Seed.demoSeeker
+                val cleanName = if (email.contains("employee")) "Rahul Sharma" else email.substringBefore("@")
                     .replace(".", " ")
                     .replace("_", " ")
                     .split(" ")
@@ -208,6 +213,7 @@ class RemoteStore(
         seekers[email]?.let { return it }
         seekers.values.firstOrNull { it.email.equals(email, ignoreCase = true) }?.let { return it }
         if (email.equals(Seed.studentSeeker.email, ignoreCase = true)) return Seed.studentSeeker
+        if (email.equals(Seed.experiencedSeeker.email, ignoreCase = true)) return Seed.experiencedSeeker
         if (email.equals("student.web@naukrisetu.com", ignoreCase = true)) {
             return Seed.studentSeeker.copy(
                 id = "seeker-pooja",
@@ -241,6 +247,7 @@ class RemoteStore(
 
     override fun upsertSeeker(seeker: Seeker) {
         seekers[seeker.email] = seeker
+        seekers[seeker.id] = seeker
         scope.launch { pushProfile(seeker) }
     }
 

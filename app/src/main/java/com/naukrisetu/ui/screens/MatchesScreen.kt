@@ -130,11 +130,19 @@ fun MatchesScreen(
                     } else {
                         Text("Ranked by fit score. Tap a card for the full breakdown.", fontSize = 13.sp, color = ThemeColors.InkMute)
                         eligible.forEachIndexed { i, r ->
+                            var appliedState by remember(r.opportunity.id) {
+                                mutableStateOf(store.isJobApplied(r.opportunity.id))
+                            }
                             CompactJobCard(
                                 ranked = r,
                                 position = i + 1,
                                 total = eligible.size,
                                 seeker = seeker,
+                                isApplied = appliedState,
+                                onApply = {
+                                    store.applyJob(r.opportunity.id)
+                                    appliedState = true
+                                },
                                 onHowToQualify = { onHowToQualify(r.opportunity.id) },
                             )
                         }

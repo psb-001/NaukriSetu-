@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,20 +43,24 @@ fun CompactJobCard(
     position: Int,
     total: Int,
     seeker: Seeker? = null,
+    isApplied: Boolean = false,
+    onApply: () -> Unit = {},
     onHowToQualify: () -> Unit,
 ) {
     val opp = ranked.opportunity
     val candidateSkills = seeker?.skills.orEmpty()
 
     Card(
-        onClick = onHowToQualify,
         modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
         shape = RoundedCornerShape(ThemeRadii.Card.dp),
         border = BorderStroke(1.dp, ThemeColors.Hairline),
         colors = CardDefaults.cardColors(containerColor = ThemeColors.Canvas),
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 ScoreRing(score = ranked.score, size = 44.dp, stroke = 4.dp, fontSize = 13)
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
@@ -60,12 +68,6 @@ fun CompactJobCard(
                     Text("${opp.employer} · ${opp.city}", fontSize = 12.sp, color = ThemeColors.InkMute)
                     Text("#$position of $total · ${opportunityPay(opp)} · ${"%.1f".format(opp.distanceKm)} km", fontSize = 11.sp, color = ThemeColors.InkMute2)
                 }
-                Icon(
-                    imageVector = Lucide.ChevronRight,
-                    contentDescription = null,
-                    tint = ThemeColors.InkMute,
-                    modifier = Modifier.size(20.dp),
-                )
             }
 
             Spacer(Modifier.height(8.dp))
@@ -103,6 +105,38 @@ fun CompactJobCard(
                 fontWeight = FontWeight.Medium,
                 color = ThemeColors.PrimaryDeep
             )
+
+            Spacer(Modifier.height(8.dp))
+
+            // Action Row: Gap Breakdown Link + 1-Tap Apply Button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextButton(onClick = onHowToQualify) {
+                    Text("Fit Analysis →", fontSize = 12.sp, color = ThemeColors.InkMute)
+                }
+
+                Button(
+                    onClick = onApply,
+                    enabled = !isApplied,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isApplied) ThemeColors.PrimarySoft else ThemeColors.Primary,
+                        contentColor = if (isApplied) ThemeColors.PrimaryDeep else Color.White,
+                        disabledContainerColor = ThemeColors.PrimarySoft,
+                        disabledContentColor = ThemeColors.PrimaryDeep,
+                    ),
+                    modifier = Modifier.height(34.dp),
+                ) {
+                    Text(
+                        text = if (isApplied) "✓ Applied" else "Apply Now",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
         }
     }
 }
